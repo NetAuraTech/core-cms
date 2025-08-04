@@ -12,7 +12,7 @@
     <select id="{{ $name }}"
             name="{{ $name }}"
             class="form-control @error($name) is-invalid @enderror">
-        <option value="">{{ __('cms.select.option.choose') }}</option>
+        <option value="">{{ __('core-cms::core.select.option.choose') }}</option>
         @foreach($selectOptions as $option)
             <option @selected(old($name, $value) === $option->key) value="{{ $option->key }}">{{ $option->label }}</option>
         @endforeach

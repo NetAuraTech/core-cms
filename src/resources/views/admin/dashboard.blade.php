@@ -1,7 +1,7 @@
 @extends('core-cms::admin.base')
 
 @section('title')
-    {{ __('admin.dashboard') }}
+    {{ __('core-cms::admin.dashboard') }}
 @endsection
 
 @section('body')

@@ -20,6 +20,6 @@
         <input type="hidden" name="captcha-answer" id="captcha-answer">
     </puzzle-captcha>
     <div class="clr-neutral-600">
-        {{ __('cms.captcha.help') }}
+        {{ __('core-cms::core.captcha.help') }}
     </div>
 </div>

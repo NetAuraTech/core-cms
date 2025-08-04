@@ -56,6 +56,14 @@ class CoreCmsServiceProvider extends ServiceProvider
         // Load all views
         $this->loadViewsFrom(__DIR__.'/resources/views', 'core-cms');
 
+        // Lang
+        $this->loadTranslationsFrom(__DIR__.'/lang', 'core-cms');
+
+        // Allows you to publish translations of the package
+        $this->publishes([
+            __DIR__.'/lang' => $this->app->langPath('vendor/core-cms'),
+        ], 'core-cms-translations');
+
         // Command registration Artisan
         if ($this->app->runningInConsole()) {
             $this->commands([
