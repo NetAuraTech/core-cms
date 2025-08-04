@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Netauratech\CoreCms\Console\DiscoverAssetsCommand;
 use Netauratech\CoreCms\Console\InstallCommand;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
 use Netauratech\CoreCms\Services\Admin\MenuManager;
+use Netauratech\CoreCms\Services\AssetManager;
 use Netauratech\CoreCms\Services\NullContentProvider;
 
 class CoreCmsServiceProvider extends ServiceProvider
@@ -34,9 +37,13 @@ class CoreCmsServiceProvider extends ServiceProvider
             return new DashboardManager();
         });
 
+        $this->app->singleton(AssetManager::class, function ($app) {
+            return new AssetManager();
+        });
+
         $this->app->bind(ContentProviderInterface::class, NullContentProvider::class);
     }
-    public function boot(MenuManager $menuManager): void
+    public function boot(MenuManager $menuManager, AssetManager $assetManager): void
     {
         // Publish the configuration file
         $this->publishes([
@@ -63,6 +70,18 @@ class CoreCmsServiceProvider extends ServiceProvider
 
         // Load all views
         $this->loadViewsFrom(__DIR__.'/resources/views', 'core-cms');
+
+        // Register Assets
+        $packageBasePath = realpath(__DIR__ . '/../');
+        $composerJsonPath = $packageBasePath . '/composer.json';
+
+        if (file_exists($composerJsonPath)) {
+            $composerJsonContent = json_decode(file_get_contents($composerJsonPath), true);
+            if (isset($composerJsonContent['name'])) {
+                $packageName = $composerJsonContent['name'];
+            }
+            $assetManager->registerAppJs("vendor/{$packageName}/src/resources/ts/app.ts");
+        }
 
         // Lang
         $this->loadTranslationsFrom(__DIR__.'/lang', 'core-cms');
@@ -101,6 +120,12 @@ class CoreCmsServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCommand::class,
+            ]);
+        }
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                DiscoverAssetsCommand::class,
             ]);
         }
 
