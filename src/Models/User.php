@@ -1,18 +1,18 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Models;
+namespace Netauratech\CoreCms\Models;
 
 use Carbon\Carbon;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -59,5 +59,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getNotificationsReadAtTimestamp(): int
     {
         return Carbon::create($this->notifications_read_at)->getTimestamp();
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function factory(): UserFactory
+    {
+        return new UserFactory();
     }
 }

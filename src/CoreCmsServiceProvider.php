@@ -1,12 +1,12 @@
 <?php
 
-namespace NetAuraTech\CoreCms;
+namespace Netauratech\CoreCms;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use NetAuraTech\CoreCms\Console\InstallCommand;
-use NetAuraTech\CoreCms\Services\Admin\DashboardManager;
-use NetAuraTech\CoreCms\Services\Admin\MenuManager;
+use Netauratech\CoreCms\Console\InstallCommand;
+use Netauratech\CoreCms\Services\Admin\DashboardManager;
+use Netauratech\CoreCms\Services\Admin\MenuManager;
 
 class CoreCmsServiceProvider extends ServiceProvider
 {
@@ -48,6 +48,10 @@ class CoreCmsServiceProvider extends ServiceProvider
         ], 'core-cms-migrations');
 
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+
+        $this->publishes([
+            __DIR__.'/database/seeders/' => database_path('seeders')
+        ], 'core-cms-seeders');
 
         // Load all views
         $this->loadViewsFrom(__DIR__.'/resources/views', 'core-cms');

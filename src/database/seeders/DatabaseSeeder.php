@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\seeders;
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use NetAuraTech\CoreCms\Models\User;
+use Netauratech\CoreCms\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,8 +13,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'Test User',
+            'username' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        if (class_exists(RolesAndPermissionsSeeder::class)) {
+            $this->call(RolesAndPermissionsSeeder::class);
+        }
     }
 }
