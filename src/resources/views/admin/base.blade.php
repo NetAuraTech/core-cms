@@ -1,5 +1,5 @@
 @php
-    $menuManager = app(\NetAuraTech\CoreCms\Services\Admin\MenuManager::class);
+    $menuManager = app(\Netauratech\CoreCms\Services\Admin\MenuManager::class);
     $menuItems = $menuManager->getMenuItems();
 @endphp
 <!DOCTYPE html>
@@ -43,4 +43,13 @@
             </main>
         </div>
     </body>
+    <spotlight-bar></spotlight-bar>
+    <script>
+        window.cms = {
+            ...(window.cms || {}),
+            USER: {{ Auth::user() ? Auth::user()->id : 'null' }},
+            NOTIFICATION: new Date({{ (\Illuminate\Support\Facades\Auth::user() and \Illuminate\Support\Facades\Auth::user()->notifications_read_at) ? \Illuminate\Support\Facades\Auth::user()->getNotificationsReadAtTimestamp() : 0 }} * 1000)
+        };
+    </script>
+    @yield('javascripts_footer')
 </html>

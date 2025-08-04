@@ -1,6 +1,6 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Http\Controllers;
+namespace Netauratech\CoreCms\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;

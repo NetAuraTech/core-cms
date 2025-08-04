@@ -1,8 +1,8 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Http\Controllers\Auth;
+namespace Netauratech\CoreCms\Http\Controllers\Auth;
 
-use NetAuraTech\CoreCms\Http\Controllers\Controller;
+use Netauratech\CoreCms\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

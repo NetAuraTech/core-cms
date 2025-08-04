@@ -1,6 +1,6 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Http\Requests\Auth;
+namespace Netauratech\CoreCms\Http\Requests\Auth;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;

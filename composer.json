@@ -9,7 +9,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "NetAuraTech\\CoreCms\\": "src/",
+            "Netauratech\\CoreCms\\": "src/",
             "Database\\Factories\\": "src/database/factories/",
             "Database\\Seeders\\": "src/database/seeders/"
         },
@@ -34,7 +34,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "NetAuraTech\\CoreCms\\CoreCmsServiceProvider"
+                "Netauratech\\CoreCms\\CoreCmsServiceProvider"
             ]
         }
     },

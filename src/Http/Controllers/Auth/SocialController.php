@@ -1,10 +1,10 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Http\Controllers\Auth;
+namespace Netauratech\CoreCms\Http\Controllers\Auth;
 
 use Illuminate\Contracts\View\View;
-use NetAuraTech\CoreCms\Http\Controllers\Controller;
-use NetAuraTech\CoreCms\Models\User;
+use Netauratech\CoreCms\Http\Controllers\Controller;
+use Netauratech\CoreCms\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;

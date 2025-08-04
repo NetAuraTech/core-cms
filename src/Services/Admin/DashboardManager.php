@@ -1,6 +1,6 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Services\Admin;
+namespace Netauratech\CoreCms\Services\Admin;
 
 class DashboardManager
 {

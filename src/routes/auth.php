@@ -1,16 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\AuthenticatedSessionController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\ConfirmablePasswordController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\EmailVerificationNotificationController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\EmailVerificationPromptController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\NewPasswordController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\PasswordController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\PasswordResetLinkController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\RegisteredUserController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\SocialController;
-use NetAuraTech\CoreCms\Http\Controllers\Auth\VerifyEmailController;
+use Netauratech\CoreCms\Http\Controllers\Auth\AuthenticatedSessionController;
+use Netauratech\CoreCms\Http\Controllers\Auth\ConfirmablePasswordController;
+use Netauratech\CoreCms\Http\Controllers\Auth\EmailVerificationNotificationController;
+use Netauratech\CoreCms\Http\Controllers\Auth\EmailVerificationPromptController;
+use Netauratech\CoreCms\Http\Controllers\Auth\NewPasswordController;
+use Netauratech\CoreCms\Http\Controllers\Auth\PasswordController;
+use Netauratech\CoreCms\Http\Controllers\Auth\PasswordResetLinkController;
+use Netauratech\CoreCms\Http\Controllers\Auth\RegisteredUserController;
+use Netauratech\CoreCms\Http\Controllers\Auth\SocialController;
+use Netauratech\CoreCms\Http\Controllers\Auth\VerifyEmailController;
 
 Route::middleware('web')->group(function () {
     Route::middleware('guest')->group(function () {

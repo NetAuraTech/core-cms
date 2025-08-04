@@ -1,9 +1,9 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Http\Controllers\Auth;
+namespace Netauratech\CoreCms\Http\Controllers\Auth;
 
-use NetAuraTech\CoreCms\Http\Controllers\Controller;
-use NetAuraTech\CoreCms\Models\User;
+use Netauratech\CoreCms\Http\Controllers\Controller;
+use Netauratech\CoreCms\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

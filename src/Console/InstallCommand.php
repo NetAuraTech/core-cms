@@ -1,6 +1,6 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Console;
+namespace Netauratech\CoreCms\Console;
 
 use Illuminate\Console\Command;
 

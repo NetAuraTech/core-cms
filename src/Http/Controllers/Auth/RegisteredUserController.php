@@ -1,9 +1,9 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Http\Controllers\Auth;
+namespace Netauratech\CoreCms\Http\Controllers\Auth;
 
 use Illuminate\Contracts\View\View;
-use NetAuraTech\CoreCms\Http\Controllers\Controller;
+use Netauratech\CoreCms\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
-use NetAuraTech\CoreCms\Models\User;
+use Netauratech\CoreCms\Models\User;
 
 class RegisteredUserController extends Controller
 {

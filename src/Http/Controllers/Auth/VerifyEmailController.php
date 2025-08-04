@@ -1,8 +1,8 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Http\Controllers\Auth;
+namespace Netauratech\CoreCms\Http\Controllers\Auth;
 
-use NetAuraTech\CoreCms\Http\Controllers\Controller;
+use Netauratech\CoreCms\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
