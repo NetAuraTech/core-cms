@@ -1,6 +1,8 @@
 <?php
 
-namespace NetAuraTech\CoreCms\Services\Admin;
+namespace Netauratech\CoreCms\Services\Admin;
+
+use Illuminate\Support\Facades\Auth;
 
 class MenuManager
 {
@@ -27,6 +29,22 @@ class MenuManager
      */
     public function getMenuItems(): array
     {
-        return $this->menuItems;
+        $user = Auth::user();
+
+        if (!$user) {
+            return [];
+        }
+
+        return collect($this->menuItems)->filter(function ($item) use ($user) {
+            if (!isset($item['can'])) {
+                return true;
+            }
+
+            if (!method_exists($user, 'can')) {
+                return true;
+            }
+
+            return $user->can($item['can']);
+        })->toArray();
     }
 }
