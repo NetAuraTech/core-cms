@@ -6,16 +6,17 @@
 <html lang="{{ Lang::locale() }}">
     <head>
         <meta charset="UTF-8">
+        <title>@yield('title') | {{ $options['site_name'] }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui"/>
         @yield('meta')
-        @include('theme::assets.css')
-        @include('theme::assets.admin.css')
+        @includeIf('theme::assets.css')
+        @includeIf('theme::assets.admin.css')
     </head>
     <body>
         <div class="admin">
             <nav class="bg-neutral-200">
                 <!-- TODO: Add condition if we have a logo, else write sitename -->
-                <h2 class="heading-2 text-center padding-block-8">Sitename</h2>
+                <h2 class="heading-2 text-center padding-block-8">{{ $options['site_name'] }}</h2>
                 <ul>
                     @foreach($menuItems as $item)
                         @if(isset($item['children']))

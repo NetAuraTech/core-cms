@@ -20,5 +20,9 @@ class DatabaseSeeder extends Seeder
         if (class_exists(RolesAndPermissionsSeeder::class)) {
             $this->call(RolesAndPermissionsSeeder::class);
         }
+
+        if (class_exists(CmsOptionsSeeder::class)) {
+            $this->call(CmsOptionsSeeder::class);
+        }
     }
 }

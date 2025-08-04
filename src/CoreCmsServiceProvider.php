@@ -2,11 +2,17 @@
 
 namespace Netauratech\CoreCms;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Netauratech\CoreCms\Console\InstallCommand;
+use Netauratech\CoreCms\Contracts\ContentProviderInterface;
+use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
 use Netauratech\CoreCms\Services\Admin\MenuManager;
+use Netauratech\CoreCms\Services\NullContentProvider;
 
 class CoreCmsServiceProvider extends ServiceProvider
 {
@@ -27,8 +33,10 @@ class CoreCmsServiceProvider extends ServiceProvider
         $this->app->singleton(DashboardManager::class, function () {
             return new DashboardManager();
         });
+
+        $this->app->bind(ContentProviderInterface::class, NullContentProvider::class);
     }
-    public function boot(): void
+    public function boot(MenuManager $menuManager): void
     {
         // Publish the configuration file
         $this->publishes([
@@ -64,6 +72,31 @@ class CoreCmsServiceProvider extends ServiceProvider
             __DIR__.'/lang' => $this->app->langPath('vendor/core-cms'),
         ], 'core-cms-translations');
 
+        // Share all CMS options with views
+        if (Schema::hasTable('options')) {
+            $cache = Cache::store('database');
+            $ret = $cache->remember('options', 60 * 60, function () {
+                $opts = Option::all();
+                $data = [];
+                $contentProvider = $this->app->make(ContentProviderInterface::class);
+
+                foreach ($opts as $option) {
+                    $valueToStore = $option->value ?? '';
+
+                    if ($option->type === 'content') {
+                        $contentItem = $contentProvider->getContentById($option->value);
+                        $valueToStore = $contentItem;
+                    }
+                    $data[$option->key] = $valueToStore;
+                }
+                return $data;
+            });
+
+            View::composer('*', function ($view) use ($ret) {
+                $view->with('options', $ret);
+            });
+        }
+
         // Command registration Artisan
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -92,5 +125,12 @@ class CoreCmsServiceProvider extends ServiceProvider
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         });
+
+        $menuManager->registerMenuItem('option', [
+            'label' => trans_choice('core-cms::admin.option.value', 0),
+            'icon' => 'option',
+            'route' => 'admin.option.index',
+            'can' => 'option-list'
+        ]);
     }
 }
