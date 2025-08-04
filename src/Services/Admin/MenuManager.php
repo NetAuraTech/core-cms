@@ -35,12 +35,21 @@ class MenuManager
             return [];
         }
 
-        return collect($this->menuItems)->filter(function ($item) use ($user) {
-            if (!isset($item['can'])) {
-                return true;
+        $hasPermissions = method_exists($user, 'can');
+
+        return collect($this->menuItems)->filter(function ($item) use ($user, $hasPermissions) {
+            if (isset($item['children']) && is_array($item['children'])) {
+                $item['children'] = collect($item['children'])->filter(function ($child) use ($user, $hasPermissions) {
+                    if (!isset($child['can']) || !$hasPermissions) {
+                        return true;
+                    }
+                    return $user->can($child['can']);
+                })->toArray();
+
+                return !empty($item['children']);
             }
 
-            if (!method_exists($user, 'can')) {
+            if (!isset($item['can']) || !$hasPermissions) {
                 return true;
             }
 

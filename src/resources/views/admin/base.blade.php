@@ -18,11 +18,22 @@
                 <h2 class="heading-2 text-center padding-block-8">Sitename</h2>
                 <ul>
                     @foreach($menuItems as $item)
-                        <li>
-                            <a href="{{ route($item['route']) }}" {{ menu_active(route($item['route'])) }}>{!! icon('home', 'small') !!}
-                                {{ $item['label'] }}
-                            </a>
-                        </li>
+                        @if(isset($item['children']))
+                            <h4 class="heading-4 padding-inline-4 padding-block-2">{{ $item['label'] }}</h4>
+                            @foreach($item['children'] as $child)
+                                <li>
+                                    <a href="{{ route($child['route']) }}" {{ menu_active(route($child['route'])) }}>{!! icon($child['icon'], 'small') !!}
+                                        {{ $child['label'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        @else
+                            <li>
+                                <a href="{{ route($item['route']) }}" {{ menu_active(route($item['route'])) }}>{!! icon($item['icon'], 'small') !!}
+                                    {{ $item['label'] }}
+                                </a>
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
             </nav>
