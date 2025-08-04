@@ -17,4 +17,59 @@ return [
             'choose' => 'Choose an option',
         ],
     ],
+    'profile' => [
+        'title' => 'My Account',
+        'social' => [
+            'info' => 'Link your account to a social network to use it as a login method.',
+            'link' => [
+                'confirmed' => 'Your account has been linked successfully.',
+                'value' => 'Link',
+            ],
+            'login' => [
+                'with' => 'Log in with',
+            ],
+            'unlink' => [
+                'confirmed' => 'Your account has been unlinked successfully.',
+                'value' => 'Unlink',
+            ],
+            'value' => 'Social login',
+        ],
+        'notifications' => [
+            'all' => 'All notifications',
+            'close' => 'Close',
+            'deleted' => 'Notifications deleted successfully.',
+            'empty' => 'You have no notifications.',
+            'value' => 'My notifications',
+        ],
+        'comments' => [
+            'article' => 'Article',
+            'comment' => 'Comment',
+            'value' => 'My latest comments',
+        ],
+        'updated' => 'The profile has been updated successfully!',
+        'email' => [
+            'unverified' => 'Your email address is not verified.',
+            'verified' => 'Your email address has been verified.',
+            'verify' => [
+                'confirmed' => 'A new verification link has been sent to your email address.',
+                'value' => 'Click here to resend the verification email.',
+            ],
+        ],
+        'details' => [
+            'edit' => 'Edit my profile',
+            'value' => 'My information',
+        ],
+        'password' => [
+            'edit' => 'Change my password',
+        ],
+        'warning' => [
+            'value' => 'Danger zone',
+            'confirm' => [
+                'info' => 'Once your account is deleted, all its resources and data will be permanently removed.',
+                'password' => 'Please enter your password to confirm you want to permanently delete your account.',
+                'value' => 'Are you sure you want to delete your account?',
+            ],
+            'delete' => 'Delete Account',
+        ],
+    ],
 ];

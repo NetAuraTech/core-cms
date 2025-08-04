@@ -85,5 +85,12 @@ class CoreCmsServiceProvider extends ServiceProvider
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/routes/auth.php');
         });
+
+        //Route Web
+        Route::group([
+            'middleware' => ['web'],
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        });
     }
 }
