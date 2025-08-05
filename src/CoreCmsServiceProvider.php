@@ -75,12 +75,15 @@ class CoreCmsServiceProvider extends ServiceProvider
         $packageBasePath = realpath(__DIR__ . '/../');
         $composerJsonPath = $packageBasePath . '/composer.json';
 
+        $assetManager->registerTranslationPath('core-cms', __DIR__.'/lang');
+
         if (file_exists($composerJsonPath)) {
             $composerJsonContent = json_decode(file_get_contents($composerJsonPath), true);
             if (isset($composerJsonContent['name'])) {
                 $packageName = $composerJsonContent['name'];
             }
             $assetManager->registerAppJs("vendor/{$packageName}/src/resources/ts/app.ts");
+            $assetManager->registerAppJs("vendor/{$packageName}/src/resources/ts/admin.ts");
         }
 
         // Lang

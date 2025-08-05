@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "flatpickr": "^4.6.13",
+    "htm": "^3.1.1",
+    "lodash": "^4.17.21",
+    "preact": "^10.27.0",
+    "react-com": "^1.0.6"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.20"
+  }
+}
