@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <title>@yield('title')</title>
+        <script defer src="{{ route('translations') }}"></script>
         @vite(['resources/ts/app.ts'])
         @include('theme::assets.css')
         @yield('stylesheets')
