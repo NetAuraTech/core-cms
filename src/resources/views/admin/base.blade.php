@@ -26,14 +26,14 @@
                             <h4 class="heading-4 padding-inline-4 padding-block-2">{{ $item['label'] }}</h4>
                             @foreach($item['children'] as $child)
                                 <li>
-                                    <a href="{{ route($child['route']) }}" {{ menu_active(route($child['route'])) }}>{!! icon($child['icon'], 'small') !!}
+                                    <a href="{{ route($child['route'], $child['params'] ?? []) }}" {{ menu_active(route($child['route'], $child['params'] ?? [])) }}>{!! icon($child['icon'], 'small') !!}
                                         {{ $child['label'] }}
                                     </a>
                                 </li>
                             @endforeach
                         @else
                             <li>
-                                <a href="{{ route($item['route']) }}" {{ menu_active(route($item['route'])) }}>{!! icon($item['icon'], 'small') !!}
+                                <a href="{{ route($item['route'], $item['params'] ?? []) }}" {{ menu_active(route($item['route'], $item['params'] ?? [])) }}>{!! icon($item['icon'], 'small') !!}
                                     {{ $item['label'] }}
                                 </a>
                             </li>
