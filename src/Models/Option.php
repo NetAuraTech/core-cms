@@ -13,6 +13,7 @@ class Option extends Model
         'key',
         'value',
         'type',
+        'category',
         'created_at'
     ];
 

@@ -18,29 +18,31 @@ return [
         'updated' => 'The option has been updated.',
         'deleted' => 'The option has been deleted.',
         'cannot_deleted' => 'The option cannot be deleted.',
+        'category' => [
+            'general' => 'General',
+            'branding' => 'Branding',
+            'content_settings' => 'Content Settings',
+            'contact_emails' => 'Contact Emails',
+            'social_media' => 'Social Media',
+            'security' => 'Security',
+            'theme' => 'Theme',
+            'custom' => 'Custom',
+        ],
         'content' => [
             'article' => 'Article',
             'post' => 'Post',
-            'value' => 'Content'
         ],
         'value' => '{0}Options|[1,1]option|[2,*]options',
         'key' => 'Key',
-        'text' => [
-            'value' => 'Text'
-        ],
-        'theme' => [
-            'value' => 'Theme'
-        ],
-        'number' => [
-            'value' => 'Number'
-        ],
-        'boolean' => [
-            'value' => 'Boolean'
-        ],
-        'image' => [
-            'value' => 'Image'
-        ],
-        'type' => 'Type'
+        'type' => [
+            'value' => 'Type',
+            'text' =>  'Text',
+            'theme' =>  'Theme',
+            'number' => 'Number',
+            'boolean' => 'Boolean',
+            'image' => 'Image',
+            'content' => 'Content',
+        ]
     ],
     'save' => 'Save',
     'send' => 'Send',

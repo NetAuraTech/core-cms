@@ -4,6 +4,7 @@ namespace Netauratech\CoreCms\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class OptionContentFormRequest extends FormRequest
 {
@@ -29,17 +30,17 @@ class OptionContentFormRequest extends FormRequest
             'type' => [],
         ];
 
-        if ($option && $option->used_by_cms) {
+        if ($option && $option->category !== 'custom') {
             $rules['key'][] = 'nullable';
             $rules['type'][] = 'nullable';
         }elseif ($this->isMethod('post')) {
             $rules['key'][] = 'unique:options,key';
             $rules['key'][] = 'required';
-            $rules['type'][] = 'in:image,text,content,theme';
+            $rules['type'][] = 'in:image,text,content,theme,boolean,number';
         } elseif ($this->isMethod('put')) {
             $rules['key'][] = 'unique:options,key,' . $this->route('option')->key . ',key';
             $rules['key'][] = 'required';
-            $rules['type'][] = 'in:image,text,content,theme';
+            $rules['type'][] = 'in:image,text,content,theme,boolean,number';
         }
 
         return $rules;

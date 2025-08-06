@@ -11,62 +11,64 @@
             <a class="button" href="{{ route('admin.option.create') }}"
                data-type="primary">{{ __('core-cms::admin.add') }} {{ trans_choice('core-cms::admin.option.value', 1) }}</a>
         </div>
-        <div class="card">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>{{ __('core-cms::admin.option.key') }}</th>
-                    <th>{{ __('core-cms::admin.value') }}</th>
-                    <th>{{ __('core-cms::admin.option.type') }}</th>
-                    <th>{{ __('core-cms::admin.actions') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($cms_options as $item)
+        @foreach($groupedOptions as $group)
+            <div class="card">
+                <h2 class="heading-2 margin-block-end-6">{{ $group->label }}</h2>
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td>
-                            <a href="{{ route('admin.option.edit', $item->key) }}">{{ $item->key }}</a>
-                        </td>
-                        <td>
-                            <a href="{{ route('admin.option.edit', $item->key) }}">
-                                {{-- TODO: Display content by their type: Content, image or only dispay $item->value --}}
-                                {{ $item->value }}
-                            </a>
-                        </td>
-                        <td>
-                            {{ __('core-cms::admin.option.' . $item->type . '.value') }}
-                        </td>
-                        <td>
-                            <div class="flex-group align-items-center justify-content-flex-end" style="width: initial">
-                                <a href="{{ route('admin.option.edit', $item->key) }}" class="button padding-0"
-                                   data-type="transparent"
-                                   title="{{ __('core-cms::admin.edit') }} {{ $item->key }}">{!! icon('edit', 'small') !!}</a>
-                                @if(!$item->used_by_cms)
-                                    <form
-                                            class="clr-red-300"
-                                            action="{{ route('admin.option.destroy', $item->key) }}"
-                                            method="post"
-                                            onsubmit="return confirm('{{ __('core-cms::admin.delete.confirm') }}')">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="button padding-0" data-type="transparent"
-                                                title="{{ __('core-cms::admin.delete.value') }} {{ $item->key }}">
-                                            {!! icon('trash', 'small') !!}
-                                        </button>
-                                    </form>
-                                @else
-                                    <button type="submit" class="button padding-0" data-type="transparent"
-                                            title="{{ __('core-cms::admin.delete.unable') }} {{ $item->key }}">
-                                        {!! icon('ban', 'small') !!}
-                                    </button>
-                                @endif
-                            </div>
-                        </td>
+                        <th>{{ __('core-cms::admin.option.key') }}</th>
+                        <th>{{ __('core-cms::admin.value') }}</th>
+                        <th>{{ __('core-cms::admin.option.type.value') }}</th>
+                        <th>{{ __('core-cms::admin.actions') }}</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
-            {{$cms_options->links()}}
-        </div>
+                    </thead>
+                    <tbody>
+                    @foreach($group->options as $item)
+                        <tr>
+                            <td>
+                                <a href="{{ route('admin.option.edit', $item->key) }}">{{ $item->key }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.option.edit', $item->key) }}">
+                                    {{-- TODO: Afficher le contenu en fonction de son type: Contenu, image ou simplement la valeur --}}
+                                    {{ $item->value }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ __('core-cms::admin.option.type.' . $item->type) }}
+                            </td>
+                            <td>
+                                <div class="flex-group align-items-center justify-content-flex-end" style="width: initial">
+                                    <a href="{{ route('admin.option.edit', $item->key) }}" class="button padding-0"
+                                       data-type="transparent"
+                                       title="{{ __('core-cms::admin.edit') }} {{ $item->key }}">{!! icon('edit', 'small') !!}</a>
+                                    @if($item->category === 'custom')
+                                        <form
+                                                class="clr-red-300"
+                                                action="{{ route('admin.option.destroy', $item->key) }}"
+                                                method="post"
+                                                onsubmit="return confirm('{{ __('core-cms::admin.delete.confirm') }}')">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="button padding-0" data-type="transparent"
+                                                    title="{{ __('core-cms::admin.delete.value') }} {{ $item->key }}">
+                                                {!! icon('trash', 'small') !!}
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" class="button padding-0" data-type="transparent"
+                                                title="{{ __('core-cms::admin.delete.unable') }} {{ $item->key }}">
+                                            {!! icon('ban', 'small') !!}
+                                        </button>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endforeach
     </section>
 @endsection

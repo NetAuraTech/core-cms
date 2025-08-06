@@ -17,34 +17,41 @@
     <section class="grid">
         <h2 class="heading-2 flex-group align-items-center">
             @if($option->exists)
-                {!! icon('option', 'small') !!} {{ __('core-cms::admin.edit') }} {{ trans_choice('core-cms::admin.option.value', 1) }}
+                {!! icon('cog', 'small') !!} {{ __('core-cms::admin.edit') }} {{ trans_choice('core-cms::admin.option.value', 1) }}
             @else
-                {!! icon('option', 'small') !!} {{ __('core-cms::admin.create') }} {{ trans_choice('core-cms::admin.option.value', 1) }}
+                {!! icon('cog', 'small') !!} {{ __('core-cms::admin.create') }} {{ trans_choice('core-cms::admin.option.value', 1) }}
             @endif
         </h2>
         <div class="card">
             <form class="grid"
-                  action="{{ route($option->exists ? 'admin.option.update' : 'admin.option.store', $option->key) }}"
+                  action="{{ route($option->exists ? 'admin.option.update' : 'admin.option.store', $option->exists ? $option->key : []) }}"
                   method="POST">
                 @csrf
                 @method($option->exists ? 'put' : 'post')
-                <div class="grid" x-data="{ type: '{{ $option->type }}' }">
-                    @include('core-cms::shared.input', ['label' => __('core-cms::admin.option.key'), 'name' => 'key', 'value' => $option->key, 'disabled' => $option->used_by_cms])
+                <div class="grid" x-data="{ type: '{{ old('type', $option->type) }}', category: '{{ old('category', $option->category) }}' }">
+                    @include('core-cms::shared.input', [
+                        'label' => __('core-cms::admin.option.key'),
+                        'name' => 'key',
+                        'value' => $option->key,
+                        'disabled' => $option->category !== 'custom'
+                    ])
                     <div class="form-group">
-                        <label for="type" class="required">{{ __('core-cms::admin.option.type') }}</label>
+                        <label for="type" class="required">{{ __('core-cms::admin.option.type.value') }}</label>
                         <select id="type"
                                 name="type"
                                 class="form-control @error("type") is-invalid @enderror"
                                 x-model="type"
-                                @if($option->used_by_cms)
-                                    disabled="disabled"
+                                @if($option->category !== 'custom')
+                                disabled="disabled"
                                 @endif
                         >
                             <option value="">{{ __('core-cms::core.select.option.choose') }}</option>
-                            <option @selected(old("type", $option->type) === "image") value="image">{{ __('core-cms::admin.option.image.value') }}</option>
-                            <option @selected(old("type", $option->type) === "text") value="text">{{ __('core-cms::admin.option.text.value') }}</option>
-                            <option @selected(old("type", $option->type) === "theme") value="theme">{{ __('core-cms::admin.option.theme.value') }}</option>
-                            <option @selected(old("type", $option->type) === "content") value="content">{{ __('core-cms::admin.option.content.value') }}</option>
+                            <option @selected(old("type", $option->type) === "image") value="image">{{ __('core-cms::admin.option.type.image') }}</option>
+                            <option @selected(old("type", $option->type) === "text") value="text">{{ __('core-cms::admin.option.type.text') }}</option>
+                            <option @selected(old("type", $option->type) === "theme") value="theme">{{ __('core-cms::admin.option.type.theme') }}</option>
+                            <option @selected(old("type", $option->type) === "content") value="content">{{ __('core-cms::admin.option.type.content') }}</option>
+                            <option @selected(old("type", $option->type) === "number") value="number">{{ __('core-cms::admin.option.type.number') }}</option>
+                            <option @selected(old("type", $option->type) === "boolean") value="boolean">{{ __('core-cms::admin.option.type.boolean') }}</option>
                         </select>
                         @error("type")
                         <div class="invalid-feedback">
@@ -54,6 +61,12 @@
                     </div>
                     <template x-if="type === 'text'">
                         @include('core-cms::shared.input', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'textarea'])
+                    </template>
+                    <template x-if="type === 'number'">
+                        @include('core-cms::shared.input', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'number'])
+                    </template>
+                    <template x-if="type === 'boolean'">
+                        @include('core-cms::shared.switch', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value])
                     </template>
                     <template x-if="type === 'theme'">
                         @include('core-cms::shared.input', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value])

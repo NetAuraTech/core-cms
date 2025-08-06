@@ -18,29 +18,31 @@ return [
         'updated' => 'L\'option a été mise à jour.',
         'deleted' => 'L\'option a été supprimée.',
         'cannot_deleted' => 'L\'option ne peut pas être supprimée.',
+        'category' => [
+            'general' => 'Général',
+            'branding' => 'Image de marque',
+            'content_settings' => 'Paramètres de contenu',
+            'contact_emails' => 'E-mails de contact',
+            'social_media' => 'Réseaux sociaux',
+            'security' => 'Sécurité',
+            'theme' => 'Thème',
+            'custom' => 'Personnalisé',
+        ],
         'content' => [
             'article' => 'Article',
             'post' => 'Page',
-            'value' => 'Contenu'
         ],
         'value' => '{0}Options|[1,1]une option|[2,*]les options',
         'key' => 'Clé',
-        'text' => [
-            'value' => 'Texte'
-        ],
-        'theme' => [
-            'value' => 'Thème'
-        ],
-        'number' => [
-            'value' => 'Nombre'
-        ],
-        'boolean' => [
-            'value' => 'Booléen'
-        ],
-        'image' => [
-            'value' => 'Image'
-        ],
-        'type' => 'Type'
+        'type' => [
+            'value' => 'Type',
+            'text' =>  'Texte',
+            'theme' =>  'Thème',
+            'number' => 'Nombre',
+            'boolean' => 'Booléen',
+            'image' => 'Image',
+            'content' => 'Contenu',
+        ]
     ],
     'save' => 'Enregistrer',
     'send' => 'Envoyer',

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('key', 255)->primary();
             $table->string('type');
             $table->string('value', 255)->nullable();
-            $table->boolean('used_by_cms');
+            $table->string('category')->default('custom');
             $table->timestamps();
         });
     }

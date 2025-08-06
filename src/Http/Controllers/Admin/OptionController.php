@@ -37,8 +37,35 @@ class OptionController extends AdminController
      */
     public function index(): View
     {
+        $groupedOptions = Option::orderBy('category')
+            ->orderBy('key')
+            ->get()
+            ->groupBy('category');
+
+        $categoryOrder = [
+            'custom',
+            'general',
+            'branding',
+            'theme',
+            'content_settings',
+            'contact_emails',
+            'social_media',
+            'security'
+        ];
+
+        $structuredGroups = $groupedOptions->map(function ($options, $categoryKey) {
+            return (object) [
+                'key' => $categoryKey,
+                'label' => __('core-cms::admin.option.category.' . $categoryKey),
+                'options' => $options,
+            ];
+        })->sortBy(function ($group) use ($categoryOrder) {
+            $index = array_search($group->key, $categoryOrder);
+            return $index === false ? PHP_INT_MAX : $index;
+        })->values();
+
         return view('core-cms::admin.option.index', [
-            'cms_options' => Option::orderBy('created_at', 'desc')->paginate(20),
+            'groupedOptions' => $structuredGroups,
         ]);
     }
 
@@ -48,12 +75,12 @@ class OptionController extends AdminController
     public function create(): View
     {
         $option = new Option();
-        $option->used_by_cms = false;
+        $option->category = 'custom';
 
         return view('core-cms::admin.option.form', [
             'option' => $option,
-            'blogPosts' => $this->contentProvider->getArticles(),
-            'pagePosts' => $this->contentProvider->getPages(),
+            'articles' => $this->contentProvider->getArticles(),
+            'pages' => $this->contentProvider->getPages(),
         ]);
     }
 
@@ -63,7 +90,6 @@ class OptionController extends AdminController
     public function store(OptionContentFormRequest $request): RedirectResponse
     {
         $option = new Option();
-        $option->used_by_cms = false;
         $option->created_at = new Carbon();
         $option->fill($request->validated());
         $option->save();
@@ -90,7 +116,7 @@ class OptionController extends AdminController
      */
     public function update(OptionContentFormRequest $request, Option $option): RedirectResponse
     {
-        if ($option->used_by_cms) {
+        if ($option->category !== 'custom') {
             $validated = $request->validated();
 
             $validated['key'] = $option->key;
@@ -113,8 +139,9 @@ class OptionController extends AdminController
      */
     public function destroy(Option $option): RedirectResponse
     {
-        if(!$option->used_by_cms) {
+        if($option->category === 'custom') {
             $option->delete();
+            OptionUpdated::dispatch($option);
             return to_route('admin.option.index')->with('success', __('core-cms::admin.option.deleted'));
         }
 

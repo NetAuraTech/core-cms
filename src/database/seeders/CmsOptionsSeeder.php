@@ -23,7 +23,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'site_name'],
             [
                 'value' => 'Mon site',
-                'used_by_cms' => true,
+                'category' => 'general',
                 'type' => 'text',
             ]
         );
@@ -32,7 +32,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'description'],
             [
                 'value' => 'La description de mon site',
-                'used_by_cms' => true,
+                'category' => 'general',
                 'type' => 'text',
             ]
         );
@@ -41,7 +41,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'logo'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'branding',
                 'type' => 'image',
             ]
         );
@@ -50,7 +50,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'favicon'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'branding',
                 'type' => 'image',
             ]
         );
@@ -59,7 +59,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'theme'],
             [
                 'value' => 'default',
-                'used_by_cms' => true,
+                'category' => 'theme',
                 'type' => 'theme',
             ]
         );
@@ -68,7 +68,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'homepage'],
             [
                 'value' => '3',
-                'used_by_cms' => true,
+                'category' => 'content_settings',
                 'type' => 'content',
             ]
         );
@@ -77,7 +77,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'privacy-policy'],
             [
                 'value' => '5',
-                'used_by_cms' => true,
+                'category' => 'content_settings',
                 'type' => 'content',
             ]
         );
@@ -86,7 +86,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'contact-email'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'contact_emails',
                 'type' => 'text',
             ]
         );
@@ -95,7 +95,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'noreply-email'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'contact_emails',
                 'type' => 'text',
             ]
         );
@@ -104,7 +104,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'sav-email'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'contact_emails',
                 'type' => 'text',
             ]
         );
@@ -113,7 +113,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'spam_words'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'security',
                 'type' => 'text',
             ]
         );
@@ -122,7 +122,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'facebook'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'social_media',
                 'type' => 'text',
             ]
         );
@@ -131,7 +131,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'instagram'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'social_media',
                 'type' => 'text',
             ]
         );
@@ -140,7 +140,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'linkedin'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'social_media',
                 'type' => 'text',
             ]
         );
@@ -149,7 +149,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'twitter'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'social_media',
                 'type' => 'text',
             ]
         );
@@ -158,7 +158,7 @@ class CmsOptionsSeeder extends Seeder
             ['key' => 'youtube'],
             [
                 'value' => '',
-                'used_by_cms' => true,
+                'category' => 'social_media',
                 'type' => 'text',
             ]
         );
