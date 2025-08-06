@@ -14,12 +14,12 @@
         @foreach($groupedOptions as $group)
             <div class="card">
                 <h2 class="heading-2 margin-block-end-6">{{ $group->label }}</h2>
-                <table class="table">
+                <table class="table" style="table-layout: fixed;">
                     <thead>
                     <tr>
                         <th>{{ __('core-cms::admin.option.key') }}</th>
-                        <th>{{ __('core-cms::admin.value') }}</th>
                         <th>{{ __('core-cms::admin.option.type.value') }}</th>
+                        <th>{{ __('core-cms::admin.value') }}</th>
                         <th>{{ __('core-cms::admin.actions') }}</th>
                     </tr>
                     </thead>
@@ -30,13 +30,13 @@
                                 <a href="{{ route('admin.option.edit', $item->key) }}">{{ $item->key }}</a>
                             </td>
                             <td>
+                                {{ __('core-cms::admin.option.type.' . $item->type) }}
+                            </td>
+                            <td>
                                 <a href="{{ route('admin.option.edit', $item->key) }}">
                                     {{-- TODO: Afficher le contenu en fonction de son type: Contenu, image ou simplement la valeur --}}
                                     {{ $item->value }}
                                 </a>
-                            </td>
-                            <td>
-                                {{ __('core-cms::admin.option.type.' . $item->type) }}
                             </td>
                             <td>
                                 <div class="flex-group align-items-center justify-content-flex-end" style="width: initial">
