@@ -52,8 +52,8 @@ class OptionController extends AdminController
 
         return view('core-cms::admin.option.form', [
             'option' => $option,
-            'blogPosts' => $this->contentProvider->getBlogPosts(),
-            'pagePosts' => $this->contentProvider->getPagePosts(),
+            'blogPosts' => $this->contentProvider->getArticles(),
+            'pagePosts' => $this->contentProvider->getPages(),
         ]);
     }
 
@@ -80,8 +80,8 @@ class OptionController extends AdminController
     {
         return view('core-cms::admin.option.form', [
             'option' => $option,
-            'blogPosts' => $this->contentProvider->getBlogPosts(),
-            'pagePosts' => $this->contentProvider->getPagePosts(),
+            'articles' => $this->contentProvider->getArticles(),
+            'pages' => $this->contentProvider->getPages(),
         ]);
     }
 

@@ -70,13 +70,13 @@
                             >
                                 <option value="">{{ __('core-cms::core.select.option.choose') }}</option>
                                 <optgroup label="{{ __('core-cms::admin.option.content.article') }}">
-                                    @foreach($blogPosts as $post)
+                                    @foreach($articles as $post)
                                         <option value="{{ $post->id }}"
                                                 @if($option->value== $post->id) selected @endif>{{ $post->title }}</option>
                                     @endforeach
                                 </optgroup>
                                 <optgroup label="{{ __('core-cms::admin.option.content.post') }}">
-                                    @foreach($pagePosts as $post)
+                                    @foreach($pages as $post)
                                         <option value="{{ $post->id }}"
                                                 @if($option->value== $post->id) selected @endif>{{ $post->title }}</option>
                                     @endforeach

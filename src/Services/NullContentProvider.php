@@ -10,7 +10,7 @@ class NullContentProvider implements ContentProviderInterface
     /**
      * @inheritDoc
      */
-    public function getBlogPosts(): Collection
+    public function getArticles(): Collection
     {
         return new Collection();
     }
@@ -18,7 +18,7 @@ class NullContentProvider implements ContentProviderInterface
     /**
      * @inheritDoc
      */
-    public function getPagePosts(): Collection
+    public function getPages(): Collection
     {
         return new Collection();
     }
@@ -27,6 +27,30 @@ class NullContentProvider implements ContentProviderInterface
      * @inheritDoc
      */
     public function getContentById(int $id): ?object
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContentBySlug(string $slug): ?object
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getHeaderContent(): ?object
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFooterContent(): ?object
     {
         return null;
     }

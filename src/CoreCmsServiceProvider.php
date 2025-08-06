@@ -41,7 +41,7 @@ class CoreCmsServiceProvider extends ServiceProvider
             return new AssetManager();
         });
 
-        $this->app->bind(ContentProviderInterface::class, NullContentProvider::class);
+        $this->app->bindIf(ContentProviderInterface::class, NullContentProvider::class);
     }
     public function boot(MenuManager $menuManager, AssetManager $assetManager): void
     {
