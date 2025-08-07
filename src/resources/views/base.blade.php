@@ -15,6 +15,7 @@
         <script src="{{ route('translations') }}"></script>
         @vite(['resources/ts/app.ts'])
         @include('theme::assets.css') {{-- Includes theme-specific CSS --}}
+        @include('theme::assets.js') {{-- Includes theme-specific JS --}}
         @yield('stylesheets') {{-- For page-specific CSS --}}
         @yield('meta') {{-- For additional meta tags --}}
         @yield('description') {{-- The page description is managed in the specific view --}}
@@ -99,7 +100,13 @@
     </head>
     <body id="page-wrapper">
         <main class="body">
+            @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
+                {{-- TODO: Display header --}}
+            @endunless
             @yield('body')
+            @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
+                {{-- TODO: Display header --}}
+            @endunless
         </main>
     </body>
 </html>
