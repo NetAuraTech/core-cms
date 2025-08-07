@@ -1,3 +1,5 @@
+import {useEffect, useState} from "preact/compat";
+
 /**
  * Returns window height
  * @return {number}
@@ -39,4 +41,38 @@ export function isActiveWindow() {
   } else {
     return true
   }
+}
+
+export function useWindowSize() {
+  const [windowSize, setWindowSize] = useState(() => {
+    if (typeof window === 'undefined') {
+      return {
+        width: undefined,
+        height: undefined,
+      };
+    }
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowSize;
 }
