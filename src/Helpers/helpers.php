@@ -1,11 +1,13 @@
 <?php
 
+use Netauratech\CoreCms\Contracts\MediaProviderInterface;
+
 if (!function_exists('icon')) {
     /**
-     * Génère une balise SVG pour une icône.
+     * Generates an SVG tag for an icon.
      *
-     * @param string $name Le nom de l'icône.
-     * @param string|null $size La taille de l'icône.
+     * @param string $name The name of the icon.
+     * @param string|null $size The size of the icon.
      * @return string
      */
     function icon(string $name, ?string $size = null): string
@@ -23,9 +25,9 @@ if (!function_exists('icon')) {
 
 if (!function_exists('menu_active')) {
     /**
-     * Ajoute la classe 'active' si l'URL courante correspond au chemin du menu.
+     * Adds the ‘active’ class if the current URL matches the menu path.
      *
-     * @param string $path Le chemin du lien de menu (généralement via route()).
+     * @param string $path The path of the menu link (usually via route()).
      * @return string
      */
     function menu_active(string $path): string
@@ -43,11 +45,11 @@ if (!function_exists('menu_active')) {
 }
 
 if (!function_exists('generateNameVariants')) {
-    function generateNameVariants(string $sitename): array
+    function generateNameVariants(string $site_name): array
     {
         $variants = [];
 
-        $base = trim($sitename);
+        $base = trim($site_name);
         $lower = strtolower($base);
         $ucfirst = ucfirst($lower);
         $variants[] = $base;
@@ -84,5 +86,23 @@ if (!function_exists('generateNameVariants')) {
         }
 
         return array_unique($variants);
+    }
+}
+
+if (!function_exists('image_url')) {
+    /**
+     * Generates a URL for an image, potentially resized.
+     * Uses MediaProviderInterface to delegate the logic.
+     *
+     * @param string|int|object|null $entity The ID of the attachment, the file name, or the Attachment object itself.
+     * @param int|null $width The desired width for the image.
+     * @param int|null $height The desired height for the image.
+     * @return string The URL of the image.
+     */
+    function image_url(string|int|object|null $entity, ?int $width = null, ?int $height = null): string
+    {
+        $mediaProvider = app(MediaProviderInterface::class);
+
+        return $mediaProvider->getImageUrl($entity, $width, $height);
     }
 }
