@@ -1,4 +1,4 @@
-import Icon from '../components/Icon'
+import Icon from '../shared/components/Icon'
 import { ComponentChildren } from 'preact';
 import {slideUp} from "../shared/functions/animation";
 import {useEffect, useRef, useState} from "preact/compat";

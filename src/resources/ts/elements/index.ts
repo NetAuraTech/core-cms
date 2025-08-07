@@ -1,3 +1,4 @@
-import Alert from "./Alert";
+import Alert from "../shared/elements/Alert";
+
 
 Alert.defineElement();

@@ -1,4 +1,4 @@
-import {Alert as AlertComponent} from '../components/Alert'
+import {Alert as AlertComponent} from '../../components/Alert'
 import {createRoot} from "preact/compat/client";
 
 export default class Alert {
