@@ -63,7 +63,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', NetAuraTech\CoreCms\Models\User::class),
+            'model' => env('AUTH_MODEL', Netauratech\CoreCms\Models\User::class),
         ],
 
         // 'users' => [
