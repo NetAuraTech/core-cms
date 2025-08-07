@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Translation\Translator;
+use Netauratech\CoreCms\Http\Controllers\AssetController;
 use Netauratech\CoreCms\Http\Controllers\ProfileController;
 use Netauratech\CoreCms\Services\AssetManager;
 
@@ -42,6 +43,13 @@ Route::get('js/translations.js', function (AssetManager $assetManager, Translato
     echo('window.i18n = ' . json_encode($strings) . ';');
     exit();
 })->name('translations');
+
+/**
+ * Assets
+ */
+Route::get('/assets/{path}', [AssetController::class, 'show'])
+    ->where('path', '.*')
+    ->name('assets.show');
 
 /**
  * Profile

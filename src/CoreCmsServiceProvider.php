@@ -11,11 +11,15 @@ use Illuminate\Support\Str;
 use Netauratech\CoreCms\Console\DiscoverAssetsCommand;
 use Netauratech\CoreCms\Console\InstallCommand;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
+use Netauratech\CoreCms\Contracts\MediaProviderInterface;
+use Netauratech\CoreCms\Http\Controllers\AssetController;
 use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
 use Netauratech\CoreCms\Services\Admin\MenuManager;
 use Netauratech\CoreCms\Services\AssetManager;
 use Netauratech\CoreCms\Services\NullContentProvider;
+use Netauratech\CoreCms\Services\NullMediaProvider;
+use Netauratech\CoreCms\Services\StorageAssetSource;
 
 class CoreCmsServiceProvider extends ServiceProvider
 {
@@ -42,6 +46,15 @@ class CoreCmsServiceProvider extends ServiceProvider
         });
 
         $this->app->bindIf(ContentProviderInterface::class, NullContentProvider::class);
+        $this->app->bindIf(MediaProviderInterface::class, NullMediaProvider::class);
+
+        $this->app->tag(StorageAssetSource::class, 'cms.asset.sources');
+        $this->app->bind(AssetController::class, function ($app) {
+            $assetSources = iterator_to_array($app->tagged('cms.asset.sources'));
+            return new AssetController(
+                $assetSources
+            );
+        });
     }
     public function boot(MenuManager $menuManager, AssetManager $assetManager): void
     {
@@ -83,7 +96,7 @@ class CoreCmsServiceProvider extends ServiceProvider
                 $packageName = $composerJsonContent['name'];
             }
             $assetManager->registerAppJs("vendor/{$packageName}/src/resources/ts/app.ts");
-            $assetManager->registerAppJs("vendor/{$packageName}/src/resources/ts/admin.ts");
+            $assetManager->registerAdminJs("vendor/{$packageName}/src/resources/ts/admin.ts");
         }
 
         // Lang
