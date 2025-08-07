@@ -14,6 +14,8 @@
         @vite(['resources/ts/admin.ts'])
         @includeIf('theme::assets.css')
         @includeIf('theme::assets.admin.css')
+        @includeIf('theme::assets.js')
+        @includeIf('theme::assets.admin.js')
     </head>
     <body>
         <div class="admin">
