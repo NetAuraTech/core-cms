@@ -13,6 +13,7 @@ use Netauratech\CoreCms\Contracts\ChallengeGeneratorInterface;
 use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 use Netauratech\CoreCms\Contracts\MediaProviderInterface;
+use Netauratech\CoreCms\Form\FormRegistry;
 use Netauratech\CoreCms\Http\Controllers\AssetController;
 use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
@@ -46,6 +47,10 @@ class CoreCmsServiceProvider extends ServiceProvider
 
         $this->app->singleton(AssetManager::class, function ($app) {
             return new AssetManager();
+        });
+
+        $this->app->singleton(FormRegistry::class, function ($app) {
+            return new FormRegistry();
         });
 
         $this->app->bindIf(ContentProviderInterface::class, NullContentProvider::class);
