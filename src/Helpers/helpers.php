@@ -1,5 +1,6 @@
 <?php
 
+use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\MediaProviderInterface;
 
 if (!function_exists('icon')) {
@@ -104,5 +105,20 @@ if (!function_exists('image_url')) {
         $mediaProvider = app(MediaProviderInterface::class);
 
         return $mediaProvider->getImageUrl($entity, $width, $height);
+    }
+}
+
+if (!function_exists('generate_challenge')) {
+    /**
+     * Generates and returns a unique key for a new captcha challenge.
+     *
+     * @return string The key for the generated challenge.
+     */
+    function generate_challenge(): string
+    {
+        $challenge = app(ChallengeInterface::class);
+        $key = $challenge->generateKey();
+
+        return $key;
     }
 }

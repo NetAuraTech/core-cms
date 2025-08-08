@@ -14,7 +14,7 @@
         height="200"
         piece-width="80"
         piece-height="50"
-        src="{{ route('captcha', ['challenge' => $key]) }}"
+        src="{{ route('captcha.image', ['key' => $key]) }}"
     >
         <input type="hidden" name="captcha-challenge" id="captcha-challenge" value="{{ $key }}">
         <input type="hidden" name="captcha-answer" id="captcha-answer">

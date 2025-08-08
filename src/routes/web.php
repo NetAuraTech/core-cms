@@ -1,11 +1,13 @@
 <?php
 
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Translation\Translator;
 use Netauratech\CoreCms\Http\Controllers\AssetController;
+use Netauratech\CoreCms\Http\Controllers\CaptchaController;
 use Netauratech\CoreCms\Http\Controllers\ProfileController;
 use Netauratech\CoreCms\Services\AssetManager;
 
@@ -50,6 +52,14 @@ Route::get('js/translations.js', function (AssetManager $assetManager, Translato
 Route::get('/assets/{path}', [AssetController::class, 'show'])
     ->where('path', '.*')
     ->name('assets.show');
+
+/**
+ * Captcha
+ */
+Route::middleware(['lscache:no-cache'])->group(function () {
+    Route::get('/captcha/{key}', [CaptchaController::class, 'show'])->name('captcha.image');
+    Route::post('/captcha/check', [CaptchaController::class, 'check'])->name('captcha.check')->withoutMiddleware(VerifyCsrfToken::class);
+});
 
 /**
  * Profile

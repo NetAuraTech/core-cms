@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Netauratech\CoreCms\Console\DiscoverAssetsCommand;
 use Netauratech\CoreCms\Console\InstallCommand;
+use Netauratech\CoreCms\Contracts\ChallengeGeneratorInterface;
+use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 use Netauratech\CoreCms\Contracts\MediaProviderInterface;
 use Netauratech\CoreCms\Http\Controllers\AssetController;
@@ -17,6 +18,8 @@ use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
 use Netauratech\CoreCms\Services\Admin\MenuManager;
 use Netauratech\CoreCms\Services\AssetManager;
+use Netauratech\CoreCms\Services\Captcha\PuzzleChallenge;
+use Netauratech\CoreCms\Services\Captcha\PuzzleGenerator;
 use Netauratech\CoreCms\Services\NullContentProvider;
 use Netauratech\CoreCms\Services\NullMediaProvider;
 use Netauratech\CoreCms\Services\StorageAssetSource;
@@ -55,6 +58,9 @@ class CoreCmsServiceProvider extends ServiceProvider
                 $assetSources
             );
         });
+
+        $this->app->bindIf(ChallengeInterface::class, PuzzleChallenge::class);
+        $this->app->bindIf(ChallengeGeneratorInterface::class, PuzzleGenerator::class);
     }
     public function boot(MenuManager $menuManager, AssetManager $assetManager): void
     {
