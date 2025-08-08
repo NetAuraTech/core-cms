@@ -7,8 +7,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use Netauratech\CoreCms\Notifications\EmailVerificationNotification;
+use Netauratech\CoreCms\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -48,12 +52,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendEmailVerificationNotification(): void
     {
-        //$this->notify(new EmailVerificationNotification(Auth::user()));
+        $this->notify(new EmailVerificationNotification(Auth::user()));
     }
 
     public function sendPasswordResetNotification($token): void
     {
-        //$this->notify(new ResetPasswordNotification($token));
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     public function getNotificationsReadAtTimestamp(): int
