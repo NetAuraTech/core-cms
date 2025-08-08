@@ -9,7 +9,7 @@
 @section('body')
     <section class="container padding-block-6">
         <div class="card">
-            <form class="grid" method="post" action="{{ route('password.email') }}">
+            <form class="grid" method="post" action="{{ route('password.store') }}">
                 <h1 class="heading-1 text-center">{{ __('core-cms::auth.account.password.reset.value') }}</h1>
                 @csrf
                 @include('core-cms::shared.input', ['type' => 'hidden', 'name' => 'token', 'value' => $request->route('token')])
