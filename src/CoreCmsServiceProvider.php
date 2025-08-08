@@ -90,6 +90,10 @@ class CoreCmsServiceProvider extends ServiceProvider
         // Load all views
         $this->loadViewsFrom(__DIR__.'/resources/views', 'core-cms');
 
+        $this->publishes([
+            __DIR__.'/resources/views/mail' => resource_path('views/vendor/mail'),
+        ], 'core-cms-assets');
+
         // Register Assets
         $packageBasePath = realpath(__DIR__ . '/../');
         $composerJsonPath = $packageBasePath . '/composer.json';

@@ -130,4 +130,19 @@ return [
             'value' => 'Zone de danger',
         ],
     ],
+    'form' => [
+        'send' => 'Envoyer',
+        'consentement' => 'J’accepte que mes données soient utilisées pour traiter ma demande, conformément à la',
+        'confirmed' => 'Votre demande a bien été transmise.',
+        'error' => 'Une erreur s\'est produite. Veuillez réessayer plus tard.',
+        'contact' => [
+            'lastname' => 'Nom',
+            'firstname' => 'Prénom',
+            'email' => 'E-mail',
+            'phone' => 'Téléphone',
+            'subject' => 'Sujet',
+            'message' => 'Message',
+        ]
+    ],
+    'privacy-policy' => 'politique de confidentialité',
 ];

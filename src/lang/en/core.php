@@ -130,4 +130,19 @@ return [
             'delete' => 'Delete Account',
         ],
     ],
+    'form' => [
+        'send' => 'Send',
+        'consentement' => 'I agree to my data being used to process my request, in accordance with the',
+        'confirmed' => 'Your request has been sent.',
+        'error' => 'An error has occurred. Please try again later.',
+        'contact' => [
+            'lastname' => 'Lastname',
+            'firstname' => 'Firstname',
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'subject' => 'Subject',
+            'message' => 'Message',
+        ]
+    ],
+    'privacy-policy' => 'privacy policy',
 ];
