@@ -95,16 +95,16 @@ if (!function_exists('image_url')) {
      * Generates a URL for an image, potentially resized.
      * Uses MediaProviderInterface to delegate the logic.
      *
-     * @param string|int|object|null $entity The ID of the attachment, the file name, or the Attachment object itself.
+     * @param string|int $id The ID of the Media.
      * @param int|null $width The desired width for the image.
      * @param int|null $height The desired height for the image.
      * @return string The URL of the image.
      */
-    function image_url(string|int|object|null $entity, ?int $width = null, ?int $height = null): string
+    function image_url(string|int $id, ?int $width = null, ?int $height = null): string
     {
         $mediaProvider = app(MediaProviderInterface::class);
 
-        return $mediaProvider->getImageUrl($entity, $width, $height);
+        return $mediaProvider->getImageUrl($id, $width, $height);
     }
 }
 

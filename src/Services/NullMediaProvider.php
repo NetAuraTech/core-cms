@@ -9,7 +9,7 @@ class NullMediaProvider implements MediaProviderInterface
     /**
      * @inheritDoc
      */
-    public function getImageUrl(string|int|object|null $entity, ?int $width = null, ?int $height = null): string
+    public function getImageUrl(string|int $id, ?int $width = null, ?int $height = null): string
     {
         return '';
     }
@@ -17,7 +17,7 @@ class NullMediaProvider implements MediaProviderInterface
     /**
      * @inheritDoc
      */
-    public function getAttachmentById(string|int $id): ?object
+    public function get(int $id): ?object
     {
         return null;
     }
