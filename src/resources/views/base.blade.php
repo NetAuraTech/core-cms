@@ -1,9 +1,6 @@
 <?php
     $options = $options ?? [];
     $site_name = $options['site_name'] ?? config('app.name');
-
-    $favicon = $options['favicon'] ?? null;
-    $openGraphLogo = $options['logo'] ?? null;
 ?>
 
 <!DOCTYPE html>
