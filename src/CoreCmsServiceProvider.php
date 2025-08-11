@@ -2,6 +2,7 @@
 
 namespace Netauratech\CoreCms;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,7 @@ use Netauratech\CoreCms\Contracts\ChallengeGeneratorInterface;
 use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 use Netauratech\CoreCms\Contracts\MediaProviderInterface;
+use Netauratech\CoreCms\Events\LangLoaded;
 use Netauratech\CoreCms\Form\FormRegistry;
 use Netauratech\CoreCms\Http\Controllers\AssetController;
 use Netauratech\CoreCms\Models\Option;
@@ -116,6 +118,7 @@ class CoreCmsServiceProvider extends ServiceProvider
 
         // Lang
         $this->loadTranslationsFrom(__DIR__.'/lang', 'core-cms');
+        LangLoaded::dispatch('core-cms');
 
         // Allows you to publish translations of the package
         $this->publishes([
