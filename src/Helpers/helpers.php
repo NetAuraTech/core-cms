@@ -108,6 +108,29 @@ if (!function_exists('image_url')) {
     }
 }
 
+if (!function_exists('image_tag')) {
+    /**
+     * Generates an HTML <img> tag to display an image.
+     *
+     * This function takes an image entity or path and constructs an <img> tag
+     * with options for alternative text, height, CSS transitions,
+     * additional classes, and preloading.
+     *
+     * @param string $entity The image entity (e.g., a file path, an ID, or an image object).
+     * @param string|null $alt The alternative text for the image, for accessibility. Defaults to null.
+     * @param int|null $height The height of the image in pixels. Defaults to null.
+     * @param string|null $transitionName A CSS transition name (e.g., for frontend animations). Defaults to null.
+     * @param string|null $class Additional CSS classes to apply to the <img> tag. Defaults to null.
+     * @return string|null The generated HTML <img> tag as a string, or null if the image cannot be generated.
+     */
+    function image_tag(string $entity, ?string $alt = null, ?int $height = null, ?string $transitionName = null, ?string $class = null): ?string
+    {
+        $mediaProvider = app(MediaProviderInterface::class);
+
+        return $mediaProvider->image_tag($entity, $alt, $height, $transitionName, $class);
+    }
+}
+
 if (!function_exists('generate_challenge')) {
     /**
      * Generates and returns a unique key for a new captcha challenge.
