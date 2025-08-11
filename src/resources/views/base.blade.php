@@ -32,15 +32,10 @@
         <meta property="og:site_name" content="{{ $site_name }}"/>
         <meta property="og:language" content="fr"/>
         <meta property='og:url' content="{{ Request::url() }}"/>
-        @if($openGraphLogo)
-            <meta property='og:image' content="{{ $openGraphLogo }}"/>
-        @endif
+
         <meta name='twitter:card' content='summary'/>
         <meta name='twitter:site' content="{{ Request::url() }}"/>
         <meta name='twitter:title' content="@yield('title') | {{ $site_name }}"/>
-        @if($openGraphLogo)
-            <meta name='twitter:image' content="{{ $openGraphLogo }}"/>
-        @endif
 
         <style>
             @view-transition {
