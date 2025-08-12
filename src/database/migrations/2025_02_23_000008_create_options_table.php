@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('options', function (Blueprint $table) {
             $table->string('key', 255)->primary();
             $table->string('type');
-            $table->string('value', 255)->nullable();
+            $table->longText('value')->nullable();
             $table->string('category')->default('custom');
             $table->timestamps();
         });
