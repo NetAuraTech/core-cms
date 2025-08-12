@@ -187,6 +187,15 @@ class CoreCmsServiceProvider extends ServiceProvider
             $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         });
 
+        //Route Api
+        Route::group([
+            'prefix' => 'api',
+            'as' => 'api.',
+            'middleware' => ['web'],
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/routes/api.php');
+        });
+
         $menuManager->registerMenuItem('option', [
             'label' => trans_choice('core-cms::admin.option.value', 0),
             'icon' => 'option',

@@ -2,6 +2,7 @@
 
 namespace Netauratech\CoreCms\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Netauratech\CoreCms\Contracts\ChallengeGeneratorInterface;
 use Illuminate\Http\Response;
 use Netauratech\CoreCms\Contracts\ChallengeInterface;
@@ -10,10 +11,12 @@ use Netauratech\CoreCms\Http\Requests\CaptchaRequest;
 class CaptchaController extends Controller
 {
     protected ChallengeGeneratorInterface $challengeGenerator;
+    protected ChallengeInterface $challenge;
 
-    public function __construct(ChallengeGeneratorInterface $challengeGenerator)
+    public function __construct(ChallengeGeneratorInterface $challengeGenerator, ChallengeInterface $challenge)
     {
         $this->challengeGenerator = $challengeGenerator;
+        $this->challenge = $challenge;
     }
 
     /**
@@ -46,5 +49,10 @@ class CaptchaController extends Controller
             return new Response(null, 204);
         }
         return new Response(null, 422);
+    }
+
+    public function generate(): JsonResponse
+    {
+        return new JsonResponse(['key' => $this->challenge->generateKey()], 200);
     }
 }
