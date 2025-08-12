@@ -72,10 +72,15 @@ type Violation = {
   propertyPath: string
   message: string
 }
+
+type Error = Record<string, string[]>;
+
 type Data = {
   title?: string
+  message?: string
   detail?: string
-  violations: Violation[]
+  violations?: Violation[]
+  errors?: Error[]
 }
 
 /**
@@ -99,11 +104,17 @@ export class ApiError {
 
   // Returns violations indexed by propertyPath
   get violations() {
-    if (!this.data.violations) {
+    if (!this.data.violations && !this.data.errors) {
       return {
-        main: `${this.data.title} ${this.data.detail || ''}`,
+        main: `${this.data.title || this.data.message} ${this.data.detail || ''}`,
       }
     }
+
+    if(this.data.errors) {
+      return this.data.errors;
+    }
+
+
     return this.data.violations.reduce(
       (acc: Record<string, Array<string>>, violation: Violation) => {
         if (acc[violation.propertyPath]) {
