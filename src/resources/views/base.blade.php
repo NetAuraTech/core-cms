@@ -91,14 +91,22 @@
         @show
     </head>
     <body id="page-wrapper">
+        @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
+            {{-- TODO: Display header --}}
+        @endunless
         <main class="body">
-            @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
-                {{-- TODO: Display header --}}
-            @endunless
             @yield('body')
-            @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
-                {{-- TODO: Display header --}}
-            @endunless
         </main>
+        @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
+            {{-- TODO: Display header --}}
+        @endunless
+        <script>
+            @php use Illuminate\Support\Facades\Auth; @endphp
+            window.auth = {
+                ...(window.auth || {}),
+                USER: {{ Auth::user() ? Auth::user()->id : 'null' }},
+                NOTIFICATION: new Date({{ (Auth::user() and Auth::user()->notifications_read_at) ? Auth::user()->getNotificationsReadAtTimestamp() : 0 }})
+            };
+        </script>
     </body>
 </html>
