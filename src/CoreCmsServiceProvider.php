@@ -147,8 +147,8 @@ class CoreCmsServiceProvider extends ServiceProvider
 
             View::composer('*', function ($view) use ($ret) {
                 $view->with('options', $ret);
-                $view->with('favicon', image_url($ret['favicon'], 128));
-                $view->with('openGraphLogo', image_url($ret['logo']));
+                $view->with('favicon', $ret['favicon'] ? image_url($ret['favicon'], 128) : "");
+                $view->with('openGraphLogo', $ret['logo'] ? image_url($ret['logo']) : "");
             });
         }
 
