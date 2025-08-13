@@ -13,7 +13,7 @@ if (!function_exists('icon')) {
      */
     function icon(string $name, ?string $size = null): string
     {
-        $iconPath = asset('vendor/core-cms/sprite.svg') . "#{$name}";
+        $iconPath = '/vendor/core-cms/sprite.svg' . "#{$name}";
         $sizeClass = $size ? "{$size}" : '';
 
         return <<<HTML
