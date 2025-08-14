@@ -92,13 +92,13 @@
     </head>
     <body id="page-wrapper">
         @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
-            {{-- TODO: Display header --}}
+            @yield('header')
         @endunless
         <main class="body">
             @yield('body')
         </main>
         @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
-            {{-- TODO: Display header --}}
+            @yield('footer')
         @endunless
         <script>
             @php use Illuminate\Support\Facades\Auth; @endphp

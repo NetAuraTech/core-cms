@@ -6,6 +6,22 @@
     @parent
 @endsection
 
+@section('header')
+    @if($options['header'] !== "")
+        @foreach($options['header']->getContent() as $block)
+            @includeIf('content-manager::shared.blocks.renderer', ['block' => $block])
+        @endforeach
+    @endif
+@endsection
+
+@section('footer')
+    @if($options['footer'] !== "")
+        @foreach($options['footer']->getContent() as $block)
+            @includeIf('content-manager::shared.blocks.renderer', ['block' => $block])
+        @endforeach
+    @endif
+@endsection
+
 @section('body')
     <section class="container padding-block-6">
         <div class="card margin-block-end-6">

@@ -7,6 +7,22 @@
     @parent
 @endsection
 
+@section('header')
+    @if($options['header'] !== "")
+        @foreach($options['header']->getContent() as $block)
+            @includeIf('content-manager::shared.blocks.renderer', ['block' => $block])
+        @endforeach
+    @endif
+@endsection
+
+@section('footer')
+    @if($options['footer'] !== "")
+        @foreach($options['footer']->getContent() as $block)
+            @includeIf('content-manager::shared.blocks.renderer', ['block' => $block])
+        @endforeach
+    @endif
+@endsection
+
 @section('body')
     <section class="container grid-aside padding-block-6">
         <aside>
