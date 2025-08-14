@@ -39,6 +39,9 @@ class CoreCmsServiceProvider extends ServiceProvider
             __DIR__.'/../config/auth.php', 'auth'
         );
 
+        Paginator::defaultView('core-cms::shared.partials.paginator');
+        Paginator::defaultSimpleView('pagination::simple-bootstrap-5');
+
         $this->app->singleton(MenuManager::class, function () {
             return new MenuManager();
         });
