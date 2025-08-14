@@ -1,6 +1,6 @@
 <?php
 
-namespace Netauratech\CoreCms\Http\Events;
+namespace Netauratech\CoreCms\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
