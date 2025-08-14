@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class StorageAssetSource implements AssetSourceInterface
 {
-    public function resolve(string $path): Response|BinaryFileResponse|null
+    public function resolve(string $path, ?string $theme): Response|BinaryFileResponse|null
     {
         try {
             $basePath = storage_path('app/public');

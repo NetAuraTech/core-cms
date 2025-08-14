@@ -2,6 +2,7 @@
 
 namespace Netauratech\CoreCms\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Netauratech\CoreCms\Contracts\AssetSourceInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -27,12 +28,14 @@ class AssetController extends Controller
      * Serves assets by trying different sources.
      *
      * @param string $path The path to the requested asset.
+     * @param Request $request
      * @return BinaryFileResponse|Response
      */
-    public function show(string $path): BinaryFileResponse|Response
+    public function show(string $path, Request $request): BinaryFileResponse|Response
     {
+        $theme = $request->input('theme', null);
         foreach ($this->assetSources as $source) {
-            $response = $source->resolve($path);
+            $response = $source->resolve($path, $theme);
             if ($response !== null) {
                 return $response;
             }

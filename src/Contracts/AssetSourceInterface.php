@@ -12,7 +12,8 @@ interface AssetSourceInterface
      * Returns null if the asset is not found by this source.
      *
      * @param string $path The relative path of the asset (e.g., ‘images/logo.png’).
+     * @param string|null $theme
      * @return BinaryFileResponse|Response|null A binary file response if the asset is found, otherwise null.
      */
-    public function resolve(string $path): BinaryFileResponse|Response|null;
+    public function resolve(string $path, ?string $theme): BinaryFileResponse|Response|null;
 }
