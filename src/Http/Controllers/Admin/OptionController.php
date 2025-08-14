@@ -2,6 +2,7 @@
 
 namespace Netauratech\CoreCms\Http\Controllers\Admin;
 
+use Netauratech\CoreCms\Form\FormRegistry;
 use Netauratech\CoreCms\Http\Controllers\AdminController;
 use Netauratech\CoreCms\Http\Events\OptionUpdated;
 use Netauratech\CoreCms\Http\Requests\Admin\OptionContentFormRequest;
@@ -21,15 +22,14 @@ class OptionController extends AdminController
         'option-delete' => ['destroy'],
     ];
 
-    /**
-     * @var ContentProviderInterface
-     */
     protected ContentProviderInterface $contentProvider;
+    protected FormRegistry $formRegistry;
 
-    public function __construct(ContentProviderInterface $contentProvider)
+    public function __construct(ContentProviderInterface $contentProvider, FormRegistry $formRegistry)
     {
         parent::__construct();
         $this->contentProvider = $contentProvider;
+        $this->formRegistry = $formRegistry;
     }
 
     /**
@@ -38,6 +38,7 @@ class OptionController extends AdminController
     public function index(): View
     {
         $groupedOptions = Option::orderBy('category')
+            ->where('type', '!=', 'theme')
             ->orderBy('key')
             ->get()
             ->groupBy('category');
@@ -46,7 +47,6 @@ class OptionController extends AdminController
             'custom',
             'general',
             'branding',
-            'theme',
             'content_settings',
             'contact_emails',
             'social_media',
@@ -64,8 +64,11 @@ class OptionController extends AdminController
             return $index === false ? PHP_INT_MAX : $index;
         })->values();
 
+        $formFields = $this->formRegistry->getFormFields('option_media');
+
         return view('core-cms::admin.option.index', [
             'groupedOptions' => $structuredGroups,
+            'formFields' => $formFields,
         ]);
     }
 
@@ -77,10 +80,13 @@ class OptionController extends AdminController
         $option = new Option();
         $option->category = 'custom';
 
+        $formFields = $this->formRegistry->getFormFields('option_media');
+
         return view('core-cms::admin.option.form', [
             'option' => $option,
             'articles' => $this->contentProvider->getArticles(),
             'pages' => $this->contentProvider->getPages(),
+            'formFields' => $formFields,
         ]);
     }
 
@@ -104,10 +110,13 @@ class OptionController extends AdminController
      */
     public function edit(Option $option): View
     {
+        $formFields = $this->formRegistry->getFormFields('option_media');
+
         return view('core-cms::admin.option.form', [
             'option' => $option,
             'articles' => $this->contentProvider->getArticles(),
             'pages' => $this->contentProvider->getPages(),
+            'formFields' => $formFields
         ]);
     }
 

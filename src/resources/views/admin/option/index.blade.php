@@ -34,8 +34,32 @@
                             </td>
                             <td>
                                 <a href="{{ route('admin.option.edit', $item->key) }}">
-                                    {{-- TODO: Afficher le contenu en fonction de son type: Contenu, image ou simplement la valeur --}}
-                                    {{ $item->value }}
+                                    @switch($item->type)
+                                        @case('content')
+                                            @php
+                                                $contentProvider = app(Netauratech\CoreCms\Contracts\ContentProviderInterface::class);
+                                                $content = $contentProvider->getContentById($item->value);
+                                            @endphp
+
+                                            @if ($content)
+                                                {{ $content->title }}
+                                            @else
+                                                {{ $item->value }}
+                                            @endif
+                                            @break
+
+                                        @default
+                                            @php
+                                                $formFields = $formFields ?? [];
+                                                $field = collect($formFields)->firstWhere('type', $item->type);
+                                            @endphp
+
+                                            @if ($field)
+                                                @include($field['renderer'], [...$field['props'] ?? [], 'value' => $item->value])
+                                            @else
+                                                {{ $item->value }}
+                                            @endif
+                                    @endswitch
                                 </a>
                             </td>
                             <td>

@@ -37,10 +37,9 @@ return [
         'type' => [
             'value' => 'Type',
             'text' =>  'Texte',
-            'theme' =>  'Thème',
             'number' => 'Nombre',
             'boolean' => 'Booléen',
-            'image' => 'Image',
+            'media' => 'Média',
             'content' => 'Contenu',
         ]
     ],

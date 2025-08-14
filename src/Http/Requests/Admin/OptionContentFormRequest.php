@@ -36,11 +36,11 @@ class OptionContentFormRequest extends FormRequest
         }elseif ($this->isMethod('post')) {
             $rules['key'][] = 'unique:options,key';
             $rules['key'][] = 'required';
-            $rules['type'][] = 'in:image,text,content,theme,boolean,number';
+            $rules['type'][] = 'in:media,text,content,boolean,number';
         } elseif ($this->isMethod('put')) {
             $rules['key'][] = 'unique:options,key,' . $this->route('option')->key . ',key';
             $rules['key'][] = 'required';
-            $rules['type'][] = 'in:image,text,content,theme,boolean,number';
+            $rules['type'][] = 'in:media,text,content,boolean,number';
         }
 
         return $rules;

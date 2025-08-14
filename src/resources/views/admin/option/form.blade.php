@@ -46,12 +46,13 @@
                                 @endif
                         >
                             <option value="">{{ __('core-cms::core.select.option.choose') }}</option>
-                            <option @selected(old("type", $option->type) === "image") value="image">{{ __('core-cms::admin.option.type.image') }}</option>
                             <option @selected(old("type", $option->type) === "text") value="text">{{ __('core-cms::admin.option.type.text') }}</option>
-                            <option @selected(old("type", $option->type) === "theme") value="theme">{{ __('core-cms::admin.option.type.theme') }}</option>
                             <option @selected(old("type", $option->type) === "content") value="content">{{ __('core-cms::admin.option.type.content') }}</option>
                             <option @selected(old("type", $option->type) === "number") value="number">{{ __('core-cms::admin.option.type.number') }}</option>
                             <option @selected(old("type", $option->type) === "boolean") value="boolean">{{ __('core-cms::admin.option.type.boolean') }}</option>
+                            @foreach($formFields as $field)
+                                <option @selected(old("type", $option->type) === $field['type']) value="{{ $field['type'] }}">{{ $field['label'] }}</option>
+                            @endforeach
                         </select>
                         @error("type")
                         <div class="invalid-feedback">
@@ -67,12 +68,6 @@
                     </template>
                     <template x-if="type === 'boolean'">
                         @include('core-cms::shared.switch', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value])
-                    </template>
-                    <template x-if="type === 'theme'">
-                        @include('core-cms::shared.input', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value])
-                    </template>
-                    <template x-if="type === 'image'">
-                        @include('core-cms::shared.attachment', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value])
                     </template>
                     <template x-if="type === 'content'">
                         <div class="form-group">
@@ -102,6 +97,12 @@
                             @enderror
                         </div>
                     </template>
+                    @foreach($formFields as $field)
+                        @php
+                            $fieldValue = old('value', $option->value ?? null);
+                        @endphp
+                        @include($field['template'], [...$field['props'] ?? [], 'value' => $fieldValue])
+                    @endforeach
                     <div class="text-center">
                         <button type="submit" class="button" data-type="primary">{{ __('core-cms::admin.save') }}</button>
                     </div>
