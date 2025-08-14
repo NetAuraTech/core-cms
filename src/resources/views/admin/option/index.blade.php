@@ -36,9 +36,14 @@
                                 <a href="{{ route('admin.option.edit', $item->key) }}">
                                     @switch($item->type)
                                         @case('content')
+                                        @case('template')
                                             @php
                                                 $contentProvider = app(Netauratech\CoreCms\Contracts\ContentProviderInterface::class);
-                                                $content = $contentProvider->getContentById($item->value);
+                                                $content = null;
+
+                                                if($item->value !== "") {
+                                                    $content = $contentProvider->getContentById($item->value);
+                                                }
                                             @endphp
 
                                             @if ($content)

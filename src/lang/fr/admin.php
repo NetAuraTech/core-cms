@@ -41,6 +41,7 @@ return [
             'boolean' => 'Booléen',
             'media' => 'Média',
             'content' => 'Contenu',
+            'template' => 'Modèle',
         ]
     ],
     'save' => 'Enregistrer',

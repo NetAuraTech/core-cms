@@ -2,16 +2,16 @@
 
 namespace Netauratech\CoreCms\Http\Controllers\Admin;
 
-use Netauratech\CoreCms\Form\FormRegistry;
-use Netauratech\CoreCms\Http\Controllers\AdminController;
-use Netauratech\CoreCms\Http\Events\OptionUpdated;
-use Netauratech\CoreCms\Http\Requests\Admin\OptionContentFormRequest;
-use Netauratech\CoreCms\Models\Option;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
+use Netauratech\CoreCms\Events\OptionUpdated;
+use Netauratech\CoreCms\Form\FormRegistry;
+use Netauratech\CoreCms\Http\Controllers\AdminController;
+use Netauratech\CoreCms\Http\Requests\Admin\OptionContentFormRequest;
+use Netauratech\CoreCms\Models\Option;
 
 class OptionController extends AdminController
 {
@@ -84,8 +84,9 @@ class OptionController extends AdminController
 
         return view('core-cms::admin.option.form', [
             'option' => $option,
-            'articles' => $this->contentProvider->getArticles(),
-            'pages' => $this->contentProvider->getPages(),
+            'articles' => $this->contentProvider->getArticles(999999999999999999),
+            'pages' => $this->contentProvider->getPages(999999999999999999),
+            'templates' => $this->contentProvider->getTemplates(999999999999999999),
             'formFields' => $formFields,
         ]);
     }
@@ -114,8 +115,9 @@ class OptionController extends AdminController
 
         return view('core-cms::admin.option.form', [
             'option' => $option,
-            'articles' => $this->contentProvider->getArticles(),
-            'pages' => $this->contentProvider->getPages(),
+            'articles' => $this->contentProvider->getArticles(999999999999999999),
+            'pages' => $this->contentProvider->getPages(999999999999999999),
+            'templates' => $this->contentProvider->getTemplates(999999999999999999),
             'formFields' => $formFields
         ]);
     }

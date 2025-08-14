@@ -48,6 +48,7 @@
                             <option value="">{{ __('core-cms::core.select.option.choose') }}</option>
                             <option @selected(old("type", $option->type) === "text") value="text">{{ __('core-cms::admin.option.type.text') }}</option>
                             <option @selected(old("type", $option->type) === "content") value="content">{{ __('core-cms::admin.option.type.content') }}</option>
+                            <option @selected(old("type", $option->type) === "template") value="template">{{ __('core-cms::admin.option.type.template') }}</option>
                             <option @selected(old("type", $option->type) === "number") value="number">{{ __('core-cms::admin.option.type.number') }}</option>
                             <option @selected(old("type", $option->type) === "boolean") value="boolean">{{ __('core-cms::admin.option.type.boolean') }}</option>
                             @foreach($formFields as $field)
@@ -89,6 +90,26 @@
                                                 @if($option->value== $post->id) selected @endif>{{ $post->title }}</option>
                                     @endforeach
                                 </optgroup>
+                            </select>
+                            @error("type")
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                    </template>
+                    <template x-if="type === 'template'">
+                        <div class="form-group">
+                            <label for="value" class="required">{{ __('core-cms::admin.value') }}</label>
+                            <select id="value"
+                                    name="value"
+                                    class="form-control @error("type") is-invalid @enderror"
+                            >
+                                <option value="">{{ __('core-cms::core.select.option.choose') }}</option>
+                                @foreach($templates as $post)
+                                    <option value="{{ $post->id }}"
+                                            @if($option->value== $post->id) selected @endif>{{ $post->title }}</option>
+                                @endforeach
                             </select>
                             @error("type")
                             <div class="invalid-feedback">

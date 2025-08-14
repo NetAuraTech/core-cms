@@ -41,6 +41,7 @@ return [
             'boolean' => 'Boolean',
             'media' => 'Media',
             'content' => 'Content',
+            'template' => 'Template',
         ]
     ],
     'save' => 'Save',
