@@ -15,8 +15,10 @@ use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 use Netauratech\CoreCms\Contracts\MediaProviderInterface;
 use Netauratech\CoreCms\Events\LangLoaded;
+use Netauratech\CoreCms\Events\OptionUpdated;
 use Netauratech\CoreCms\Form\FormRegistry;
 use Netauratech\CoreCms\Http\Controllers\AssetController;
+use Netauratech\CoreCms\Listeners\ClearOptionCache;
 use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
 use Netauratech\CoreCms\Services\Admin\MenuManager;
@@ -136,22 +138,28 @@ class CoreCmsServiceProvider extends ServiceProvider
                 $data = [];
                 $contentProvider = $this->app->make(ContentProviderInterface::class);
 
+                $theme = null;
+
                 foreach ($opts as $option) {
                     $valueToStore = $option->value ?? '';
 
-                    if ($option->type === 'content') {
+                    if (($option->type === 'content' || $option->type === 'template') && $option->value !== "") {
                         $contentItem = $contentProvider->getContentById($option->value);
                         $valueToStore = $contentItem;
                     }
+                    if ($option->type === 'theme') {
+                        $theme = $option;
+                    }
                     $data[$option->key] = $valueToStore;
                 }
-                return $data;
+                return ["options" => $data, "theme" => $theme];
             });
 
             View::composer('*', function ($view) use ($ret) {
-                $view->with('options', $ret);
-                $view->with('favicon', $ret['favicon'] ? image_url($ret['favicon'], 128) : "");
-                $view->with('openGraphLogo', $ret['logo'] ? image_url($ret['logo']) : "");
+                $view->with('options', $ret['options']);
+                $view->with('favicon', $ret['options']['favicon'] ? image_url($ret['options']['favicon'], 128) : "");
+                $view->with('openGraphLogo', $ret['options']['logo'] ? image_url($ret['options']['logo']) : "");
+                $view->with('cacheBuster', substr(md5(json_encode($ret['theme']->updated_at)), 0, 8));
             });
         }
 
@@ -167,6 +175,11 @@ class CoreCmsServiceProvider extends ServiceProvider
                 DiscoverAssetsCommand::class,
             ]);
         }
+
+        $this->app->events->listen(
+            OptionUpdated::class,
+            ClearOptionCache::class
+        );
 
         // Routes admin
         Route::group([
