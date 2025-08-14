@@ -43,6 +43,14 @@ class NullContentProvider implements ContentProviderInterface
     /**
      * @inheritDoc
      */
+    public function getTemplates(int $perPage = 10): LengthAwarePaginator
+    {
+        return new LengthAwarePaginator([], 0, 0);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getContentById(int $id): ?object
     {
         return null;

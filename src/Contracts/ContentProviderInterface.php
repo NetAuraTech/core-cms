@@ -40,6 +40,14 @@ interface ContentProviderInterface
     public function getPages(int $perPage = 10): LengthAwarePaginator;
 
     /**
+     * Retrieves all template.
+     *
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getTemplates(int $perPage = 10): LengthAwarePaginator;
+
+    /**
      * Retrieves a content item by its ID.
      *
      * @param int $id
@@ -54,20 +62,6 @@ interface ContentProviderInterface
      * @return object|null The content model or null if not found.
      */
     public function getContentBySlug(string $slug): ?object;
-
-    /**
-     * Retrieves the header content (Content type ‘header’).
-     *
-     * @return object|null The header content model or null if not found.
-     */
-    public function getHeaderContent(): ?object;
-
-    /**
-     * Retrieves the footer content (Content of type ‘footer’).
-     *
-     * @return object|null The footer content model or null if not found.
-     */
-    public function getFooterContent(): ?object;
 
     /**
      * Transforms a string containing a list of names
