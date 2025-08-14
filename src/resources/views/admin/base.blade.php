@@ -16,6 +16,10 @@
         @includeIf('theme::assets.admin.css')
         @includeIf('theme::assets.js')
         @includeIf('theme::assets.admin.js')
+        @if($favicon)
+            <link rel="apple-touch-icon" sizes="128x128" href="{{ $favicon }}">
+            <link rel="icon" type="image/webp" href="{{ $favicon }}"/>
+        @endif
     </head>
     <body>
         <div class="admin">
