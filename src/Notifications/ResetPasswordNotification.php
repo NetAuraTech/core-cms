@@ -53,7 +53,7 @@ class ResetPasswordNotification extends VerifyEmail implements ShouldQueue
             ->action(__('core-cms::mail.password.reset.value'), url('reset-password', $this->token))
             ->line(__('core-cms::mail.password.reset.link.expire'))
             ->line(__('core-cms::mail.password.reset.no'))
-            ->markdown('core-cms::mail.notification', [
+            ->markdown('core-cms::notifications.email', [
                 'sitename' => $site_name,
                 'logo' => $logo,
                 'url' => $this->appRootUrl,

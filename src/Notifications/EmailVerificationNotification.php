@@ -56,7 +56,7 @@ class EmailVerificationNotification extends VerifyEmail implements ShouldQueue
             ->subject(__('core-cms::mail.email.verify.value') . ' - ' . $site_name)
             ->line(__('core-cms::mail.email.verify.instruction'))
             ->action(__('core-cms::mail.email.verify.value'), $actionUrl)
-            ->markdown('core-cms::mail.notification', [
+            ->markdown('core-cms::notifications.email', [
                 'sitename' => $site_name,
                 'logo' => $logo,
                 'url' => $this->appRootUrl,
