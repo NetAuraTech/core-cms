@@ -8,8 +8,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Netauratech\CoreCms\Console\BackupCmsCommand;
+use Netauratech\CoreCms\Console\BackupCommand;
+use Netauratech\CoreCms\Console\CleanupCommand;
 use Netauratech\CoreCms\Console\DiscoverAssetsCommand;
 use Netauratech\CoreCms\Console\InstallCommand;
+use Netauratech\CoreCms\Contracts\BackupProviderInterface;
 use Netauratech\CoreCms\Contracts\ChallengeGeneratorInterface;
 use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
@@ -23,6 +27,7 @@ use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
 use Netauratech\CoreCms\Services\Admin\MenuManager;
 use Netauratech\CoreCms\Services\AssetManager;
+use Netauratech\CoreCms\Services\BackupProvider;
 use Netauratech\CoreCms\Services\Captcha\PuzzleChallenge;
 use Netauratech\CoreCms\Services\Captcha\PuzzleGenerator;
 use Netauratech\CoreCms\Services\NullContentProvider;
@@ -62,6 +67,9 @@ class CoreCmsServiceProvider extends ServiceProvider
 
         $this->app->bindIf(ContentProviderInterface::class, NullContentProvider::class);
         $this->app->bindIf(MediaProviderInterface::class, NullMediaProvider::class);
+        $this->app->bindIf(ChallengeInterface::class, PuzzleChallenge::class);
+        $this->app->bindIf(ChallengeGeneratorInterface::class, PuzzleGenerator::class);
+        $this->app->bindIf(BackupProviderInterface::class, BackupProvider::class);
 
         $this->app->tag(StorageAssetSource::class, 'cms.asset.sources');
         $this->app->bind(AssetController::class, function ($app) {
@@ -70,9 +78,6 @@ class CoreCmsServiceProvider extends ServiceProvider
                 $assetSources
             );
         });
-
-        $this->app->bindIf(ChallengeInterface::class, PuzzleChallenge::class);
-        $this->app->bindIf(ChallengeGeneratorInterface::class, PuzzleGenerator::class);
     }
     public function boot(MenuManager $menuManager, AssetManager $assetManager): void
     {
@@ -83,6 +88,10 @@ class CoreCmsServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
+        ], 'core-cms-config');
+
+        $this->publishes([
+            __DIR__.'/../config/backup.php' => config_path('backup.php'),
         ], 'core-cms-config');
 
         $this->publishes([
@@ -104,6 +113,10 @@ class CoreCmsServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/resources/views/mail' => resource_path('views/vendor/mail'),
+        ], 'core-cms-assets');
+
+        $this->publishes([
+            __DIR__.'/resources/views/notifications' => resource_path('views/vendor/notifications'),
         ], 'core-cms-assets');
 
         // Register Assets
@@ -167,12 +180,10 @@ class CoreCmsServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCommand::class,
-            ]);
-        }
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
                 DiscoverAssetsCommand::class,
+                BackupCmsCommand::class,
+                BackupCommand::class,
+                CleanupCommand::class
             ]);
         }
 
