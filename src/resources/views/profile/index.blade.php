@@ -123,7 +123,7 @@
                             @foreach($comments as $comment)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('blog.show', $comment->getContent()->slug) }}">
+                                        <a href="{{ route('article.show', $comment->getContent()->slug) }}">
                                             {{ $comment->getContent()->title }}
                                         </a>
                                     </td>
