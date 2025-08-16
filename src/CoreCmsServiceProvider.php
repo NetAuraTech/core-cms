@@ -3,6 +3,7 @@
 namespace Netauratech\CoreCms;
 
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -32,6 +33,9 @@ use Netauratech\CoreCms\Services\Captcha\PuzzleChallenge;
 use Netauratech\CoreCms\Services\Captcha\PuzzleGenerator;
 use Netauratech\CoreCms\Services\NullContentProvider;
 use Netauratech\CoreCms\Services\NullMediaProvider;
+use Netauratech\CoreCms\Services\Shortcode\ButtonShortcode;
+use Netauratech\CoreCms\Services\Shortcode\ShortcodeParser;
+use Netauratech\CoreCms\Services\Shortcode\ShortcodeRegistry;
 use Netauratech\CoreCms\Services\StorageAssetSource;
 
 class CoreCmsServiceProvider extends ServiceProvider
@@ -65,6 +69,11 @@ class CoreCmsServiceProvider extends ServiceProvider
             return new FormRegistry();
         });
 
+        $this->app->singleton(ShortcodeRegistry::class, fn () => new ShortcodeRegistry());
+        $this->app->singleton(ShortcodeParser::class, function ($app) {
+            return new ShortcodeParser($app->make(ShortcodeRegistry::class));
+        });
+
         $this->app->bindIf(ContentProviderInterface::class, NullContentProvider::class);
         $this->app->bindIf(MediaProviderInterface::class, NullMediaProvider::class);
         $this->app->bindIf(ChallengeInterface::class, PuzzleChallenge::class);
@@ -79,7 +88,7 @@ class CoreCmsServiceProvider extends ServiceProvider
             );
         });
     }
-    public function boot(MenuManager $menuManager, AssetManager $assetManager): void
+    public function boot(MenuManager $menuManager, AssetManager $assetManager, ShortcodeRegistry $shortcodeRegistry): void
     {
         // Publish the configuration file
         $this->publishes([
@@ -175,6 +184,12 @@ class CoreCmsServiceProvider extends ServiceProvider
                 $view->with('cacheBuster', substr(md5(json_encode($ret['theme']->updated_at)), 0, 8));
             });
         }
+
+        Blade::directive('shortcode', function ($expression) {
+            return "<?php echo app(" . ShortcodeParser::class . "::class)->parse($expression); ?>";
+        });
+
+        $shortcodeRegistry->register('button', new ButtonShortcode());
 
         // Command registration Artisan
         if ($this->app->runningInConsole()) {
