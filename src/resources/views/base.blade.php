@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <script src="{{ route('translations') }}"></script>
         @vite(['resources/ts/app.ts'])
-        @include('theme::assets.css') {{-- Includes theme-specific CSS --}}
+        @include('theme::assets.css', ['header' => $options['header'], 'footer' => $options['footer']]) {{-- Includes theme-specific CSS --}}
         @include('theme::assets.js') {{-- Includes theme-specific JS --}}
         @yield('stylesheets') {{-- For page-specific CSS --}}
         @yield('meta') {{-- For additional meta tags --}}
@@ -98,7 +98,9 @@
             @yield('body')
         </main>
         @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
-            @yield('footer')
+            <footer class="site-footer">
+                @yield('footer')
+            </footer>
         @endunless
         <script>
             @php use Illuminate\Support\Facades\Auth; @endphp
