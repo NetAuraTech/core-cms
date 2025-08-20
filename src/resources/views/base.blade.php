@@ -110,5 +110,11 @@
                 NOTIFICATION: new Date({{ (Auth::user() and Auth::user()->notifications_read_at) ? Auth::user()->getNotificationsReadAtTimestamp() : 0 }})
             };
         </script>
+        @php
+            $assetManager = app(\Netauratech\CoreCms\Services\AssetManager::class);
+        @endphp
+        @foreach($assetManager->getViewAssets() as $asset)
+            @includeIf($asset)
+        @endforeach
     </body>
 </html>

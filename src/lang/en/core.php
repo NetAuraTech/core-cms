@@ -145,4 +145,29 @@ return [
         ]
     ],
     'privacy-policy' => 'privacy policy',
+    'time-ago' => [
+        'ago' => ':time ago',
+        'day' => [
+            'about' => 'about a day',
+            'days' => 'days',
+        ],
+        'hour' => [
+            'about' => 'about an hour',
+            'hours' => 'hours',
+        ],
+        'in' => 'In :time',
+        'minute' => [
+            'about' => 'about a minute',
+            'less' => 'less than a minute',
+            'minutes' => 'minutes',
+        ],
+        'month' => [
+            'about' => 'about a month',
+            'months' => 'months',
+        ],
+        'year' => [
+            'about' => 'about a year',
+            'years' => 'years',
+        ],
+    ],
 ];

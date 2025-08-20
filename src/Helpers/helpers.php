@@ -145,3 +145,22 @@ if (!function_exists('generate_challenge')) {
         return $key;
     }
 }
+
+if (!function_exists('ago')) {
+    function ago(Carbon\Carbon $date, string $prefix = ''): string
+    {
+        $prefixAttribute = !empty($prefix) ? " prefix=\"{$prefix}\"" : '';
+
+        return "<time-ago time=\"{$date->getTimestamp()}\"$prefixAttribute></time-ago>";
+    }
+}
+
+if (!function_exists('shortened_exception')) {
+    function shortened_exception(string $exception): string
+    {
+        if (preg_match('/(\w+Exception.*?)(\n|$)/', $exception, $matches)) {
+            return $matches[1];
+        }
+        return substr($exception, 0, 200) . (strlen($exception) > 200 ? '...' : '');
+    }
+}

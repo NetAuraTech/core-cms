@@ -12,6 +12,20 @@ return [
         'value' => 'Delete',
     ],
     'edit' => 'Edit',
+    'job' => [
+        'date' => 'Date',
+        'delete' => [
+            'confirm' => 'Do you really want to delete the task?',
+            'confirmed' => 'The task has been deleted.',
+        ],
+        'failed' => 'Failed tasks',
+        'relaunch' => [
+            'value' => 'Relaunch',
+            'confirmed' => 'The task has been relaunched.',
+        ],
+        'message' => 'Message',
+        'value' => '{0}Tasks|[1,1]task|[2,*]tasks',
+    ],
     'manage' => 'Manage',
     'option' => [
         'created' => 'The option has been created.',

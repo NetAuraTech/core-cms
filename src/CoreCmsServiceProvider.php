@@ -37,6 +37,7 @@ use Netauratech\CoreCms\Services\Shortcode\ButtonShortcode;
 use Netauratech\CoreCms\Services\Shortcode\ShortcodeParser;
 use Netauratech\CoreCms\Services\Shortcode\ShortcodeRegistry;
 use Netauratech\CoreCms\Services\StorageAssetSource;
+use Netauratech\CoreCms\Widgets\TasksWidget;
 
 class CoreCmsServiceProvider extends ServiceProvider
 {
@@ -88,7 +89,7 @@ class CoreCmsServiceProvider extends ServiceProvider
             );
         });
     }
-    public function boot(MenuManager $menuManager, AssetManager $assetManager, ShortcodeRegistry $shortcodeRegistry): void
+    public function boot(MenuManager $menuManager, AssetManager $assetManager, ShortcodeRegistry $shortcodeRegistry, DashboardManager $dashboardManager): void
     {
         // Publish the configuration file
         $this->publishes([
@@ -237,6 +238,8 @@ class CoreCmsServiceProvider extends ServiceProvider
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/routes/api.php');
         });
+
+        $dashboardManager->addWidget(TasksWidget::class);
 
         $menuManager->registerMenuItem('option', [
             'label' => trans_choice('core-cms::admin.option.value', 0),

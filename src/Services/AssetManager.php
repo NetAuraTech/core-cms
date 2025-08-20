@@ -30,6 +30,12 @@ class AssetManager
     protected array $translationFiles = [];
 
     /**
+     * List of registered views.
+     * @var array
+     */
+    protected array $viewAssets = [];
+
+    /**
      * Saves one or more paths for JavaScript/TypeScript app assets.
      *
      * @param string|array $assets The paths of assets to be saved.
@@ -89,6 +95,21 @@ class AssetManager
     }
 
     /**
+     * Saves one or more paths for views.
+     *
+     * @param string|array $assets The paths of assets to be saved.
+     * @return void
+     */
+    public function registerView(string|array $assets): void
+    {
+        foreach ((array) $assets as $asset) {
+            if (!in_array($asset, $this->viewAssets)) {
+                $this->viewAssets[] = $asset;
+            }
+        }
+    }
+
+    /**
      * Retrieves all paths of JavaScript/TypeScript app assets that have been saved.
      *
      * @return array
@@ -126,5 +147,15 @@ class AssetManager
     public function getTranslationPaths(): array
     {
         return $this->translationFiles;
+    }
+
+    /**
+     * Retrieves all paths of views that have been saved.
+     *
+     * @return array
+     */
+    public function getViewAssets(): array
+    {
+        return $this->viewAssets;
     }
 }

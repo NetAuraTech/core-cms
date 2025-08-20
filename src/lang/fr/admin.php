@@ -12,6 +12,20 @@ return [
         'value' => 'Supprimer',
     ],
     'edit' => 'Modifier',
+    'job' => [
+        'date' => 'Date',
+        'delete' => [
+            'confirm' => 'Voulez vous vraiment supprimer la tâche ?',
+            'confirmed' => 'La tâche a bien été supprimée.',
+        ],
+        'failed' => 'Failed tasks',
+        'relaunch' => [
+            'value' => 'Relancer',
+            'confirmed' => 'La tâche a bien été relancée.',
+        ],
+        'message' => 'Message',
+        'value' => '{0}Tâches|[1,1]la tâche|[2,*]les tâches',
+    ],
     'manage' => 'Gérer',
     'option' => [
         'created' => 'L\'option a été créée.',

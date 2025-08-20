@@ -3,8 +3,12 @@
 namespace Netauratech\CoreCms\Http\Controllers\Admin;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Artisan;
 use Netauratech\CoreCms\Http\Controllers\AdminController;
+use Netauratech\CoreCms\Models\FailedJob;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
+use Netauratech\CoreCms\Services\CacheService;
 
 class DashboardController extends AdminController
 {
@@ -26,5 +30,27 @@ class DashboardController extends AdminController
         $widgets = $this->dashboardManager->getWidgets();
 
         return view('core-cms::admin.dashboard', compact('widgets'));
+    }
+
+    public function cache(CacheService $cache): RedirectResponse
+    {
+        $cache->clear();
+
+
+        return to_route('admin.dashboard')->with('success', __('core-cms::admin.cache.cleared'));
+    }
+
+    public function retry_job(FailedJob $job): RedirectResponse
+    {
+        Artisan::call('queue:retry ' . $job->uuid);
+
+        return to_route('admin.dashboard')->with('success', __('core-cms::admin.job.relaunch.confirmed'));
+    }
+
+    public function destroy_job(FailedJob $job): RedirectResponse
+    {
+        Artisan::call('queue:forget ' . $job->uuid);
+
+        return to_route('admin.dashboard')->with('success', __('core-cms::admin.job.delete.confirmed'));
     }
 }
