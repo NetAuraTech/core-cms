@@ -106,19 +106,19 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         // Publish the configuration file
         $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
-        ], 'core-cms');
+        ], 'core-cms-config');
 
         $this->publishes([
             __DIR__.'/../config/backup.php' => config_path('backup.php'),
-        ], 'core-cms');
+        ], 'core-cms-config');
 
         $this->publishes([
             __DIR__.'/resources/views/mail' => resource_path('views/vendor/mail'),
-        ], 'core-cms');
+        ], 'core-cms-views');
 
         $this->publishes([
             __DIR__.'/resources/views/notifications' => resource_path('views/vendor/notifications'),
-        ], 'core-cms');
+        ], 'core-cms-views');
 
         // Share all CMS options with views
         if (Schema::hasTable('options')) {
