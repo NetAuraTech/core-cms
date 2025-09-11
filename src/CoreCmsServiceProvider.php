@@ -5,10 +5,8 @@ namespace Netauratech\CoreCms;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\ServiceProvider;
 use Netauratech\CoreCms\Console\BackupCmsCommand;
 use Netauratech\CoreCms\Console\BackupCommand;
 use Netauratech\CoreCms\Console\CleanupCommand;
@@ -19,12 +17,12 @@ use Netauratech\CoreCms\Contracts\ChallengeGeneratorInterface;
 use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 use Netauratech\CoreCms\Contracts\MediaProviderInterface;
-use Netauratech\CoreCms\Events\LangLoaded;
 use Netauratech\CoreCms\Events\OptionUpdated;
 use Netauratech\CoreCms\Form\FormRegistry;
 use Netauratech\CoreCms\Http\Controllers\AssetController;
 use Netauratech\CoreCms\Listeners\ClearOptionCache;
 use Netauratech\CoreCms\Models\Option;
+use Netauratech\CoreCms\Services\AbstractCmsServiceProvider;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
 use Netauratech\CoreCms\Services\Admin\MenuManager;
 use Netauratech\CoreCms\Services\AssetManager;
@@ -39,8 +37,20 @@ use Netauratech\CoreCms\Services\Shortcode\ShortcodeRegistry;
 use Netauratech\CoreCms\Services\StorageAssetSource;
 use Netauratech\CoreCms\Widgets\TasksWidget;
 
-class CoreCmsServiceProvider extends ServiceProvider
+class CoreCmsServiceProvider extends AbstractCmsServiceProvider
 {
+    protected function getPackageName(): string
+    {
+        return 'core-cms';
+    }
+
+    protected function getBootstrapConfig(): array
+    {
+        $config = parent::getBootstrapConfig();
+
+        return $config;
+    }
+
     public function register(): void
     {
         $this->mergeConfigFrom(
@@ -89,69 +99,26 @@ class CoreCmsServiceProvider extends ServiceProvider
             );
         });
     }
-    public function boot(MenuManager $menuManager, AssetManager $assetManager, ShortcodeRegistry $shortcodeRegistry, DashboardManager $dashboardManager): void
+    public function boot(MenuManager $menuManager, ShortcodeRegistry $shortcodeRegistry, DashboardManager $dashboardManager): void
     {
+        $this->bootstrapPackage();
+
         // Publish the configuration file
         $this->publishes([
-            __DIR__.'/../config/core-cms.php' => config_path('core-cms.php'),
-        ], 'core-cms-config');
-
-        $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
-        ], 'core-cms-config');
+        ], 'core-cms');
 
         $this->publishes([
             __DIR__.'/../config/backup.php' => config_path('backup.php'),
-        ], 'core-cms-config');
-
-        $this->publishes([
-            __DIR__.'/resources/assets' => public_path('vendor/core-cms'),
-        ], 'core-cms-assets');
-
-        $this->publishes([
-            __DIR__.'/database/migrations/' => database_path('migrations'),
-        ], 'core-cms-migrations');
-
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
-
-        $this->publishes([
-            __DIR__.'/database/seeders/' => database_path('seeders')
-        ], 'core-cms-seeders');
-
-        // Load all views
-        $this->loadViewsFrom(__DIR__.'/resources/views', 'core-cms');
+        ], 'core-cms');
 
         $this->publishes([
             __DIR__.'/resources/views/mail' => resource_path('views/vendor/mail'),
-        ], 'core-cms-assets');
+        ], 'core-cms');
 
         $this->publishes([
             __DIR__.'/resources/views/notifications' => resource_path('views/vendor/notifications'),
-        ], 'core-cms-assets');
-
-        // Register Assets
-        $packageBasePath = realpath(__DIR__ . '/../');
-        $composerJsonPath = $packageBasePath . '/composer.json';
-
-        $assetManager->registerTranslationPath('core-cms', __DIR__.'/lang');
-
-        if (file_exists($composerJsonPath)) {
-            $composerJsonContent = json_decode(file_get_contents($composerJsonPath), true);
-            if (isset($composerJsonContent['name'])) {
-                $packageName = $composerJsonContent['name'];
-            }
-            $assetManager->registerAppJs("vendor/{$packageName}/src/resources/ts/app.ts");
-            $assetManager->registerAdminJs("vendor/{$packageName}/src/resources/ts/admin.ts");
-        }
-
-        // Lang
-        $this->loadTranslationsFrom(__DIR__.'/lang', 'core-cms');
-        LangLoaded::dispatch('core-cms');
-
-        // Allows you to publish translations of the package
-        $this->publishes([
-            __DIR__.'/lang' => $this->app->langPath('vendor/core-cms'),
-        ], 'core-cms-translations');
+        ], 'core-cms');
 
         // Share all CMS options with views
         if (Schema::hasTable('options')) {
@@ -207,37 +174,6 @@ class CoreCmsServiceProvider extends ServiceProvider
             OptionUpdated::class,
             ClearOptionCache::class
         );
-
-        // Routes admin
-        Route::group([
-            'middleware' => config('core-cms.admin.middleware'),
-            'prefix' => config('core-cms.admin.prefix'),
-            'as' => config('core-cms.admin.name'),
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/routes/admin.php');
-        });
-
-        //Route Auth
-        Route::group([
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/routes/auth.php');
-        });
-
-        //Route Web
-        Route::group([
-            'middleware' => ['web'],
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/routes/web.php');
-        });
-
-        //Route Api
-        Route::group([
-            'prefix' => 'api',
-            'as' => 'api.',
-            'middleware' => ['web'],
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/routes/api.php');
-        });
 
         $dashboardManager->addWidget(TasksWidget::class);
 
