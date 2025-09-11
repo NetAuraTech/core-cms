@@ -116,45 +116,39 @@ abstract class AbstractCmsServiceProvider extends ServiceProvider
 
     protected function registerPublishes(): void
     {
-        $publishes = [];
-
         if ($this->config['publishes']['migrations'] && $this->config['migrations']) {
             $migrationsPath = $this->getPackagePath() . '/database/migrations/';
             if (is_dir($migrationsPath)) {
-                $publishes[$migrationsPath] = database_path('migrations');
+                $this->publishes([$migrationsPath => database_path('migrations')], 'core-cms-migrations');
             }
         }
 
         if ($this->config['publishes']['seeders'] && $this->config['seeders']) {
             $seedersPath = $this->getPackagePath() . '/database/seeders/';
             if (is_dir($seedersPath)) {
-                $publishes[$seedersPath] = database_path('seeders');
+                $this->publishes([$seedersPath => database_path('seeders')], 'core-cms-seeders');
             }
         }
 
         if ($this->config['publishes']['translations'] && $this->config['translations']) {
             $langPath = $this->getPackagePath() . '/lang';
             if (is_dir($langPath)) {
-                $publishes[$langPath] = $this->app->langPath("vendor/{$this->packageName}");
+                $this->publishes([$langPath => $this->app->langPath("vendor/{$this->packageName}")], 'core-cms-translations');
             }
         }
 
         if ($this->config['publishes']['config']) {
             $configPath = $this->getPackagePath() . '/../config/' . $this->packageName . '.php';
             if (file_exists($configPath)) {
-                $publishes[$configPath] = config_path($this->packageName . '.php');
+                $this->publishes([$configPath => config_path($this->packageName . '.php')], 'core-cms-config');
             }
         }
 
         if ($this->config['publishes']['assets']) {
             $assetsPath = $this->getPackagePath() . '/resources/assets';
             if (is_dir($assetsPath)) {
-                $publishes[$assetsPath] = public_path("vendor/{$this->packageName}");
+                $this->publishes([$assetsPath => public_path("vendor/{$this->packageName}")], 'core-cms-assets');
             }
-        }
-
-        if (!empty($publishes)) {
-            $this->publishes($publishes, 'core-cms');
         }
     }
 
