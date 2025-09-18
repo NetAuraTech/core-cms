@@ -5,10 +5,10 @@ namespace Netauratech\CoreCms\Http\Controllers\Admin;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Artisan;
+use Netauratech\CoreCms\Contracts\CacheServiceInterface;
 use Netauratech\CoreCms\Http\Controllers\AdminController;
 use Netauratech\CoreCms\Models\FailedJob;
 use Netauratech\CoreCms\Services\Admin\DashboardManager;
-use Netauratech\CoreCms\Services\CacheService;
 
 class DashboardController extends AdminController
 {
@@ -32,7 +32,7 @@ class DashboardController extends AdminController
         return view('core-cms::admin.dashboard', compact('widgets'));
     }
 
-    public function cache(CacheService $cache): RedirectResponse
+    public function cache(CacheServiceInterface $cache): RedirectResponse
     {
         $cache->clear();
 

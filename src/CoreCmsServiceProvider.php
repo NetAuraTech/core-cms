@@ -13,6 +13,7 @@ use Netauratech\CoreCms\Console\CleanupCommand;
 use Netauratech\CoreCms\Console\DiscoverAssetsCommand;
 use Netauratech\CoreCms\Console\InstallCommand;
 use Netauratech\CoreCms\Contracts\BackupProviderInterface;
+use Netauratech\CoreCms\Contracts\CacheServiceInterface;
 use Netauratech\CoreCms\Contracts\ChallengeGeneratorInterface;
 use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
@@ -27,6 +28,7 @@ use Netauratech\CoreCms\Services\Admin\DashboardManager;
 use Netauratech\CoreCms\Services\Admin\MenuManager;
 use Netauratech\CoreCms\Services\AssetManager;
 use Netauratech\CoreCms\Services\BackupProvider;
+use Netauratech\CoreCms\Services\CacheService;
 use Netauratech\CoreCms\Services\Captcha\PuzzleChallenge;
 use Netauratech\CoreCms\Services\Captcha\PuzzleGenerator;
 use Netauratech\CoreCms\Services\NullContentProvider;
@@ -90,6 +92,7 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         $this->app->bindIf(ChallengeInterface::class, PuzzleChallenge::class);
         $this->app->bindIf(ChallengeGeneratorInterface::class, PuzzleGenerator::class);
         $this->app->bindIf(BackupProviderInterface::class, BackupProvider::class);
+        $this->app->bindIf(CacheServiceInterface::class, CacheService::class);
 
         $this->app->tag(StorageAssetSource::class, 'cms.asset.sources');
         $this->app->bind(AssetController::class, function ($app) {
