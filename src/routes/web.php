@@ -64,7 +64,7 @@ Route::middleware(['lscache:no-cache'])->group(function () {
 /**
  * Profile
  */
-Route::middleware(['auth', 'lscache:no-cache'])->group(function () {
+Route::middleware(['auth', 'lscache:private;'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
