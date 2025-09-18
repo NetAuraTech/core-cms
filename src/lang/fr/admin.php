@@ -3,6 +3,10 @@
 return [
     'actions' => 'Actions',
     'add' => 'Ajouter',
+    'cache' => [
+        'clear' => 'Vider le cache',
+        'cleared' => 'Le cache a bien été vidé.',
+    ],
     'create' => 'Créer',
     'dashboard' => 'Tableau de bord',
     'date' => 'Date',

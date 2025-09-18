@@ -3,6 +3,10 @@
 return [
     'actions' => 'Actions',
     'add' => 'Add',
+    'cache' => [
+        'clear' => 'Clear the cache',
+        'cleared' => 'The cache has been cleared.',
+    ],
     'create' => 'Create',
     'dashboard' => 'Dashboard',
     'date' => 'Date',

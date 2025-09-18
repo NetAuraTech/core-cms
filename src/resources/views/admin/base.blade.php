@@ -52,7 +52,13 @@
                 <div class="flex-group align-items-center justify-content-space-between" style="width: 100%">
                     <site-notifications></site-notifications>
                     <div class="flex-group align-items-center">
-                        <!-- Count spam -->
+                        <form class="clr-red-300" action="{{ route('admin.cache') }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button class="button flex-group align-items-center" data-type="transparent" type="submit" title="{{ __('core-cms::admin.cache.clear') }}" style="background-color: transparent">
+                                {!! icon('cache', 'small') !!}
+                            </button>
+                        </form>
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
                             <button class="button padding-0" data-type="transparent">{!! icon('logout', 'small') !!}</button>
