@@ -16,9 +16,8 @@
         @yield('stylesheets') {{-- For page-specific CSS --}}
         @yield('meta') {{-- For additional meta tags --}}
         @yield('description') {{-- The page description is managed in the specific view --}}
+        <meta name="csrf-token" content="">
         <meta name="view-transition" content="same-origin">
-        <meta name="turbolinks-cache-control" content="no-cache"/>
-
         {{-- Favicon --}}
         @if($favicon)
             <link rel="apple-touch-icon" sizes="128x128" href="{{ $favicon }}">

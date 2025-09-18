@@ -16,6 +16,7 @@
         @includeIf('theme::assets.admin.css')
         @includeIf('theme::assets.js')
         @includeIf('theme::assets.admin.js')
+        <meta name="csrf-token" content="">
         @if($favicon)
             <link rel="apple-touch-icon" sizes="128x128" href="{{ $favicon }}">
             <link rel="icon" type="image/webp" href="{{ $favicon }}"/>
@@ -60,7 +61,6 @@
                 </div>
             </header>
             <main>
-                @include('core-cms::shared.partials.flash', ['floating' => true, 'duration' => 2])
                 @yield('body')
             </main>
         </div>
