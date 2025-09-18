@@ -138,46 +138,6 @@
             @endif
         </aside>
         <main>
-            @if (session('status') === 'password-updated')
-                <alert-message type="success" is-floating="true">
-                    {{ __('core-cms::auth.account.password.updated') }}
-                </alert-message>
-            @endif
-            @if (session('status') === 'password-defined')
-                <alert-message type="success" is-floating="true">
-                    {{ __('core-cms::auth.account.password.define.defined') }}
-                </alert-message>
-            @endif
-            @if (session('status') === 'profile-updated')
-                <alert-message type="success" is-floating="true">
-                    {{ __('core-cms::core.profile.updated') }}
-                </alert-message>
-            @endif
-            @if (session('status') === 'verification-link-sent')
-                <alert-message type="success" is-floating="true">
-                    {{ __('core-cms::core.profile.email.verify.confirmed') }}
-                </alert-message>
-            @endif
-            @if (session('status') === 'email-verified')
-                <alert-message type="success" is-floating="true">
-                    {{ __('core-cms::core.profile.email.verified') }}
-                </alert-message>
-            @endif
-            @if (session('status') === 'notification-deleted')
-                <alert-message type="success" is-floating="true">
-                    {{ __('core-cms::core.profile.notifications.deleted') }}
-                </alert-message>
-            @endif
-            @if (session('status') === 'oauth-link')
-                <alert-message type="success" is-floating="true">
-                    {{ __('core-cms::core.profile.social.link.confirmed') }}
-                </alert-message>
-            @endif
-            @if (session('status') === 'oauth-unlink')
-                <alert-message type="success" is-floating="true">
-                    {{ __('core-cms::core.profile.social.unlink.confirmed') }}
-                </alert-message>
-            @endif
             <form id="send-verification" method="post" action="{{ route('verification.send') }}">
                 @csrf
             </form>
@@ -195,8 +155,8 @@
                             @include('core-cms::shared.button', ['type' => 'submit', 'label' => __('core-cms::core.profile.email.verify.value'), 'form' => 'send-verification', 'color' => 'link'])
                         </alert-message>
                     @endif
-                    @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.username'), 'name' => 'username', 'value' => $user->username])
-                    @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.email'), 'name' => 'email', 'value' => $user->email])
+                    @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.username'), 'name' => 'username', 'value' => $user->username])
+                    @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.email'), 'name' => 'email', 'value' => $user->email])
                     @include('core-cms::shared.button', ['type' => 'submit', 'label' => __('core-cms::core.profile.details.edit'), 'name' => 'action', 'value' => 'update', 'color' => 'primary'])
                 </form>
             </div>
@@ -208,9 +168,9 @@
                         {!! icon('lock', 'small') !!}
                         {{ __('core-cms::auth.account.password.value') }}
                     </h2>
-                    @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.current'), 'name' => 'current_password', 'type' => 'password', 'errorLocation' => 'updatePassword'])
-                    @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.new'), 'name' => 'password', 'type' => 'password', 'errorLocation' => 'updatePassword'])
-                    @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.confirm'), 'name' => 'password_confirmation', 'type' => 'password', 'errorLocation' => 'updatePassword'])
+                    @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.current'), 'name' => 'current_password', 'type' => 'password', 'errorLocation' => 'updatePassword'])
+                    @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.new'), 'name' => 'password', 'type' => 'password', 'errorLocation' => 'updatePassword'])
+                    @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.confirm'), 'name' => 'password_confirmation', 'type' => 'password', 'errorLocation' => 'updatePassword'])
                     @include('core-cms::shared.button', ['type' => 'submit', 'label' => __('core-cms::core.profile.password.edit'), 'name' => 'action', 'value' => 'password', 'color' => 'primary'])
                 </form>
             </div>
@@ -227,7 +187,7 @@
                         {{ __('core-cms::core.profile.warning.confirm.info') }}<br>
                         {{ __('core-cms::core.profile.warning.confirm.password') }}
                     </p>
-                    @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.current'), 'name' => 'password', 'type' => 'password', 'errorLocation' => 'userDeletion'])
+                    @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.current'), 'name' => 'password', 'type' => 'password', 'errorLocation' => 'userDeletion'])
                     @include('core-cms::shared.button', ['type' => 'submit', 'label' => __('core-cms::core.profile.warning.delete'), 'icon' => 'trash', 'color' => 'primary'])
                 </form>
             </div>

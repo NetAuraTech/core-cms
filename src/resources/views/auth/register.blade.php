@@ -28,10 +28,10 @@
             <form class="grid" method="post" action="{{ route('register') }}">
                 <h1 class="heading-1 text-center">{{ __('core-cms::auth.register.value') }}</h1>
                 @csrf
-                @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.username'), 'name' => 'username', 'value' => old('username')])
-                @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.email'), 'name' => 'email', 'value' => old('email')])
-                @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.value'), 'name' => 'password', 'type' => 'password'])
-                @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.confirm'), 'name' => 'password_confirmation', 'type' => 'password'])
+                @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.username'), 'name' => 'username', 'value' => old('username')])
+                @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.email'), 'name' => 'email', 'value' => old('email')])
+                @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.value'), 'name' => 'password', 'type' => 'password'])
+                @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.confirm'), 'name' => 'password_confirmation', 'type' => 'password'])
                 <div class="flex-group justify-content-space-between" style="width: initial">
                     <a href="{{ route('login') }}" class="auth-password-forgot">{{ __('core-cms::auth.account.has') }}</a>
                 </div>

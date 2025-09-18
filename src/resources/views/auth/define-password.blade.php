@@ -29,8 +29,8 @@
                 <h1 class="heading-1 text-center">{{ __('core-cms::auth.account.password.define.value') }}</h1>
                 <p>{{ __('core-cms::auth.account.password.define.info') }}</p>
                 @csrf
-                @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.new'), 'name' => 'password', 'type' => 'password', 'errorLocation' => 'updatePassword'])
-                @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.confirm'), 'name' => 'password_confirmation', 'type' => 'password', 'errorLocation' => 'updatePassword'])
+                @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.new'), 'name' => 'password', 'type' => 'password', 'errorLocation' => 'updatePassword'])
+                @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.confirm'), 'name' => 'password_confirmation', 'type' => 'password', 'errorLocation' => 'updatePassword'])
                 @include('core-cms::shared.button', ['type' => 'submit', 'label' => __('core-cms::auth.account.password.define.value'), 'name' => 'action', 'value' => 'password', 'color' => 'primary'])
             </form>
         </div>

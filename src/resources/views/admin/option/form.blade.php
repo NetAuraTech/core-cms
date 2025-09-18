@@ -29,7 +29,7 @@
                 @csrf
                 @method($option->exists ? 'put' : 'post')
                 <div class="grid" x-data="{ type: '{{ old('type', $option->type) }}', category: '{{ old('category', $option->category) }}' }">
-                    @include('core-cms::shared.input', [
+                    @include('core-cms::shared.form-field', [
                         'label' => __('core-cms::admin.option.key'),
                         'name' => 'key',
                         'value' => $option->key,
@@ -62,13 +62,13 @@
                         @enderror
                     </div>
                     <template x-if="type === 'text'">
-                        @include('core-cms::shared.input', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'textarea'])
+                        @include('core-cms::shared.form-field', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'textarea'])
                     </template>
                     <template x-if="type === 'number'">
-                        @include('core-cms::shared.input', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'number'])
+                        @include('core-cms::shared.form-field', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'number'])
                     </template>
                     <template x-if="type === 'boolean'">
-                        @include('core-cms::shared.switch', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value])
+                        @include('core-cms::shared.form-field', ['type' => 'checkbox', 'label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value])
                     </template>
                     <template x-if="type === 'content'">
                         <div class="form-group">

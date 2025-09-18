@@ -24,29 +24,12 @@
 
 @section('body')
     <section class="container padding-block-6">
-        @if (session('status'))
-            <alert-message type="success" is-floating="true">
-                {{ __('core-cms::auth.account.password.reset.confirmed') }}
-            </alert-message>
-        @endif
-        @if (session('error') === 'user-banned')
-            <alert-message type="error" is-floating="true">
-                {{ __('core-cms::auth.account.account.banned') }}
-            </alert-message>
-        @endif
-        @if(count($errors) > 0)
-            @foreach( $errors->all() as $message )
-                <alert-message type="danger" is-floating="true">
-                    {{ $message }}
-                </alert-message>
-            @endforeach
-        @endif
         <div class="card margin-block-end-6">
             <form class="grid" method="post" action="{{ route('login') }}">
                 <h1 class="heading-1 text-center">{{ __('core-cms::auth.login.value') }}</h1>
                 @csrf
-                @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.email'), 'name' => 'email', 'value' => old('email'), 'displayError' => false])
-                @include('core-cms::shared.input', ['label' => __('core-cms::auth.account.password.value'), 'name' => 'password', 'type' => 'password', 'displayError' => false])
+                @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.email'), 'name' => 'email', 'value' => old('email'), 'displayError' => false])
+                @include('core-cms::shared.form-field', ['label' => __('core-cms::auth.account.password.value'), 'name' => 'password', 'type' => 'password', 'displayError' => false])
                 <div class="flex-group justify-content-space-between" style="width: initial">
                     <div class="form-group">
                         <div class="form-switch">
