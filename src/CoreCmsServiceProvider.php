@@ -116,6 +116,10 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         ], 'core-cms-config');
 
         $this->publishes([
+            __DIR__.'/../config/lscache.php' => config_path('lscache.php'),
+        ], 'core-cms-config');
+
+        $this->publishes([
             __DIR__.'/resources/views/mail' => resource_path('views/vendor/mail'),
         ], 'core-cms-views');
 
