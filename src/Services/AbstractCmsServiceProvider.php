@@ -4,6 +4,7 @@ namespace Netauratech\CoreCms\Services;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Netauratech\CoreCms\Contracts\ThemeMiddlewareInterface;
 use Netauratech\CoreCms\Events\LangLoaded;
 use Netauratech\CoreCms\Http\Middlewares\BackupSessionForEsi;
 use Netauratech\CoreCms\Http\Middlewares\SmartCacheControlMiddleware;
@@ -174,7 +175,7 @@ abstract class AbstractCmsServiceProvider extends ServiceProvider
             $webRoutesPath = $this->getPackagePath() . '/routes/web.php';
             if (file_exists($webRoutesPath)) {
                 Route::group([
-                    'middleware' => ['web', BackupSessionForEsi::class, SmartCacheControlMiddleware::class],
+                    'middleware' => ['web', ThemeMiddlewareInterface::class, BackupSessionForEsi::class, SmartCacheControlMiddleware::class],
                 ], function () use ($webRoutesPath) {
                     $this->loadRoutesFrom($webRoutesPath);
                 });
@@ -198,7 +199,7 @@ abstract class AbstractCmsServiceProvider extends ServiceProvider
             $authRoutesPath = $this->getPackagePath() . '/routes/auth.php';
             if (file_exists($authRoutesPath)) {
                 Route::group([
-                    'middleware' => ['web', BackupSessionForEsi::class, SmartCacheControlMiddleware::class],
+                    'middleware' => ['web', ThemeMiddlewareInterface::class, BackupSessionForEsi::class, SmartCacheControlMiddleware::class],
                 ], function () use ($authRoutesPath) {
                     $this->loadRoutesFrom($authRoutesPath);
                 });
