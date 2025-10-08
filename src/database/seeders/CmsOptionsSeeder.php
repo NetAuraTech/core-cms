@@ -92,15 +92,6 @@ class CmsOptionsSeeder extends Seeder
         );
 
         Option::firstOrCreate(
-            ['key' => 'privacy-policy'],
-            [
-                'value' => '',
-                'category' => 'content_settings',
-                'type' => 'content',
-            ]
-        );
-
-        Option::firstOrCreate(
             ['key' => 'contact-email'],
             [
                 'value' => '',
@@ -177,6 +168,51 @@ class CmsOptionsSeeder extends Seeder
             [
                 'value' => '',
                 'category' => 'social_media',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'privacy-policy'],
+            [
+                'value' => '',
+                'category' => 'legals',
+                'type' => 'content',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'host-name'],
+            [
+                'value' => 'o2Switch',
+                'category' => 'legals',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'host-address'],
+            [
+                'value' => 'o2switch, Chemin des Pardiaux, 63000, Clermont-Ferrand, France',
+                'category' => 'legals',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'host-phone'],
+            [
+                'value' => '04 44 44 60 40',
+                'category' => 'legals',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'host-website'],
+            [
+                'value' => 'https://www.o2switch.fr',
+                'category' => 'legals',
                 'type' => 'text',
             ]
         );
