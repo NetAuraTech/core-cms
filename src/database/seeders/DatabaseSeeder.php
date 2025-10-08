@@ -17,12 +17,15 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        if (class_exists(RolesAndPermissionsSeeder::class)) {
-            $this->call(RolesAndPermissionsSeeder::class);
-        }
+        $packageSeeders = config('package-seeders', []);
 
-        if (class_exists(CmsOptionsSeeder::class)) {
-            $this->call(CmsOptionsSeeder::class);
+        foreach ($packageSeeders as $seederInfo) {
+            $seederClass = $seederInfo['class'];
+
+            if (class_exists($seederClass)) {
+                $this->command->info("Seeding from package: {$seederInfo['package']}");
+                $this->call($seederClass);
+            }
         }
     }
 }
