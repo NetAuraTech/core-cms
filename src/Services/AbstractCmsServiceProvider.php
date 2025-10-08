@@ -23,6 +23,11 @@ abstract class AbstractCmsServiceProvider extends ServiceProvider
 
     abstract protected function getPackageName(): string;
 
+    protected function getSeeders(): array
+    {
+        return [];
+    }
+
     protected function getBootstrapConfig(): array
     {
         return [
@@ -55,6 +60,7 @@ abstract class AbstractCmsServiceProvider extends ServiceProvider
         $this->loadMigrations();
         $this->registerPublishes();
         $this->registerRoutes();
+        $this->registerPackageSeeders();
 
         if ($this->config['translations']) {
             LangLoaded::dispatch($this->packageName);
@@ -115,6 +121,30 @@ abstract class AbstractCmsServiceProvider extends ServiceProvider
         $migrationsPath = $this->getPackagePath() . '/database/migrations';
         if (is_dir($migrationsPath)) {
             $this->loadMigrationsFrom($migrationsPath);
+        }
+    }
+
+    protected function registerPackageSeeders(): void
+    {
+        if (!$this->config['seeders']) {
+            return;
+        }
+
+        $seeders = $this->getSeeders();
+
+        if (empty($seeders)) {
+            return;
+        }
+
+        if (!config()->has('package-seeders')) {
+            config(['package-seeders' => []]);
+        }
+
+        foreach ($seeders as $seederClass) {
+            config()->push('package-seeders', [
+                'package' => $this->packageName,
+                'class' => $seederClass
+            ]);
         }
     }
 
