@@ -2,6 +2,7 @@
 
 namespace Netauratech\CoreCms;
 
+use Database\Seeders\CmsOptionsSeeder;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
@@ -34,6 +35,7 @@ use Netauratech\CoreCms\Services\Captcha\PuzzleGenerator;
 use Netauratech\CoreCms\Services\NullContentProvider;
 use Netauratech\CoreCms\Services\NullMediaProvider;
 use Netauratech\CoreCms\Services\Shortcode\ButtonShortcode;
+use Netauratech\CoreCms\Services\Shortcode\OptionShortcode;
 use Netauratech\CoreCms\Services\Shortcode\ShortcodeParser;
 use Netauratech\CoreCms\Services\Shortcode\ShortcodeRegistry;
 use Netauratech\CoreCms\Services\StorageAssetSource;
@@ -51,6 +53,13 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         $config = parent::getBootstrapConfig();
 
         return $config;
+    }
+
+    protected function getSeeders(): array
+    {
+        return [
+            CmsOptionsSeeder::class,
+        ];
     }
 
     public function register(): void
@@ -165,6 +174,7 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         });
 
         $shortcodeRegistry->register('button', new ButtonShortcode());
+        $shortcodeRegistry->register('option', new OptionShortcode());
 
         // Command registration Artisan
         if ($this->app->runningInConsole()) {
