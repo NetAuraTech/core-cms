@@ -1,5 +1,6 @@
 import {defineI18n} from "./shared/functions/i18n";
 import './elements/index'
+import {$} from "./shared/functions/dom";
 
 defineI18n();
 document.addEventListener("DOMContentLoaded", () => {
@@ -23,6 +24,35 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     void refreshCSRF();
+
+    const header = $('#header')
+    if (header) {
+        const burgerButton = $('#js-burger')
+        burgerButton?.addEventListener('click', () => {
+            const lists = header.querySelectorAll('ul')
+            const currentState = burgerButton.getAttribute('data-state')
+
+            if (!currentState || currentState === 'closed') {
+                header.setAttribute('data-state', 'opened')
+                header.setAttribute('aria-expanded', 'true')
+                burgerButton.setAttribute('data-state', 'opened')
+                burgerButton.setAttribute('aria-expanded', 'true')
+                lists.forEach(ul => {
+                    ul.setAttribute('data-state', 'opened')
+                    ul.setAttribute('aria-expanded', 'true')
+                })
+            } else {
+                header.setAttribute('data-state', 'closed')
+                header.setAttribute('aria-expanded', 'false')
+                burgerButton.setAttribute('data-state', 'closed')
+                burgerButton.setAttribute('aria-expanded', 'false')
+                lists.forEach(ul => {
+                    ul.setAttribute('data-state', 'closed')
+                    ul.setAttribute('aria-expanded', 'false')
+                })
+            }
+        })
+    }
 });
 
 window.addEventListener('csrf-ready', function(event) {
