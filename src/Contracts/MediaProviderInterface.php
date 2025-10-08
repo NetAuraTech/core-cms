@@ -25,10 +25,11 @@ interface MediaProviderInterface
      * @param string|null $alt The alternative text for the image, for accessibility. Defaults to null.
      * @param int|null $width The width of the image in pixels. Defaults to null.
      * @param string|null $transitionName A CSS transition name (e.g., for frontend animations). Defaults to null.
-     * @param string|null $class Additional CSS classes to apply to the <img> tag. Defaults to null.
+     * @param string|null $classes Additional CSS classes to apply to the <img> tag. Defaults to null.
+     * @param array $styles Additional styles to apply to the <img> tag. Defaults to [].
      * @return string|null The generated HTML <img> tag as a string, or null if the image cannot be generated.
      */
-    public function image_tag(int $id, ?string $alt = null, ?int $width = null, ?string $transitionName = null, ?string $class = null): ?string;
+    public function image_tag(int $id, ?string $alt = null, ?int $width = null, ?string $transitionName = null, ?string $classes = null, array $styles = []): ?string;
 
     /**
      * Retrieves a Media object by its ID.

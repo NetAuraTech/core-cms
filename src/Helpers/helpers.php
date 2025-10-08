@@ -120,14 +120,15 @@ if (!function_exists('image_tag')) {
      * @param string|null $alt The alternative text for the image, for accessibility. Defaults to null.
      * @param int|null $height The height of the image in pixels. Defaults to null.
      * @param string|null $transitionName A CSS transition name (e.g., for frontend animations). Defaults to null.
-     * @param string|null $class Additional CSS classes to apply to the <img> tag. Defaults to null.
+     * @param string|null $classes Additional CSS classes to apply to the <img> tag. Defaults to null.
+     * @param array $styles Additional styles to apply to the <img> tag. Defaults to [].
      * @return string|null The generated HTML <img> tag as a string, or null if the image cannot be generated.
      */
-    function image_tag(string $entity, ?string $alt = null, ?int $height = null, ?string $transitionName = null, ?string $class = null): ?string
+    function image_tag(string $entity, ?string $alt = null, ?int $height = null, ?string $transitionName = null, ?string $classes = null, array $styles = []): ?string
     {
         $mediaProvider = app(MediaProviderInterface::class);
 
-        return $mediaProvider->image_tag($entity, $alt, $height, $transitionName, $class);
+        return $mediaProvider->image_tag($entity, $alt, $height, $transitionName, $classes, $styles);
     }
 }
 
