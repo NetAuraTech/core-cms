@@ -65,33 +65,6 @@ class CmsOptionsSeeder extends Seeder
         );
 
         Option::firstOrCreate(
-            ['key' => 'homepage'],
-            [
-                'value' => '1',
-                'category' => 'content_settings',
-                'type' => 'content',
-            ]
-        );
-
-        Option::firstOrCreate(
-            ['key' => 'header'],
-            [
-                'value' => '',
-                'category' => 'content_settings',
-                'type' => 'template',
-            ]
-        );
-
-        Option::firstOrCreate(
-            ['key' => 'footer'],
-            [
-                'value' => '',
-                'category' => 'content_settings',
-                'type' => 'template',
-            ]
-        );
-
-        Option::firstOrCreate(
             ['key' => 'contact-email'],
             [
                 'value' => '',
@@ -169,15 +142,6 @@ class CmsOptionsSeeder extends Seeder
                 'value' => '',
                 'category' => 'social_media',
                 'type' => 'text',
-            ]
-        );
-
-        Option::firstOrCreate(
-            ['key' => 'privacy-policy'],
-            [
-                'value' => '',
-                'category' => 'legals',
-                'type' => 'content',
             ]
         );
 
