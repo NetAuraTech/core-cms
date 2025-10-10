@@ -5,7 +5,6 @@ namespace Netauratech\CoreCms\Services;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Netauratech\CoreCms\Contracts\ThemeMiddlewareInterface;
-use Netauratech\CoreCms\Events\LangLoaded;
 use Netauratech\CoreCms\Http\Middlewares\BackupSessionForEsi;
 use Netauratech\CoreCms\Http\Middlewares\SmartCacheControlMiddleware;
 
@@ -61,10 +60,6 @@ abstract class AbstractCmsServiceProvider extends ServiceProvider
         $this->registerPublishes();
         $this->registerRoutes();
         $this->registerPackageSeeders();
-
-        if ($this->config['translations']) {
-            LangLoaded::dispatch($this->packageName);
-        }
     }
 
     protected function registerViews(): void
