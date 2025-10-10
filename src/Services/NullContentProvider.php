@@ -11,7 +11,7 @@ class NullContentProvider implements ContentProviderInterface
     /**
      * @inheritDoc
      */
-    public function getArticles(int $perPage = 10): LengthAwarePaginator
+    public function getContents(string $type, ?int $perPage): LengthAwarePaginator
     {
         return new LengthAwarePaginator([], 0, 0);
     }
@@ -19,7 +19,7 @@ class NullContentProvider implements ContentProviderInterface
     /**
      * @inheritDoc
      */
-    public function getArticlesByCategory(string $slug, int $perPage = 10): LengthAwarePaginator
+    public function getContentsByCategory(string $type, string $slug, ?int $perPage): LengthAwarePaginator
     {
         return new LengthAwarePaginator([], 0, 0);
     }
@@ -27,25 +27,9 @@ class NullContentProvider implements ContentProviderInterface
     /**
      * @inheritDoc
      */
-    public function countCategories(): Collection
+    public function countCategories(string $type): Collection
     {
         return new Collection();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPages(int $perPage = 10): LengthAwarePaginator
-    {
-        return new LengthAwarePaginator([], 0, 0);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getTemplates(int $perPage = 10): LengthAwarePaginator
-    {
-        return new LengthAwarePaginator([], 0, 0);
     }
 
     /**
@@ -60,22 +44,6 @@ class NullContentProvider implements ContentProviderInterface
      * @inheritDoc
      */
     public function getContentBySlug(string $slug): ?object
-    {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getHeaderContent(): ?object
-    {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getFooterContent(): ?object
     {
         return null;
     }

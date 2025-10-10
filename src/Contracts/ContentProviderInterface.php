@@ -8,50 +8,37 @@ use Illuminate\Support\Collection;
 interface ContentProviderInterface
 {
     /**
-     * Retrieves all articles.
+     * Retrieves all contents.
      *
-     * @param int $perPage
+     * @param string $type
+     * @param ?int $perPage
      * @return LengthAwarePaginator
      */
-    public function getArticles(int $perPage = 10): LengthAwarePaginator;
+    public function getContents(string $type, ?int $perPage): LengthAwarePaginator;
 
     /**
-     * Retrieves articles from category.
+     * Retrieves contents from category.
      *
+     * @param string $type
      * @param string $slug
-     * @param int $perPage
+     * @param ?int $perPage
      * @return LengthAwarePaginator
      */
-    public function getArticlesByCategory(string $slug, int $perPage = 10): LengthAwarePaginator;
+    public function getContentsByCategory(string $type, string $slug, ?int $perPage): LengthAwarePaginator;
 
     /**
-     * Returns categories with the number of articles
+     * Returns categories with the number of contents
      *
+     * @param string $type
      * @return Collection
      */
-    public function countCategories(): Collection;
-
-    /**
-     * Retrieves all pages.
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
-     */
-    public function getPages(int $perPage = 10): LengthAwarePaginator;
-
-    /**
-     * Retrieves all template.
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
-     */
-    public function getTemplates(int $perPage = 10): LengthAwarePaginator;
+    public function countCategories(string $type): Collection;
 
     /**
      * Retrieves a content item by its ID.
      *
      * @param int $id
-     * @return object|null The content template or null if not found.
+     * @return object|null The content model or null if not found.
      */
     public function getContentById(int $id): ?object;
 
