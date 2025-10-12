@@ -25,7 +25,7 @@ class NullMediaProvider implements MediaProviderInterface
     /**
      * @inheritDoc
      */
-    public function image_tag(int $id, ?string $alt = null, ?int $width = null, ?string $transitionName = null, ?string $class = null): ?string
+    public function image_tag(int $id, ?string $alt = null, ?int $height = null, ?string $transitionName = null, ?string $class = null): ?string
     {
         return null;
     }
