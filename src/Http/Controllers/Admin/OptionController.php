@@ -48,6 +48,7 @@ class OptionController extends AdminController
             'general',
             'branding',
             'content_settings',
+            'seo',
             'contact_emails',
             'social_media',
             'security'
@@ -84,9 +85,9 @@ class OptionController extends AdminController
 
         return view('core-cms::admin.option.form', [
             'option' => $option,
-            'articles' => $this->contentProvider->getArticles(999999999999999999),
-            'pages' => $this->contentProvider->getPages(999999999999999999),
-            'templates' => $this->contentProvider->getTemplates(999999999999999999),
+            'articles' => $this->contentProvider->getContents('article'),
+            'pages' => $this->contentProvider->getContents('page'),
+            'templates' => $this->contentProvider->getContents('template'),
             'formFields' => $formFields,
         ]);
     }
@@ -115,9 +116,9 @@ class OptionController extends AdminController
 
         return view('core-cms::admin.option.form', [
             'option' => $option,
-            'articles' => $this->contentProvider->getArticles(999999999999999999),
-            'pages' => $this->contentProvider->getPages(999999999999999999),
-            'templates' => $this->contentProvider->getTemplates(999999999999999999),
+            'articles' => $this->contentProvider->getContents('article'),
+            'pages' => $this->contentProvider->getContents('page'),
+            'templates' => $this->contentProvider->getContents('template'),
             'formFields' => $formFields
         ]);
     }
