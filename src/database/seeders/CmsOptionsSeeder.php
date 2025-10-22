@@ -191,6 +191,15 @@ class CmsOptionsSeeder extends Seeder
         );
 
         Option::firstOrCreate(
+            ['key' => 'address'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
             ['key' => 'address_city'],
             [
                 'value' => '',
@@ -249,6 +258,69 @@ class CmsOptionsSeeder extends Seeder
             [
                 'value' => '',
                 'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'schedule_monday'],
+            [
+                'value' => '',
+                'category' => 'schedule',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'schedule_tuesday'],
+            [
+                'value' => '',
+                'category' => 'schedule',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'schedule_wednesday'],
+            [
+                'value' => '',
+                'category' => 'schedule',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'schedule_thursday'],
+            [
+                'value' => '',
+                'category' => 'schedule',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'schedule_friday'],
+            [
+                'value' => '',
+                'category' => 'schedule',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'schedule_saturday'],
+            [
+                'value' => '',
+                'category' => 'schedule',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'schedule_sunday'],
+            [
+                'value' => '',
+                'category' => 'schedule',
                 'type' => 'text',
             ]
         );

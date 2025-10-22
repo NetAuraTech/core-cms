@@ -43,6 +43,8 @@ return [
             'contact_emails' => 'E-mails de contact',
             'social_media' => 'Réseaux sociaux',
             'security' => 'Sécurité',
+            'schedule' => 'Horaires',
+            'seo' => 'Optimisation pour les moteurs de recherche',
             'theme' => 'Thème',
             'custom' => 'Personnalisé',
         ],
@@ -52,6 +54,54 @@ return [
         ],
         'value' => '{0}Options|[1,1]une option|[2,*]les options',
         'key' => 'Clé',
+        'keys' => [
+            // General
+            'site_name' => 'Nom du site',
+            'description' => 'Description du site',
+
+            // Branding
+            'favicon' => 'Favicon',
+            'logo' => 'Logo',
+
+            // Content Settings
+            'header' => 'En-tête',
+            'footer' => 'Pied de page',
+            'homepage' => 'Page d\'accueil',
+            'privacy-policy' => 'Politique de confidentialité',
+
+            // Contact Emails
+            'contact-email' => 'Email de contact',
+            'noreply-email' => 'Email sans réponse',
+            'sav-email' => 'Email service client',
+
+            // Social Media
+            'facebook' => 'Facebook',
+            'instagram' => 'Instagram',
+            'linkedin' => 'LinkedIn',
+            'twitter' => 'Twitter',
+            'youtube' => 'YouTube',
+
+            // Security
+            'spam_words' => 'Mots spam',
+
+            // SEO
+            'address_city' => 'Ville',
+            'address_country' => 'Pays',
+            'address_latitude' => 'Latitude',
+            'address_longitude' => 'Longitude',
+            'address_postal-code' => 'Code postal',
+            'address_region' => 'Région',
+            'area_served' => 'Zone desservie',
+
+            // Schedule
+            'schedule_monday' => 'Lundi',
+            'schedule_tuesday' => 'Mardi',
+            'schedule_wednesday' => 'Mercredi',
+            'schedule_thursday' => 'Jeudi',
+            'schedule_friday' => 'Vendredi',
+            'schedule_saturday' => 'Samedi',
+            'schedule_sunday' => 'Dimanche',
+        ],
         'type' => [
             'value' => 'Type',
             'text' =>  'Texte',
@@ -60,6 +110,13 @@ return [
             'media' => 'Média',
             'content' => 'Contenu',
             'template' => 'Modèle',
+        ],
+        'schedule' => [
+            'format_hint' => 'Format : HH:MM-HH:MM ou HH:MM-HH:MM/HH:MM-HH:MM',
+            'examples' => 'Exemples :',
+            'continuous' => 'Journée continue : 09:00-18:00',
+            'with_break' => 'Avec coupure : 09:00-12:00/14:00-18:00',
+            'closed' => 'Fermé : laisser vide',
         ]
     ],
     'save' => 'Enregistrer',

@@ -49,6 +49,7 @@ class OptionController extends AdminController
             'branding',
             'content_settings',
             'seo',
+            'schedule',
             'contact_emails',
             'social_media',
             'security'

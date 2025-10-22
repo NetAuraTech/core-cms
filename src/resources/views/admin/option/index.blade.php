@@ -24,10 +24,44 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($group->options as $item)
+                    @php
+                        $scheduleOrder = [
+                            'schedule_monday',
+                            'schedule_tuesday',
+                            'schedule_wednesday',
+                            'schedule_thursday',
+                            'schedule_friday',
+                            'schedule_saturday',
+                            'schedule_sunday'
+                        ];
+
+                        $scheduleOptions = collect($group->options)->filter(function($item) {
+                            return str_starts_with($item->key, 'schedule_');
+                        })->sortBy(function($item) use ($scheduleOrder) {
+                            return array_search($item->key, $scheduleOrder);
+                        });
+
+                        $otherOptions = collect($group->options)->filter(function($item) {
+                            return !str_starts_with($item->key, 'schedule_');
+                        });
+
+                        $sortedOptions = $otherOptions->concat($scheduleOptions);
+                    @endphp
+
+                    @foreach($sortedOptions as $item)
                         <tr>
                             <td>
-                                <a href="{{ route('admin.option.edit', $item->key) }}">{{ $item->key }}</a>
+                                <a href="{{ route('admin.option.edit', $item->key) }}">
+                                    @php
+                                        $translationKey = 'core-cms::admin.option.keys.' . $item->key;
+                                        $translatedKey = __($translationKey);
+
+                                        if ($translatedKey === $translationKey) {
+                                            $translatedKey = $item->key;
+                                        }
+                                    @endphp
+                                    {{ $translatedKey }}
+                                </a>
                             </td>
                             <td>
                                 {{ __('core-cms::admin.option.type.' . $item->type) }}
@@ -62,7 +96,21 @@
                                             @if ($field)
                                                 @include($field['renderer'], [...$field['props'] ?? [], 'value' => $item->value])
                                             @else
-                                                {{ $item->value }}
+                                                @if (str_starts_with($item->key, 'schedule_') && !empty($item->value))
+                                                    @php
+                                                        $slots = explode('/', $item->value);
+                                                        $formatted = [];
+                                                        foreach ($slots as $slot) {
+                                                            $times = explode('-', trim($slot));
+                                                            if (count($times) === 2) {
+                                                                $formatted[] = substr($times[0], 0, 5) . ' - ' . substr($times[1], 0, 5);
+                                                            }
+                                                        }
+                                                        echo implode(' / ', $formatted);
+                                                    @endphp
+                                                @else
+                                                    {{ $item->value ?: '—' }}
+                                                @endif
                                             @endif
                                     @endswitch
                                 </a>

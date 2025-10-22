@@ -43,6 +43,8 @@ return [
             'contact_emails' => 'Contact Emails',
             'social_media' => 'Social Media',
             'security' => 'Security',
+            'schedule' => 'Schedules',
+            'seo' => 'Search Engine Optimization',
             'theme' => 'Theme',
             'custom' => 'Custom',
         ],
@@ -52,6 +54,54 @@ return [
         ],
         'value' => '{0}Options|[1,1]option|[2,*]options',
         'key' => 'Key',
+        'keys' => [
+            // General
+            'site_name' => 'Site Name',
+            'description' => 'Site Description',
+
+            // Branding
+            'favicon' => 'Favicon',
+            'logo' => 'Logo',
+
+            // Content Settings
+            'header' => 'Header',
+            'footer' => 'footer',
+            'homepage' => 'Homepage',
+            'privacy-policy' => 'Privacy Policy',
+
+            // Contact Emails
+            'contact-email' => 'Contact Email',
+            'noreply-email' => 'No-Reply Email',
+            'sav-email' => 'Customer Service Email',
+
+            // Social Media
+            'facebook' => 'Facebook',
+            'instagram' => 'Instagram',
+            'linkedin' => 'LinkedIn',
+            'twitter' => 'Twitter',
+            'youtube' => 'YouTube',
+
+            // Security
+            'spam_words' => 'Spam Words',
+
+            // SEO
+            'address_city' => 'City',
+            'address_country' => 'Country',
+            'address_latitude' => 'Latitude',
+            'address_longitude' => 'Longitude',
+            'address_postal-code' => 'Postal Code',
+            'address_region' => 'Region',
+            'area_served' => 'Service Area',
+
+            // Schedules
+            'schedule_monday' => 'Monday',
+            'schedule_tuesday' => 'Tuesday',
+            'schedule_wednesday' => 'Wednesday',
+            'schedule_thursday' => 'Thursday',
+            'schedule_friday' => 'Friday',
+            'schedule_saturday' => 'Saturday',
+            'schedule_sunday' => 'Sunday',
+        ],
         'type' => [
             'value' => 'Type',
             'text' =>  'Text',
@@ -60,6 +110,13 @@ return [
             'media' => 'Media',
             'content' => 'Content',
             'template' => 'Template',
+        ],
+        'schedule' => [
+            'format_hint' => 'Format: HH:MM-HH:MM or HH:MM-HH:MM/HH:MM-HH:MM',
+            'examples' => 'Examples:',
+            'continuous' => 'Continuous day: 09:00-18:00',
+            'with_break' => 'With lunch break: 09:00-12:00/14:00-18:00',
+            'closed' => 'Closed: leave empty',
         ]
     ],
     'save' => 'Save',

@@ -42,7 +42,7 @@
                                 class="form-control @error("type") is-invalid @enderror"
                                 x-model="type"
                                 @if($option->category !== 'custom')
-                                disabled="disabled"
+                                    disabled="disabled"
                                 @endif
                         >
                             <option value="">{{ __('core-cms::core.select.option.choose') }}</option>
@@ -61,9 +61,24 @@
                         </div>
                         @enderror
                     </div>
+
                     <template x-if="type === 'text'">
-                        @include('core-cms::shared.form-field', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'textarea'])
+                        <div>
+                            @include('core-cms::shared.form-field', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'textarea'])
+                            @if(str_starts_with($option->key, 'schedule_'))
+                                <div class="margin-block-start-3 padding-4 border-radius-1" style="background-color: var(--neutral-100); border-left: 4px solid var(--accent-400);">
+                                    <p class="margin-block-end-2"><strong>{{ __('core-cms::admin.option.schedule.format_hint') }}</strong></p>
+                                    <p class="margin-block-end-2">{{ __('core-cms::admin.option.schedule.examples') }}</p>
+                                    <ul style="margin-left: 1.5rem; margin-bottom: 0;">
+                                        <li>{{ __('core-cms::admin.option.schedule.continuous') }}</li>
+                                        <li>{{ __('core-cms::admin.option.schedule.with_break') }}</li>
+                                        <li>{{ __('core-cms::admin.option.schedule.closed') }}</li>
+                                    </ul>
+                                </div>
+                            @endif
+                        </div>
                     </template>
+
                     <template x-if="type === 'number'">
                         @include('core-cms::shared.form-field', ['label' => __('core-cms::admin.value'), 'name' => 'value', 'value' => $option->value, 'type' => 'number'])
                     </template>
