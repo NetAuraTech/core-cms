@@ -70,10 +70,17 @@ return [
             'toggleTitle' => 'Click to toggle',
         ],
     ],
+    'home' => 'Home',
     'select' => [
         'option' => [
             'choose' => 'Choose an option',
         ],
+    ],
+    'pagination' => [
+        'page' => [
+            'next' => 'Next page',
+            'previous' => 'Previous page',
+        ]
     ],
     'profile' => [
         'title' => 'My Account',

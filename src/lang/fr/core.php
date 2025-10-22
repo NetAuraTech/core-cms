@@ -70,10 +70,17 @@ return [
             'toggleTitle' => 'Cliquer pour basculer',
         ],
     ],
+    'home' => 'Accueil',
     'select' => [
         'option' => [
             'choose' => 'Choisissez une option',
         ],
+    ],
+    'pagination' => [
+      'page' => [
+          'next' => 'Page suivante',
+          'previous' => 'Page précédente',
+      ]
     ],
     'profile' => [
         'title' => 'Mon profil',
