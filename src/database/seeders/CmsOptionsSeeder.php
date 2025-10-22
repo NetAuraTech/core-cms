@@ -180,5 +180,77 @@ class CmsOptionsSeeder extends Seeder
                 'type' => 'text',
             ]
         );
+
+        Option::firstOrCreate(
+            ['key' => 'phone'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'address_city'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'address_postal-code'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'address_region'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'address_country'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'address_longitude'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'address_latitude'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
+
+        Option::firstOrCreate(
+            ['key' => 'area_served'],
+            [
+                'value' => '',
+                'category' => 'seo',
+                'type' => 'text',
+            ]
+        );
     }
 }
