@@ -9,6 +9,7 @@
         <title>@yield('title') | {{ $options['site_name'] }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui"/>
         <script defer src="{{ route('translations') }}"></script>
+        <meta name="csrf-token" content="">
         @yield('meta')
         @vite(['resources/ts/app.ts'])
         @vite(['resources/ts/admin.ts'])
