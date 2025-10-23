@@ -1,6 +1,8 @@
 <?php
     $options = $options ?? [];
     $site_name = $options['site_name'] ?? config('app.name');
+    $openGraphLogo = $openGraphLogo ?? '';
+    $logo = Request::url() . str_replace('&amp;', '&', $openGraphLogo);
 ?>
 
 <!DOCTYPE html>
@@ -54,165 +56,30 @@
                 }
             }
 
-            $daysMapping = [
-                'monday' => 'Monday',
-                'tuesday' => 'Tuesday',
-                'wednesday' => 'Wednesday',
-                'thursday' => 'Thursday',
-                'friday' => 'Friday',
-                'saturday' => 'Saturday',
-                'sunday' => 'Sunday',
+            $jsonLdOrganization = [
+                "@context" => "https://schema.org",
+                "@type" => "Organization",
+                "name" => $site_name,
+                "url" => Request::url(),
+                "logo" => $logo,
+                "contactPoint" => [
+                    "@type" => "ContactPoint",
+                    "email" => $options['contact-email'] ?? 'contact@example.com',
+                ],
             ];
 
-            $openingHoursSpecification = [];
+            if (!empty($alternateNames)) {
+                $jsonLdOrganization["alternateName"] = $alternateNames;
+            }
 
-            foreach ($daysMapping as $key => $dayName) {
-                $schedule = $options["schedule_{$key}"] ?? '';
-
-                if (empty($schedule)) {
-                    continue;
-                }
-
-                $slots = explode('/', $schedule);
-
-                foreach ($slots as $slot) {
-                    $times = explode('-', trim($slot));
-
-                    if (count($times) === 2) {
-                        $openingHoursSpecification[] = [
-                            "@type" => "OpeningHoursSpecification",
-                            "dayOfWeek" => $dayName,
-                            "opens" => trim($times[0]),
-                            "closes" => trim($times[1]),
-                        ];
-                    }
-                }
+            if (!empty($sameAs)) {
+                $jsonLdOrganization["sameAs"] = $sameAs;
             }
         @endphp
-
+        <script type="application/ld+json">
+            {!! json_encode($jsonLdOrganization, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+        </script>
         @section('jsonLd')
-            @php
-                $logo = Request::url() . str_replace('&amp;', '&', $openGraphLogo);
-
-                $jsonLdOrganization = [
-                    "@context" => "https://schema.org",
-                    "@type" => "Organization",
-                    "name" => $site_name,
-                    "url" => Request::url(),
-                    "logo" => $logo,
-                    "contactPoint" => [
-                        "@type" => "ContactPoint",
-                        "email" => $options['contact-email'] ?? 'contact@example.com',
-                    ],
-                    "mainEntityOfPage" => [
-                        "@type" => "WebPage",
-                        "@id" => Request::url(),
-                    ],
-                ];
-
-                if (!empty($alternateNames)) {
-                    $jsonLdOrganization["alternateName"] = $alternateNames;
-                }
-
-                if (!empty($sameAs)) {
-                    $jsonLdOrganization["sameAs"] = $sameAs;
-                }
-
-                $areaServedNames = !empty($options['area_served']) ? explode(", ", $options['area_served']) : [];
-                $areaServedObjects = [];
-
-                if (!empty($options['address_region'])) {
-                    $areaServedObjects[] = [
-                        "@type" => "State",
-                        "name" => $options['address_region']
-                    ];
-                }
-
-                foreach ($areaServedNames as $cityName) {
-                    if (!empty(trim($cityName))) {
-                        $areaServedObjects[] = [
-                            "@type" => "City",
-                            "name" => trim($cityName)
-                        ];
-                    }
-                }
-
-                $jsonLdLocalBusiness = [
-                    "@context" => "https://schema.org",
-                    "@type" => "LocalBusiness",
-                    "name" => $site_name,
-                    "image" => $logo,
-                    "url" => Request::url(),
-                ];
-
-                if (!empty($options['phone'])) {
-                    $jsonLdLocalBusiness["telephone"] = $options['phone'];
-                }
-
-                if (!empty($options['price_range'])) {
-                    $jsonLdLocalBusiness["priceRange"] = $options['price_range'];
-                } else {
-                    $jsonLdLocalBusiness["priceRange"] = "€€";
-                }
-
-                $address = [
-                    "@type" => "PostalAddress",
-                ];
-
-                if (!empty($options['address'])) {
-                    $address["streetAddress"] = $options['address'];
-                }
-
-                if (!empty($options['address_city'])) {
-                    $address["addressLocality"] = $options['address_city'];
-                }
-
-                if (!empty($options['address_postal-code'])) {
-                    $address["postalCode"] = $options['address_postal-code'];
-                }
-
-                if (!empty($options['address_region'])) {
-                    $address["addressRegion"] = $options['address_region'];
-                }
-
-                if (!empty($options['address_country'])) {
-                    $address["addressCountry"] = $options['address_country'];
-                }
-
-                if (!empty($options['address_city'])) {
-                    $jsonLdLocalBusiness["address"] = $address;
-                }
-
-                if (!empty($options['address_latitude']) && !empty($options['address_longitude'])) {
-                    $jsonLdLocalBusiness["geo"] = [
-                        "@type" => "GeoCoordinates",
-                        "latitude" => $options['address_latitude'],
-                        "longitude" => $options['address_longitude']
-                    ];
-                }
-
-                if (!empty($areaServedObjects)) {
-                    $jsonLdLocalBusiness["areaServed"] = $areaServedObjects;
-                }
-
-                if (!empty($openingHoursSpecification)) {
-                    $jsonLdLocalBusiness["openingHoursSpecification"] = $openingHoursSpecification;
-                }
-
-                if (!empty($sameAs)) {
-                    $jsonLdLocalBusiness["sameAs"] = $sameAs;
-                }
-            @endphp
-
-            <script type="application/ld+json">
-                {!! json_encode($jsonLdOrganization, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
-            </script>
-
-            @if(!empty($options['address_city']))
-                <script type="application/ld+json">
-                    {!! json_encode($jsonLdLocalBusiness, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
-                </script>
-            @endif
         @show
     </head>
     <body id="page-wrapper">
