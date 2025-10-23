@@ -34,7 +34,7 @@
         <meta property="og:language" content="fr"/>
         <meta property='og:url' content="{{ Request::url() }}"/>
 
-        <meta name='twitter:card' content='summary'/>
+        <meta name='twitter:card' content='summary_large_image'/>
         <meta name='twitter:site' content="{{ Request::url() }}"/>
         <meta name='twitter:title' content="@yield('title') | {{ $site_name }}"/>
 
