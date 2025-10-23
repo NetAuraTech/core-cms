@@ -16,5 +16,8 @@ return [
         ],
         'prefix' => 'admin',
         'name' => 'admin.',
+    ],
+    'media' => [
+        'model' => null
     ]
 ];
