@@ -81,8 +81,7 @@
         <script type="application/ld+json">
             {!! json_encode($jsonLdOrganization, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
         </script>
-        @section('jsonLd')
-        @show
+        @yield('jsonLd')
     </head>
     <body id="page-wrapper">
         @unless(isset($hideHeaderFooter) && $hideHeaderFooter)
