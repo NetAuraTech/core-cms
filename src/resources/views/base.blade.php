@@ -64,7 +64,9 @@
                 "logo" => $logo,
                 "contactPoint" => [
                     "@type" => "ContactPoint",
-                    "email" => $options['contact-email'] ?? 'contact@example.com',
+                    "contactType" => "customer service",
+                    "telephone" => $options['phone'],
+                    "email" => $options['contact-email'],
                 ],
             ];
 
