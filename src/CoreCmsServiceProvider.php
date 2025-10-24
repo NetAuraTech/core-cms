@@ -3,6 +3,7 @@
 namespace Netauratech\CoreCms;
 
 use Database\Seeders\CmsOptionsSeeder;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
@@ -111,6 +112,10 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
             );
         });
     }
+
+    /**
+     * @throws BindingResolutionException
+     */
     public function boot(MenuManager $menuManager, ShortcodeRegistry $shortcodeRegistry, DashboardManager $dashboardManager): void
     {
         $this->bootstrapPackage();
@@ -142,6 +147,7 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
             $ret = $cache->remember('options', 60 * 60, function () {
                 $opts = Option::all();
                 $data = [];
+
                 $contentProvider = $this->app->make(ContentProviderInterface::class);
 
                 $theme = null;
@@ -161,10 +167,12 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
                 return ["options" => $data, "theme" => $theme];
             });
 
-            View::composer('*', function ($view) use ($ret) {
+            $mediaProvider = $this->app->make(MediaProviderInterface::class);
+
+            View::composer('*', function ($view) use ($ret, $mediaProvider) {
                 $view->with('options', $ret['options']);
                 $view->with('favicon', $ret['options']['favicon'] ? image_url($ret['options']['favicon'], 128) : "");
-                $view->with('openGraphLogo', $ret['options']['logo'] ? image_url($ret['options']['logo']) : "");
+                $view->with('openGraphLogo', $ret['options']['logo'] ? $mediaProvider->get($ret['options']['logo']) : "");
                 $view->with('cacheBuster', substr(md5(json_encode($ret['theme']->updated_at)), 0, 8));
             });
         }

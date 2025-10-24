@@ -2,7 +2,7 @@
     $options = $options ?? [];
     $site_name = $options['site_name'] ?? config('app.name');
     $openGraphLogo = $openGraphLogo ?? '';
-    $logo = Request::url() . str_replace('&amp;', '&', $openGraphLogo);
+    $logo = url('/') . str_replace('&amp;', '&', image_url($openGraphLogo->id ?? ''));
 ?>
 
 <!DOCTYPE html>
