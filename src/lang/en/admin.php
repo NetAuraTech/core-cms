@@ -44,6 +44,7 @@ return [
             'social_media' => 'Social Media',
             'security' => 'Security',
             'schedule' => 'Schedules',
+            'legals' => 'Legals',
             'seo' => 'Search Engine Optimization',
             'theme' => 'Theme',
             'custom' => 'Custom',
@@ -67,7 +68,6 @@ return [
             'header' => 'Header',
             'footer' => 'footer',
             'homepage' => 'Homepage',
-            'privacy-policy' => 'Privacy Policy',
 
             // Contact Emails
             'contact-email' => 'Contact Email',
@@ -85,6 +85,7 @@ return [
             'spam_words' => 'Spam Words',
 
             // SEO
+            'address' => 'Address',
             'address_city' => 'City',
             'address_country' => 'Country',
             'address_latitude' => 'Latitude',
@@ -92,6 +93,7 @@ return [
             'address_postal-code' => 'Postal Code',
             'address_region' => 'Region',
             'area_served' => 'Service Area',
+            'phone' => 'Phone',
 
             // Schedules
             'schedule_monday' => 'Monday',
@@ -101,6 +103,13 @@ return [
             'schedule_friday' => 'Friday',
             'schedule_saturday' => 'Saturday',
             'schedule_sunday' => 'Sunday',
+
+            // Legals
+            'privacy-policy' => 'Privacy Policy',
+            'host-address' => 'Host address',
+            'host-name ' => 'Host name',
+            'host-phone' => 'Host phone',
+            'host-website' => 'Host website',
         ],
         'type' => [
             'value' => 'Type',

@@ -44,6 +44,7 @@ return [
             'social_media' => 'Réseaux sociaux',
             'security' => 'Sécurité',
             'schedule' => 'Horaires',
+            'legals' => 'Juridique',
             'seo' => 'Optimisation pour les moteurs de recherche',
             'theme' => 'Thème',
             'custom' => 'Personnalisé',
@@ -67,7 +68,6 @@ return [
             'header' => 'En-tête',
             'footer' => 'Pied de page',
             'homepage' => 'Page d\'accueil',
-            'privacy-policy' => 'Politique de confidentialité',
 
             // Contact Emails
             'contact-email' => 'Email de contact',
@@ -85,6 +85,7 @@ return [
             'spam_words' => 'Mots spam',
 
             // SEO
+            'address' => 'Adresse',
             'address_city' => 'Ville',
             'address_country' => 'Pays',
             'address_latitude' => 'Latitude',
@@ -92,6 +93,7 @@ return [
             'address_postal-code' => 'Code postal',
             'address_region' => 'Région',
             'area_served' => 'Zone desservie',
+            'phone' => 'Téléphone',
 
             // Schedule
             'schedule_monday' => 'Lundi',
@@ -101,6 +103,13 @@ return [
             'schedule_friday' => 'Vendredi',
             'schedule_saturday' => 'Samedi',
             'schedule_sunday' => 'Dimanche',
+
+            // Legals
+            'privacy-policy' => 'Politique de confidentialité',
+            'host-address' => 'Adresse de l\'hébergeur',
+            'host-name ' => 'Nom de l\'hébergeur',
+            'host-phone' => 'Téléphone de l\'hébergeur',
+            'host-website' => 'Site web de l\'hébergeur',
         ],
         'type' => [
             'value' => 'Type',
