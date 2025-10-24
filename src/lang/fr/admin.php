@@ -107,7 +107,7 @@ return [
             // Legals
             'privacy-policy' => 'Politique de confidentialité',
             'host-address' => 'Adresse de l\'hébergeur',
-            'host-name ' => 'Nom de l\'hébergeur',
+            'host-name' => 'Nom de l\'hébergeur',
             'host-phone' => 'Téléphone de l\'hébergeur',
             'host-website' => 'Site web de l\'hébergeur',
         ],

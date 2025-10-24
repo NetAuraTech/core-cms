@@ -107,7 +107,7 @@ return [
             // Legals
             'privacy-policy' => 'Privacy Policy',
             'host-address' => 'Host address',
-            'host-name ' => 'Host name',
+            'host-name' => 'Host name',
             'host-phone' => 'Host phone',
             'host-website' => 'Host website',
         ],
