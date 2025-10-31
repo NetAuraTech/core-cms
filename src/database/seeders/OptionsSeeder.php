@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Models\User;
 
-class CmsOptionsSeeder extends Seeder
+class OptionsSeeder extends Seeder
 {
     /**
      * Seed the application's database.
