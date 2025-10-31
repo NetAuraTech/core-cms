@@ -29,3 +29,12 @@ Homestead.json
 .phpactor.json
 auth.json
 composer.lock
+
+# PHPUnit
+.phpunit.cache/
+.phpunit.result.cache
+phpunit.xml.bak
+coverage/
+
+# Tests
+tests/.DS_Store
