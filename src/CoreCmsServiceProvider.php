@@ -2,7 +2,8 @@
 
 namespace Netauratech\CoreCms;
 
-use Database\Seeders\CmsOptionsSeeder;
+use Database\Seeders\OptionsSeeder;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
@@ -20,6 +21,7 @@ use Netauratech\CoreCms\Contracts\ChallengeGeneratorInterface;
 use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 use Netauratech\CoreCms\Contracts\MediaProviderInterface;
+use Netauratech\CoreCms\Contracts\ThemeMiddlewareInterface;
 use Netauratech\CoreCms\Events\OptionUpdated;
 use Netauratech\CoreCms\Form\FormRegistry;
 use Netauratech\CoreCms\Http\Controllers\AssetController;
@@ -41,6 +43,7 @@ use Netauratech\CoreCms\Services\Shortcode\ShortcodeParser;
 use Netauratech\CoreCms\Services\Shortcode\ShortcodeRegistry;
 use Netauratech\CoreCms\Services\StorageAssetSource;
 use Netauratech\CoreCms\Widgets\TasksWidget;
+use Spatie\Permission\Middleware\PermissionMiddleware;
 
 class CoreCmsServiceProvider extends AbstractCmsServiceProvider
 {
@@ -59,7 +62,8 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
     protected function getSeeders(): array
     {
         return [
-            CmsOptionsSeeder::class,
+            OptionsSeeder::class,
+            RolesAndPermissionsSeeder::class
         ];
     }
 
@@ -71,6 +75,18 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
 
         $this->mergeConfigFrom(
             __DIR__.'/../config/auth.php', 'auth'
+        );
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/backup.php', 'backup'
+        );
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/lscache.php', 'lscache'
+        );
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/permission.php', 'permission'
         );
 
         Paginator::defaultView('core-cms::shared.partials.paginator');
@@ -93,6 +109,7 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         });
 
         $this->app->singleton(ShortcodeRegistry::class, fn () => new ShortcodeRegistry());
+
         $this->app->singleton(ShortcodeParser::class, function ($app) {
             return new ShortcodeParser($app->make(ShortcodeRegistry::class));
         });
@@ -104,13 +121,24 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         $this->app->bindIf(BackupProviderInterface::class, BackupProvider::class);
         $this->app->bindIf(CacheServiceInterface::class, CacheService::class);
 
+        if (!$this->app->bound(ThemeMiddlewareInterface::class)) {
+            $this->app->bind(ThemeMiddlewareInterface::class, function() {
+                return new class implements ThemeMiddlewareInterface {
+                    public function handle($request, \Closure $next) {
+                        return $next($request);
+                    }
+                };
+            });
+        }
+
         $this->app->tag(StorageAssetSource::class, 'cms.asset.sources');
+
         $this->app->bind(AssetController::class, function ($app) {
             $assetSources = iterator_to_array($app->tagged('cms.asset.sources'));
-            return new AssetController(
-                $assetSources
-            );
+            return new AssetController($assetSources);
         });
+
+        $this->app['router']->aliasMiddleware('permission', PermissionMiddleware::class);
     }
 
     /**
@@ -120,7 +148,7 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
     {
         $this->bootstrapPackage();
 
-        // Publish the configuration file
+        // Publish configs
         $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
         ], 'core-cms-config');
@@ -134,6 +162,11 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         ], 'core-cms-config');
 
         $this->publishes([
+            __DIR__.'/../config/permission.php' => config_path('permission.php'),
+        ], 'core-cms-config');
+
+        // Publish views
+        $this->publishes([
             __DIR__.'/resources/views/mail' => resource_path('views/vendor/mail'),
         ], 'core-cms-views');
 
@@ -141,50 +174,21 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
             __DIR__.'/resources/views/notifications' => resource_path('views/vendor/notifications'),
         ], 'core-cms-views');
 
-        // Share all CMS options with views
+        // Share options avec les vues UNIQUEMENT si la table existe
         if (Schema::hasTable('options')) {
-            $cache = Cache::store('database');
-            $ret = $cache->remember('options', 60 * 60, function () {
-                $opts = Option::all();
-                $data = [];
-
-                $contentProvider = $this->app->make(ContentProviderInterface::class);
-
-                $theme = null;
-
-                foreach ($opts as $option) {
-                    $valueToStore = $option->value ?? '';
-
-                    if (($option->type === 'content' || $option->type === 'template') && $option->value !== "") {
-                        $contentItem = $contentProvider->getContentById($option->value);
-                        $valueToStore = $contentItem;
-                    }
-                    if ($option->type === 'theme') {
-                        $theme = $option;
-                    }
-                    $data[$option->key] = $valueToStore;
-                }
-                return ["options" => $data, "theme" => $theme];
-            });
-
-            $mediaProvider = $this->app->make(MediaProviderInterface::class);
-
-            View::composer('*', function ($view) use ($ret, $mediaProvider) {
-                $view->with('options', $ret['options']);
-                $view->with('favicon', $ret['options']['favicon'] ? image_url($ret['options']['favicon'], 128) : "");
-                $view->with('openGraphLogo', $ret['options']['logo'] ? $mediaProvider->get($ret['options']['logo']) : "");
-                $view->with('cacheBuster', substr(md5(json_encode($ret['theme']->updated_at)), 0, 8));
-            });
+            $this->shareOptionsWithViews();
         }
 
+        // Blade directives
         Blade::directive('shortcode', function ($expression) {
             return "<?php echo app(" . ShortcodeParser::class . "::class)->parse($expression); ?>";
         });
 
+        // Register shortcodes
         $shortcodeRegistry->register('button', new ButtonShortcode());
         $shortcodeRegistry->register('option', new OptionShortcode());
 
-        // Command registration Artisan
+        // Commands
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCommand::class,
@@ -195,11 +199,13 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
             ]);
         }
 
+        // Events
         $this->app->events->listen(
             OptionUpdated::class,
             ClearOptionCache::class
         );
 
+        // Dashboard & Menu
         $dashboardManager->addWidget(TasksWidget::class);
 
         $menuManager->registerMenuItem('option', [
@@ -208,5 +214,62 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
             'route' => 'admin.option.index',
             'can' => 'option-list'
         ]);
+
+        $menuManager->registerMenuItem('users', [
+            'label' => trans_choice('core-cms::admin.user.value', 0),
+            'icon'  => 'users',
+            'children' => [
+                [
+                    'label' => trans_choice('core-cms::admin.user.value', 0),
+                    'icon'  => 'users',
+                    'route' => 'admin.user.index',
+                    'can'   => 'user-list'
+                ],
+                [
+                    'label' => trans_choice('core-cms::admin.role.value', 0),
+                    'icon'  => 'role',
+                    'route' => 'admin.role.index',
+                    'can'   => 'role-list'
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    protected function shareOptionsWithViews(): void
+    {
+        $cache = Cache::store('database');
+        $ret = $cache->remember('options', 60 * 60, function () {
+            $opts = Option::all();
+            $data = [];
+
+            $contentProvider = $this->app->make(ContentProviderInterface::class);
+            $theme = null;
+
+            foreach ($opts as $option) {
+                $valueToStore = $option->value ?? '';
+
+                if (($option->type === 'content' || $option->type === 'template') && $option->value !== "") {
+                    $contentItem = $contentProvider->getContentById($option->value);
+                    $valueToStore = $contentItem;
+                }
+                if ($option->type === 'theme') {
+                    $theme = $option;
+                }
+                $data[$option->key] = $valueToStore;
+            }
+            return ["options" => $data, "theme" => $theme];
+        });
+
+        $mediaProvider = $this->app->make(MediaProviderInterface::class);
+
+        View::composer('*', function ($view) use ($ret, $mediaProvider) {
+            $view->with('options', $ret['options']);
+            $view->with('favicon', $ret['options']['favicon'] ?? '' ? image_url($ret['options']['favicon'], 128) : "");
+            $view->with('openGraphLogo', $ret['options']['logo'] ?? '' ? $mediaProvider->get($ret['options']['logo']) : "");
+            $view->with('cacheBuster', isset($ret['theme']->updated_at) ? substr(md5(json_encode($ret['theme']->updated_at)), 0, 8) : 'dev');
+        });
     }
 }

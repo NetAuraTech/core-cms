@@ -132,4 +132,42 @@ return [
     'send' => 'Send',
     'statut' => 'Status',
     'value' => 'Value',
+    'permission' => 'Permissions',
+    'role' => [
+        'name' => 'Name',
+        'value' => '{0}Roles|[1,1]role|[2,*]roles',
+        'created' => 'The role has been created.',
+        'updated' => 'The role has been updated.',
+        'deleted' => 'The role has been deleted.',
+    ],
+    'user' => [
+        'created' => 'The user has been created.',
+        'updated' => 'The user has been updated.',
+        'deleted' => 'The user has been deleted.',
+        'email' => 'Email',
+        'ban' => [
+            'confirm' => 'Do you really want to ban this user?',
+            'confirmed' => 'The user has been banned!',
+            'value' => 'Ban the user',
+        ],
+        'confirm' => 'Confirm user account',
+        'confirmed' => 'The user has been confirmed!',
+        'impersonate' => [
+            'info' => 'You are in impersonation mode.',
+            'leave' => 'Leave',
+            'value' => 'Take control of the account',
+        ],
+        'password' => [
+            'confirm' => 'Confirm password',
+            'value' => 'Password',
+        ],
+        'registration' => 'Registration',
+        'unban' => [
+            'confirm' => 'Do you really want to unban this user?',
+            'confirmed' => 'The user has been unbanned!',
+            'value' => 'Unban the user',
+        ],
+        'username' => 'Username',
+        'value' => '{0}Users|[1,1]user|[2,*]users',
+    ],
 ];

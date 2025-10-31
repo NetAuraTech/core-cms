@@ -132,4 +132,42 @@ return [
     'send' => 'Envoyer',
     'statut' => 'Statut',
     'value' => 'Valeur',
+    'permission' => 'Permissions',
+    'role' => [
+        'name' => 'Nom',
+        'value' => '{0}Rôles|[1,1]un rôle|[2,*]les rôles',
+        'created' => 'Le rôle a été créé.',
+        'updated' => 'Le rôle a été mis à jour.',
+        'deleted' => 'Le rôle a été supprimé.',
+    ],
+    'user' => [
+        'created' => 'L\'utilisateur a été créé.',
+        'updated' => 'L\'utilisateur a été mis à jour.',
+        'deleted' => 'L\'utilisateur a été supprimé.',
+        'email' => 'E-mail',
+        'ban' => [
+            'confirm' => 'Voulez-vous vraiment bannir cet utilisateur ?',
+            'confirmed' => 'L\'utilisateur a été banni !',
+            'value' => 'Bannir l\'utilisateur',
+        ],
+        'confirm' => 'Confirmer le compte utilisateur',
+        'confirmed' => 'L\'utilisateur a été confirmé !',
+        'impersonate' => [
+            'info' => 'Vous êtes en mode d\'usurpation d\'identité.',
+            'leave' => 'Quitter',
+            'value' => 'Prendre le contrôle du compte',
+        ],
+        'password' => [
+            'confirm' => 'Confirmer le mot de passe',
+            'value' => 'Mot de passe',
+        ],
+        'registration' => 'Inscription',
+        'unban' => [
+            'confirm' => 'Voulez-vous vraiment débannir cet utilisateur ?',
+            'confirmed' => 'L\'utilisateur a été débanni !',
+            'value' => 'Débannir l\'utilisateur',
+        ],
+        'username' => 'Nom d\'utilisateur',
+        'value' => '{0}Utilisateurs|[1,1]un utilisateur|[2,*]les utilisateurs',
+    ],
 ];
