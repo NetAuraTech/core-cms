@@ -13,7 +13,7 @@ use Netauratech\CoreCms\Services\Admin\DashboardManager;
 class DashboardController extends AdminController
 {
     protected array $permissions = [
-        'access-administration' => ['index'],
+        'access-administration' => ['index', 'cache', 'retry_job', 'destroy_job'],
     ];
 
     protected DashboardManager $dashboardManager;

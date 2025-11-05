@@ -10,7 +10,7 @@ use Netauratech\CoreCms\Models\User;
 class ImpersonateController extends AdminController
 {
     protected array $permissions = [
-        'user-edit'   => ['impersonate', 'leave'],
+        'user-edit'   => ['impersonate'],
     ];
 
     /**
