@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Blade;
 use Intervention\Image\ImageServiceProvider;
 use Litespeed\LSCache\LSCacheServiceProvider;
+use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 use Netauratech\CoreCms\Contracts\ThemeMiddlewareInterface;
 use Netauratech\CoreCms\CoreCmsServiceProvider;
 use Netauratech\CoreCms\Models\Option;
@@ -112,7 +113,21 @@ abstract class TestCase extends Orchestra
      */
     protected function shareDefaultViewVariables(): void
     {
-        $options = Option::pluck('value', 'key')->toArray();
+        $contentProvider = $this->app->make(ContentProviderInterface::class);
+        $options = [];
+
+        foreach (Option::all() as $option) {
+            $valueToStore = $option->value ?? '';
+
+            if (($option->type === 'content' || $option->type === 'template') && $option->value !== "") {
+                $contentItem = $contentProvider->getContentById($option->value);
+                $valueToStore = $contentItem;
+            }
+            if ($option->type === 'theme') {
+                $theme = $option;
+            }
+            $options[$option->key] = $valueToStore;
+        }
 
         view()->share([
             'options' => $options,

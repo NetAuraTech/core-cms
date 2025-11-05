@@ -113,8 +113,14 @@ class ProfileControllerTest extends TestCase
             'password' => 'wrong-password',
         ]);
 
-        $response->assertSessionHasErrors('password');
+        $response->assertSessionHasErrors('password', null, 'userDeletion');
+
+        $response->assertRedirect();
+
         $this->assertDatabaseHas('users', ['id' => $user->id]);
+
+        // 2 users: Admin user & this test user
+        $this->assertDatabaseCount('users', 2);
     }
 
     /** @test */
