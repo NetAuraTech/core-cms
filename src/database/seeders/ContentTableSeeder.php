@@ -34,10 +34,12 @@ class ContentTableSeeder extends Seeder
         ];
 
         $defaultSection = [
-            "media" => "",
-            "media-alt" => "",
-            "media-height" => "",
-            "media-opacity" => "1",
+            "media" => [
+                "id" => "",
+                "alt" => "",
+                "height" => "",
+                "opacity" => "1",
+            ],
             "title" => "",
             "title-level" => "h2",
             "title-color" => "transparent",
