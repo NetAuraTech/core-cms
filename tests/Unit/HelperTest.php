@@ -28,7 +28,6 @@ class HelperTest extends TestCase
     /** @test */
     public function test_menu_active_returns_active_for_matching_path(): void
     {
-        // Simule la requête courante
         $this->get('/test-path');
 
         $result = menu_active(url('/test-path'));
@@ -74,7 +73,7 @@ class HelperTest extends TestCase
 
         $result = shortened_exception($longException);
 
-        $this->assertLessThanOrEqual(203, strlen($result)); // 200 + "..."
+        $this->assertLessThanOrEqual(203, strlen($result));
         $this->assertStringEndsWith('...', $result);
     }
 

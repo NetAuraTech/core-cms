@@ -27,7 +27,7 @@ class CaptchaTest extends TestCase
         $solution = $challenge->getSolution($key);
 
         $this->assertIsArray($solution);
-        $this->assertCount(2, $solution); // [x, y]
+        $this->assertCount(2, $solution);
     }
 
     /** @test */
@@ -65,7 +65,6 @@ class CaptchaTest extends TestCase
         $key = $challenge->generateKey();
         $solution = $challenge->getSolution($key);
 
-        // Ajoute une petite différence dans la précision autorisée
         $answer = ($solution[0] + 1) . '-' . ($solution[1] + 1);
 
         $isValid = $challenge->check($key, $answer);
