@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Netauratech\CoreCms\Http\Controllers\Admin\CategoryController;
 use Netauratech\CoreCms\Http\Controllers\Admin\ContentController;
