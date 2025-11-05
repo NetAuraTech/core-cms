@@ -13,8 +13,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <script src="{{ route('translations') }}"></script>
         @vite(['resources/ts/app.ts'])
-        @include('theme::assets.css', ['header' => $options['header'], 'footer' => $options['footer']]) {{-- Includes theme-specific CSS --}}
-        @include('theme::assets.js') {{-- Includes theme-specific JS --}}
+        @includeIf('theme::assets.css', ['header' => $options['header'], 'footer' => $options['footer']]) {{-- Includes theme-specific CSS --}}
+        @includeIf('theme::assets.js') {{-- Includes theme-specific JS --}}
         @yield('stylesheets') {{-- For page-specific CSS --}}
         @yield('meta') {{-- For additional meta tags --}}
         @yield('description') {{-- The page description is managed in the specific view --}}
