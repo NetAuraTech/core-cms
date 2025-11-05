@@ -28,8 +28,8 @@
         <aside>
             @if(session()->has('impersonate'))
                 <div class="card margin-block-end-6">
-                    <p>{{ __('user-management::admin.user.impersonate.info') }}</p>
-                    <a href="{{ route('admin.user.impersonate.leave') }}" class="button" data-type="primary">{{ __('user-management::admin.user.impersonate.leave') }}</a>
+                    <p>{{ __('core-cms::admin.user.impersonate.info') }}</p>
+                    <a href="{{ route('admin.user.impersonate.leave') }}" class="button" data-type="primary">{{ __('core-cms::admin.user.impersonate.leave') }}</a>
                 </div>
             @endif
             @php
