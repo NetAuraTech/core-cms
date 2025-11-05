@@ -217,13 +217,15 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
             ClearOptionCache::class
         );
 
-        Content::observe(ContentObserver::class);
+        if (!app()->environment('testing')) {
+            Content::observe(ContentObserver::class);
 
-        Event::listen(ContentSaved::class, function (ContentSaved $event) {
-            if ($event->content->type === "template") {
-                Cache::store('database')->forget('options');
-            }
-        });
+            Event::listen(ContentSaved::class, function (ContentSaved $event) {
+                if ($event->content->type === "template") {
+                    Cache::store('database')->forget('options');
+                }
+            });
+        }
 
         // Dashboard & Menu
         $dashboardManager->addWidget(TasksWidget::class);
