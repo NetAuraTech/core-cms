@@ -6,13 +6,22 @@
   },
   "dependencies": {
     "@grafikart/drop-files-element": "^1.0.9",
+    "body-scroll-lock": "^4.0.0-beta.0",
+    "dompurify": "^3.3.0",
     "flatpickr": "^4.6.13",
     "htm": "^3.1.1",
+    "html-react-parser": "^5.2.8",
     "lodash": "^4.17.21",
     "preact": "^10.27.0",
-    "react-com": "^1.0.6"
+    "quill": "^2.0.3",
+    "react-com": "^1.0.6",
+    "sortablejs": "^1.15.6",
+    "tippy.js": "^6.3.7",
+    "tom-select": "^2.4.3",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@types/body-scroll-lock": "^3.1.2",
     "@types/lodash": "^4.17.20"
   }
 }

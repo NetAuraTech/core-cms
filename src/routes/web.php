@@ -6,9 +6,14 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Translation\Translator;
+use Netauratech\CoreCms\Contracts\ContentProviderInterface;
+use Netauratech\CoreCms\Form\FormRegistry;
 use Netauratech\CoreCms\Http\Controllers\AssetController;
 use Netauratech\CoreCms\Http\Controllers\CaptchaController;
+use Netauratech\CoreCms\Http\Controllers\FormSubmissionController;
+use Netauratech\CoreCms\Http\Controllers\PageController;
 use Netauratech\CoreCms\Http\Controllers\ProfileController;
+use Netauratech\CoreCms\Http\Controllers\SeoContentController;
 use Netauratech\CoreCms\Services\AssetManager;
 
 Route::get('js/translations.js', function (AssetManager $assetManager, Translator $translator) {
@@ -70,3 +75,27 @@ Route::middleware(['auth', 'lscache:private;'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::delete('/profile/clean-notifications', [ProfileController::class, 'cleanNotification'])->name('profile.clean-notification');
 });
+
+/**
+ * Pages
+ */
+Route::get('/', [PageController::class, 'homepage'])->name('home');
+Route::get('/sitemap.xml', [SeoContentController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SeoContentController::class, 'robotsTxt'])->name('robots.txt');
+Route::post('/forms/{slug}/{formType}', [FormSubmissionController::class, 'submit'])->name('forms.submit');
+
+Route::fallback(function (ContentProviderInterface $contentProvider, FormRegistry $formRegistry) {
+    $slug = request()->path();
+
+    $content = $contentProvider->getContentBySlug($slug);
+
+    if (!$content || $content->type !== 'page' || $content->status !== 'published') {
+        abort(404, 'Page introuvable ou non publiée.');
+    }
+
+    return view('core-cms::front.page', [
+        'content' => $content,
+        'isHomepage' => false,
+        'metas' => $formRegistry->getFormFields('content_meta'),
+    ]);
+})->name('page.show');

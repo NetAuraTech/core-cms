@@ -1,7 +1,9 @@
 <?php
 
 
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
+use Netauratech\CoreCms\Http\Controllers\Api\TaxonomieController;
 use Netauratech\CoreCms\Http\Controllers\CaptchaController;
 
 Route::get('captcha/generate', [CaptchaController::class, 'generate'])
@@ -110,3 +112,7 @@ Route::get('flash-messages', function () {
         ->header('Expires', '0')
         ->header('X-LiteSpeed-Cache-Control', 'no-cache');
 })->name('flash.messages');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/{type}/search', [TaxonomieController::class, 'search'])->name('taxonomie.search')->withoutMiddleware(VerifyCsrfToken::class);
+});

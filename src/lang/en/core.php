@@ -12,6 +12,9 @@ return [
         'invalid' => 'The captcha is invalid.',
         'value' => 'Captcha',
     ],
+    'choice' => [
+        'delete' => 'Delete this item'
+    ],
     'datepicker' => [
         'locale' => [
             'weekdays' => [

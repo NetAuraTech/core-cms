@@ -1,10 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Netauratech\CoreCms\Http\Controllers\Admin\CategoryController;
+use Netauratech\CoreCms\Http\Controllers\Admin\ContentController;
 use Netauratech\CoreCms\Http\Controllers\Admin\DashboardController;
 use Netauratech\CoreCms\Http\Controllers\Admin\OptionController;
 use Netauratech\CoreCms\Http\Controllers\Admin\ImpersonateController;
 use Netauratech\CoreCms\Http\Controllers\Admin\RoleController;
+use Netauratech\CoreCms\Http\Controllers\Admin\TagController;
 use Netauratech\CoreCms\Http\Controllers\Admin\UserController;
 
 /**
@@ -34,3 +37,24 @@ Route::get('/user/impersonate/leave', [ImpersonateController::class, 'leave'])->
  * Roles
  */
 Route::resource('role', RoleController::class)->except(['show']);
+
+/**
+ * Content (page, article, template, ...)
+ */
+Route::get('contents/{type}', [ContentController::class, 'index'])->name('contents.index');
+Route::get('contents/{type}/create', [ContentController::class, 'create'])->name('contents.create');
+Route::post('contents/{type}', [ContentController::class, 'store'])->name('contents.store');
+Route::get('contents/{content}/edit', [ContentController::class, 'edit'])->name('contents.edit');
+Route::put('contents/{content}', [ContentController::class, 'update'])->name('contents.update');
+Route::delete('contents/{content}', [ContentController::class, 'destroy'])->name('contents.destroy');
+Route::post('contents/{type}/preview', [ContentController::class, 'preview'])->name('contents.preview')->withoutMiddleware(VerifyCsrfToken::class);
+
+/**
+ * Categories
+ */
+Route::resource('categories', CategoryController::class);
+
+/**
+ * Tags
+ */
+Route::resource('tags', TagController::class);
