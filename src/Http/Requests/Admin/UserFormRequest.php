@@ -25,7 +25,7 @@ class UserFormRequest extends FormRequest
     {
         $rules = [
             'username' => ['required', 'string'],
-            'email' => ['required', 'string'],
+            'email' => ['required', 'email'],
             'new_password' => ['nullable', 'confirmed', Rules\Password::defaults()],
             'role' => [''],
         ];
