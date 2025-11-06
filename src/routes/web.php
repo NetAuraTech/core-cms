@@ -84,6 +84,12 @@ Route::get('/sitemap.xml', [SeoContentController::class, 'sitemap'])->name('site
 Route::get('/robots.txt', [SeoContentController::class, 'robotsTxt'])->name('robots.txt');
 Route::post('/forms/{slug}/{formType}', [FormSubmissionController::class, 'submit'])->name('forms.submit');
 
+$adminPrefix = config('core-cms.admin.prefix');
+
+if ($adminPrefix && $adminPrefix !== '/') {
+    Route::redirect($adminPrefix, $adminPrefix . '/', 301);
+}
+
 Route::fallback(function (ContentProviderInterface $contentProvider, FormRegistry $formRegistry) {
     $slug = request()->path();
 
