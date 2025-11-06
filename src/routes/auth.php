@@ -12,7 +12,7 @@ use Netauratech\CoreCms\Http\Controllers\Auth\RegisteredUserController;
 use Netauratech\CoreCms\Http\Controllers\Auth\SocialController;
 use Netauratech\CoreCms\Http\Controllers\Auth\VerifyEmailController;
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['lscache:no-cache','guest'])->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
@@ -36,7 +36,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['lscache:no-cache', 'auth'])->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 
