@@ -13,11 +13,14 @@ if (!function_exists('icon')) {
      */
     function icon(string $name, ?string $size = null): string
     {
-        $iconPath = '/vendor/core-cms/sprite.svg' . "#{$name}";
-        $sizeClass = $size ? "{$size}" : '';
+        $safeName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+
+        $iconPath = '/vendor/core-cms/sprite.svg' . "#{$safeName}";
+
+        $sizeClass = $size ? htmlspecialchars($size, ENT_QUOTES, 'UTF-8') : '';
 
         return <<<HTML
-            <svg class="icon {$sizeClass} icon-{$name}">
+            <svg class="icon {$sizeClass} icon-{$safeName}">
               <use xlink:href="{$iconPath}"></use>
             </svg>
         HTML;
@@ -33,11 +36,14 @@ if (!function_exists('menu_active')) {
      */
     function menu_active(string $path): string
     {
-        // On récupère le chemin de l'URL courante
-        $currentPath = url()->current();
+        $currentPathRelative = request()->path();
 
-        // On compare les deux chemins
-        if ($currentPath === $path) {
+        $pathRelative = parse_url($path, PHP_URL_PATH);
+
+        $currentPathClean = trim($currentPathRelative, '/');
+        $pathClean = trim($pathRelative, '/');
+
+        if ($currentPathClean === $pathClean) {
             return 'aria-current=page';
         }
 
