@@ -3,6 +3,7 @@
 namespace Netauratech\CoreCms\Services\Captcha;
 
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 use Netauratech\CoreCms\Contracts\ChallengeInterface;
 use Illuminate\Http\Request;
 
@@ -28,16 +29,16 @@ class PuzzleChallenge implements ChallengeInterface
      */
     public function generateKey(): string
     {
-        $now = time();
+        $key = (string) Str::uuid();
 
         $x = mt_rand(0, self::WIDTH - self::PIECE_WIDTH);
         $y = mt_rand(0, self::HEIGHT - self::PIECE_HEIGHT);
 
         $puzzles = Session::get(self::SESSION_KEY, []);
-        $puzzles[] = ['key' => $now, 'solution' => [$x, $y]];
+        $puzzles[] = ['key' => $key, 'solution' => [$x, $y]];
         Session::put(self::SESSION_KEY, array_slice($puzzles, -10));
 
-        return (string) $now;
+        return $key;
     }
 
     /**
@@ -49,12 +50,11 @@ class PuzzleChallenge implements ChallengeInterface
     public function getSolution(string $key): array|null
     {
         $puzzles = Session::get(self::SESSION_KEY, []);
-        foreach ($puzzles as $puzzle) {
-            if ($puzzle['key'] !== intval($key)) {
-                continue;
-            }
 
-            return $puzzle['solution'];
+        foreach ($puzzles as $puzzle) {
+            if ($puzzle['key'] === $key) {
+                return $puzzle['solution'];
+            }
         }
         return null;
     }
@@ -95,9 +95,14 @@ class PuzzleChallenge implements ChallengeInterface
         }
 
         $puzzles = Session::get(self::SESSION_KEY, []);
-        Session::put(self::SESSION_KEY, array_filter($puzzles, fn (array $puzzle) => $puzzle['key'] !== intval($key)));
+
+        Session::put(
+            self::SESSION_KEY,
+            array_filter($puzzles, fn (array $puzzle) => $puzzle['key'] !== $key)
+        );
 
         $got = $this->stringToPosition($answer);
+
         return abs($expected[0] - $got[0]) <= self::PRECISION && abs($expected[1] - $got[1]) <= self::PRECISION;
     }
 
