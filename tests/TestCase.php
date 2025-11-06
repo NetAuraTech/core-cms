@@ -3,8 +3,10 @@
 namespace Netauratech\CoreCms\Tests;
 
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\ImageServiceProvider;
 use Litespeed\LSCache\LSCacheServiceProvider;
 use Netauratech\CoreCms\Contracts\ContentProviderInterface;
@@ -12,6 +14,7 @@ use Netauratech\CoreCms\Contracts\ThemeMiddlewareInterface;
 use Netauratech\CoreCms\CoreCmsServiceProvider;
 use Netauratech\CoreCms\Models\Option;
 use Netauratech\CoreCms\Models\User;
+use Netauratech\CoreCms\Tests\Stubs\DummyMedia;
 use Netauratech\CoreCms\Tests\Stubs\NullThemeMiddleware;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Backup\BackupServiceProvider;
@@ -29,9 +32,17 @@ abstract class TestCase extends Orchestra
 
         $this->artisan('migrate', ['--database' => 'testing']);
 
+        $this->app['db']->getSchemaBuilder()->create('media_dummy', function ($table) {
+            $table->id();
+        });
+
         $this->seed(DatabaseSeeder::class);
 
         $this->shareDefaultViewVariables();
+
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON;');
+        }
     }
 
     /**
@@ -87,6 +98,7 @@ abstract class TestCase extends Orchestra
         $app['config']->set('core-cms.admin.prefix', 'admin');
         $app['config']->set('core-cms.admin.name', 'admin.');
         $app['config']->set('core-cms.admin.middleware', ['web']);
+        $app['config']->set('core-cms.media.model', DummyMedia::class);
 
         // Backup configuration (to avoid errors)
         $app['config']->set('backup.backup.name', 'test');

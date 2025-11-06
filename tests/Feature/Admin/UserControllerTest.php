@@ -156,6 +156,22 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
+    public function test_it_validates_email_format(): void
+    {
+        $user = $this->actingAsUser(1);
+
+        $response = $this->post(route('admin.user.store'), [
+            'username' => 'newuser',
+            'email' => 'not-a-valid-email',
+            'new_password' => 'password123',
+            'new_password_confirmation' => 'password123',
+            'role' => [],
+        ]);
+
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    /** @test */
     public function test_it_shows_edit_form(): void
     {
         $user = $this->actingAsUser(1);
@@ -232,6 +248,56 @@ class UserControllerTest extends TestCase
         $testUser->refresh();
         $this->assertFalse($testUser->hasRole('Old Role'));
         $this->assertTrue($testUser->hasRole('New Role'));
+    }
+
+    /** @test */
+    public function test_update_validates_unique_email_except_current(): void
+    {
+        $user = $this->actingAsUser(1);
+        $testUser = $this->createUser(['email' => 'test@example.com']);
+        $otherUser = $this->createUser(['email' => 'other@example.com']);
+
+        $response = $this->put(route('admin.user.update', $testUser), [
+            'username' => $testUser->username,
+            'email' => 'other@example.com',
+            'role' => [],
+        ]);
+
+        $response->assertSessionHasErrors(['email']);
+
+        $response = $this->put(route('admin.user.update', $testUser), [
+            'username' => $testUser->username,
+            'email' => 'test@example.com',
+            'role' => [],
+        ]);
+
+        $response->assertRedirect(route('admin.user.index'));
+        $response->assertSessionDoesntHaveErrors(['email']);
+    }
+
+    /** @test */
+    public function test_update_validates_unique_username_except_current(): void
+    {
+        $user = $this->actingAsUser(1);
+        $testUser = $this->createUser(['username' => 'testuser']);
+        $otherUser = $this->createUser(['username' => 'otheruser']);
+
+        $response = $this->put(route('admin.user.update', $testUser), [
+            'username' => 'otheruser',
+            'email' => $testUser->email,
+            'role' => [],
+        ]);
+
+        $response->assertSessionHasErrors(['username']);
+
+        $response = $this->put(route('admin.user.update', $testUser), [
+            'username' => 'testuser',
+            'email' => $testUser->email,
+            'role' => [],
+        ]);
+
+        $response->assertRedirect(route('admin.user.index'));
+        $response->assertSessionDoesntHaveErrors(['username']);
     }
 
     /** @test */
@@ -313,5 +379,100 @@ class UserControllerTest extends TestCase
         $users = $response->viewData('users');
         $this->assertEquals(20, $users->perPage());
         $this->assertGreaterThan(1, $users->lastPage());
+    }
+
+    /** @test */
+    public function test_pagination_can_navigate_to_next_page(): void
+    {
+        $user = $this->actingAsUser(1);
+
+        for ($i = 1; $i <= 25; $i++) {
+            $this->createUser([
+                'username' => "user$i",
+                'email' => "user$i@example.com",
+            ]);
+        }
+
+        $response = $this->get(route('admin.user.index', ['page' => 2]));
+
+        $response->assertOk();
+        $users = $response->viewData('users');
+        $this->assertEquals(2, $users->currentPage());
+    }
+
+    /** @test */
+    public function test_users_are_ordered_by_creation_date_desc(): void
+    {
+        $user = $this->actingAsUser(1);
+
+        $oldUser = $this->createUser([
+            'username' => 'olduser',
+            'email' => 'old@example.com',
+            'created_at' => now()->subDays(5),
+        ]);
+
+        $response = $this->get(route('admin.user.index'));
+
+        $users = $response->viewData('users');
+
+        $this->assertEquals($user->username, $users->first()->username);
+    }
+
+    /** @test */
+    public function test_user_without_permission_cannot_access_user_management(): void
+    {
+        $regularUser = $this->createUser();
+        $this->actingAs($regularUser);
+
+        $response = $this->get(route('admin.user.index'));
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function test_user_without_permission_cannot_create_users(): void
+    {
+        $regularUser = $this->createUser();
+        $this->actingAs($regularUser);
+
+        $response = $this->post(route('admin.user.store'), [
+            'username' => 'newuser',
+            'email' => 'new@example.com',
+            'new_password' => 'password123',
+            'new_password_confirmation' => 'password123',
+            'role' => [],
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function test_banned_user_status_is_displayed(): void
+    {
+        $user = $this->actingAsUser(1);
+        $bannedUser = $this->createUser([
+            'username' => 'banneduser',
+            'status' => 0,
+        ]);
+
+        $response = $this->get(route('admin.user.index'));
+
+        $response->assertOk();
+        $response->assertSee('banneduser');
+    }
+
+    /** @test */
+    public function test_unverified_email_status_is_displayed(): void
+    {
+        $user = $this->actingAsUser(1);
+        $unverifiedUser = $this->createUser([
+            'username' => 'unverified',
+            'email_verified_at' => null,
+        ]);
+
+        $response = $this->get(route('admin.user.index'));
+
+        $response->assertOk();
+        $response->assertSee('unverified');
     }
 }
