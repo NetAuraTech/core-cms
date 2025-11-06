@@ -13,6 +13,14 @@ class FailedJob extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
+        'uuid',
+        'connection',
+        'queue',
+        'payload',
+        'exception',
+        'failed_at'
     ];
 }
