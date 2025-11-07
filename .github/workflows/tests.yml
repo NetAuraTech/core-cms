@@ -42,11 +42,11 @@ jobs:
       #- name: Build NPM dependencies
        # run: npm run build
 
-      - name: Copy environment file
-        run: cp .env.example .env
+      #- name: Copy environment file
+       # run: cp .env.example .env
 
-      - name: Generate app key
-        run: php artisan key:generate
+      #- name: Generate app key
+       # run: php artisan key:generate
 
       - name: Execute tests and generate coverage report
         run: vendor/bin/phpunit --coverage-clover coverage.xml
