@@ -17,9 +17,13 @@ This package provides a complete foundation for building content management syst
 - ✅ Shortcode system for dynamic content
 - ✅ Multi-language support with translation management
 - ✅ Social authentication (OAuth integration)
-- ✅ Permission-based access control
-- ✅ Media management integration
+- ✅ Permission-based access control with Spatie Permission
 - ✅ Cache management with LiteSpeed support
+- ✅ Content management (pages, templates, articles)
+- ✅ Taxonomies (categories, tags)
+- ✅ Media management integration
+- ✅ Form handling with CAPTCHA protection
+- ✅ SEO features (sitemap.xml, robots.txt)
 
 ## Requirements
 
@@ -65,8 +69,155 @@ This will publish:
 - `config/core-cms.php` - Main CMS configuration
 - `config/auth.php` - Authentication configuration
 - `config/backup.php` - Backup system configuration
+- `config/lscache.php` - LiteSpeed cache configuration
+- `config/permission.php` - Permission system configuration
 
-### 3. Publishing Assets
+### 3. Configuration Files
+
+#### core-cms.php
+
+Main CMS configuration:
+
+```php
+return [
+    'admin' => [
+        'middleware' => [
+            'auth',
+            'web',
+            'lscache:no-cache',
+            ThemeMiddlewareInterface::class,
+            BackupSessionForEsi::class,
+            SmartCacheControlMiddleware::class
+        ],
+        'prefix' => 'admin',        // Admin URL prefix
+        'name' => 'admin.',         // Route name prefix
+    ],
+    'media' => [
+        'model' => null             // Custom media model (optional)
+    ]
+];
+```
+
+#### auth.php
+
+Authentication configuration with remember me duration:
+
+```php
+'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+        'remember' => 10080  // Remember me duration in minutes (7 days)
+    ],
+],
+
+'providers' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => env('AUTH_MODEL', Netauratech\CoreCms\Models\User::class),
+    ],
+],
+```
+
+#### backup.php
+
+Backup system configuration (powered by Spatie Backup):
+
+```php
+return [
+    'backup' => [
+        'name' => env('BACKUP_LOCATION_FOLDER', 'backup'),
+        
+        'source' => [
+            'files' => [
+                'include' => [base_path()],
+                'exclude' => [
+                    base_path('vendor'),
+                    base_path('node_modules'),
+                ],
+            ],
+            'databases' => [env('DB_CONNECTION', 'mysql')],
+        ],
+        
+        'destination' => [
+            'filename_prefix' => '',
+            'disks' => ['local'],
+        ],
+    ],
+    
+    'cleanup' => [
+        'default_strategy' => [
+            'keep_all_backups_for_days' => 7,
+            'keep_daily_backups_for_days' => 16,
+            'keep_weekly_backups_for_weeks' => 8,
+            'keep_monthly_backups_for_months' => 4,
+            'keep_yearly_backups_for_years' => 2,
+        ],
+    ],
+];
+```
+
+#### lscache.php
+
+LiteSpeed Cache configuration:
+
+```php
+return [
+    'esi' => env('LSCACHE_ESI_ENABLED', false),
+    'default_ttl' => env('LSCACHE_DEFAULT_TTL', 0),
+    'default_cacheability' => env('LSCACHE_DEFAULT_CACHEABILITY', 'no-cache'),
+    'guest_only' => env('LSCACHE_GUEST_ONLY', false),
+];
+```
+
+#### permission.php
+
+Spatie Permission configuration:
+
+```php
+return [
+    'models' => [
+        'permission' => Spatie\Permission\Models\Permission::class,
+        'role' => Spatie\Permission\Models\Role::class,
+    ],
+    
+    'table_names' => [
+        'roles' => 'roles',
+        'permissions' => 'permissions',
+        'model_has_permissions' => 'model_has_permissions',
+        'model_has_roles' => 'model_has_roles',
+        'role_has_permissions' => 'role_has_permissions',
+    ],
+    
+    'cache' => [
+        'expiration_time' => \DateInterval::createFromDateString('24 hours'),
+        'key' => 'spatie.permission.cache',
+        'store' => 'default',
+    ],
+];
+```
+
+### 4. Environment Variables
+
+Add these variables to your `.env` file:
+
+```env
+# Authentication
+AUTH_GUARD=web
+AUTH_MODEL=Netauratech\CoreCms\Models\User
+
+# Backup
+BACKUP_LOCATION_FOLDER=backup
+BACKUP_ARCHIVE_PASSWORD=null
+
+# LiteSpeed Cache
+LSCACHE_ESI_ENABLED=false
+LSCACHE_DEFAULT_TTL=0
+LSCACHE_DEFAULT_CACHEABILITY=no-cache
+LSCACHE_GUEST_ONLY=false
+```
+
+### 5. Publishing Assets
 
 Publish the package assets:
 
@@ -74,7 +225,7 @@ Publish the package assets:
 php artisan vendor:publish --tag=core-cms-assets
 ```
 
-### 4. Database Setup
+### 6. Database Setup
 
 Run the migrations to create the necessary database tables:
 
@@ -82,7 +233,7 @@ Run the migrations to create the necessary database tables:
 php artisan migrate
 ```
 
-### 5. Complete Installation
+### 7. Complete Installation
 
 Run the installation command to set up the CMS:
 
@@ -92,8 +243,14 @@ php artisan cms:install
 
 This command will:
 - Run all package migrations
-- Execute database seeders
+- Execute database seeders (creates admin user, roles, permissions, default content)
 - Publish package assets
+
+**Default Admin Credentials:**
+- Email: `admin@example.com`
+- Password: `password`
+
+⚠️ **Important:** Change these credentials immediately after first login!
 
 ## Usage
 
@@ -192,6 +349,14 @@ In Blade templates:
 @shortcode('[my-shortcode url="/about" text="Learn More"]')
 ```
 
+#### Built-in Shortcodes
+
+The package includes several built-in shortcodes:
+
+- `[button url="/path" type="primary" text="Click me"]` - Creates styled buttons
+- `[option key="site_name"]` - Retrieves option values
+- `[template id=3]` - Includes template content
+
 ### Backup Management
 
 #### Programmatic Backups
@@ -256,6 +421,48 @@ if ($isValid) {
 }
 ```
 
+### Content Management
+
+The package provides a flexible content management system:
+
+```php
+use Netauratech\CoreCms\Contracts\ContentProviderInterface;
+
+$contentProvider = app(ContentProviderInterface::class);
+
+// Get published content
+$pages = $contentProvider->getContents('page', 10);
+$articles = $contentProvider->getContents('article', 20);
+
+// Get content by slug
+$page = $contentProvider->getContentBySlug('about-us');
+
+// Get content by category
+$categoryArticles = $contentProvider->getContentsByCategory('article', 'news', 10);
+```
+
+### Form Registry
+
+Register custom form fields dynamically:
+
+```php
+use Netauratech\CoreCms\Form\FormRegistry;
+
+public function boot(FormRegistry $formRegistry)
+{
+    $formRegistry->registerFormFields('content_form', [
+        'custom_field' => [
+            'type' => 'text',
+            'label' => 'Custom Field',
+        ],
+    ]);
+    
+    $formRegistry->registerValidationRules('content_form', [
+        'custom_field' => ['required', 'string', 'max:255'],
+    ]);
+}
+```
+
 ### Helper Functions
 
 The package provides several utility functions:
@@ -293,17 +500,17 @@ php artisan vendor:publish --tag=core-cms-translations
 
 This will copy translation files to `lang/vendor/core-cms/` in your Laravel application.
 
-### Available Translation Keys
-
-Edit the files in `lang/vendor/core-cms/{locale}/`:
+### Available Translation Files
 
 - `admin.php` - Admin interface translations
 - `auth.php` - Authentication messages
 - `core.php` - Core system messages
+- `mail.php` - Email notifications
 
-### Multi-language Support
+### Supported Languages
 
-The package supports all languages configured in your Laravel application. Translation files are automatically loaded and cached for performance.
+- English (en)
+- French (fr)
 
 ## Customization
 
@@ -316,9 +523,9 @@ use Netauratech\CoreCms\Contracts\ContentProviderInterface;
 
 class MyContentProvider implements ContentProviderInterface
 {
-    public function getArticles(int $perPage = 10): LengthAwarePaginator
+    public function getContents(string $type, ?int $perPage): LengthAwarePaginator
     {
-        // Return paginated articles
+        // Return paginated content
     }
     
     public function getContentBySlug(string $slug): ?object
@@ -354,6 +561,12 @@ class MyMediaProvider implements MediaProviderInterface
 }
 ```
 
+Register the provider:
+
+```php
+$this->app->bind(MediaProviderInterface::class, MyMediaProvider::class);
+```
+
 ### Asset Sources
 
 Create custom asset resolution:
@@ -377,40 +590,128 @@ Tag your asset source:
 $this->app->tag(MyAssetSource::class, 'cms.asset.sources');
 ```
 
+### Cache Purge Providers
+
+Implement custom cache purge logic:
+
+```php
+use Netauratech\CoreCms\Contracts\PurgeUrlProviderInterface;
+use Illuminate\Database\Eloquent\Model;
+
+class MyPurgeProvider implements PurgeUrlProviderInterface
+{
+    public function getUrlsToPurge(Model $content): array
+    {
+        // Return URLs to purge when content is updated
+        return ["/my-page/{$content->slug}"];
+    }
+    
+    public function getAllManagedUrls(): array
+    {
+        // Return all URLs managed by this provider
+        return ['/my-page/1', '/my-page/2'];
+    }
+}
+```
+
+Tag the provider:
+
+```php
+$this->app->tag(MyPurgeProvider::class, 'content_purge_providers');
+```
+
 ## File Structure
 
 ```
 src/
 ├── Console/                        # Artisan commands
 │   ├── BackupCmsCommand.php
+│   ├── BackupCommand.php
+│   ├── CleanupCommand.php
 │   ├── DiscoverAssetsCommand.php
 │   └── InstallCommand.php
 ├── Contracts/                      # Service interfaces
 │   ├── AssetSourceInterface.php
+│   ├── BackupProviderInterface.php
+│   ├── CacheServiceInterface.php
+│   ├── ChallengeGeneratorInterface.php
+│   ├── ChallengeInterface.php
+│   ├── CommentableInterface.php
 │   ├── ContentProviderInterface.php
-│   └── MediaProviderInterface.php
+│   ├── MediaProviderInterface.php
+│   ├── PurgeUrlProviderInterface.php
+│   └── ThemeMiddlewareInterface.php
+├── Events/                         # Event classes
+│   ├── CacheCleared.php
+│   ├── ContentSaved.php
+│   └── OptionUpdated.php
+├── Form/                          # Form management
+│   └── FormRegistry.php
+├── Helpers/                       # Helper functions
+│   └── helpers.php
 ├── Http/
-│   ├── Controllers/                # Package controllers
-│   └── Requests/                   # Form requests
-├── Models/                         # Eloquent models
-│   ├── User.php
-│   └── Option.php
-├── Services/                       # Core services
+│   ├── Controllers/               # Package controllers
+│   │   ├── Admin/                # Admin controllers
+│   │   ├── Api/                  # API controllers
+│   │   └── Auth/                 # Authentication controllers
+│   ├── Middlewares/              # HTTP middlewares
+│   └── Requests/                 # Form requests
+├── Jobs/                         # Queue jobs
+│   └── PrecacheContent.php
+├── Listeners/                    # Event listeners
+│   └── ClearOptionCache.php
+├── Mail/                        # Mailable classes
+│   └── GenericFormMail.php
+├── Models/                      # Eloquent models
+│   ├── Category.php
+│   ├── Content.php
+│   ├── FailedJob.php
+│   ├── Option.php
+│   ├── Tag.php
+│   └── User.php
+├── Notifications/               # Notification classes
+├── Observers/                   # Model observers
+│   └── ContentObserver.php
+├── Services/                    # Core services
 │   ├── Admin/
+│   │   ├── DashboardManager.php
+│   │   └── MenuManager.php
+│   ├── Captcha/
+│   │   ├── PuzzleChallenge.php
+│   │   └── PuzzleGenerator.php
+│   ├── Shortcode/
+│   │   ├── ButtonShortcode.php
+│   │   ├── OptionShortcode.php
+│   │   ├── ShortcodeParser.php
+│   │   ├── ShortcodeRegistry.php
+│   │   └── TemplateShortcode.php
+│   ├── AbstractCmsServiceProvider.php
 │   ├── AssetManager.php
-│   └── BackupProvider.php
+│   ├── BackupProvider.php
+│   ├── CacheService.php
+│   ├── ContentProvider.php
+│   ├── ContentPurgeProvider.php
+│   ├── NullContentProvider.php
+│   ├── NullMediaProvider.php
+│   └── StorageAssetSource.php
+├── Widgets/                     # Dashboard widgets
+│   └── TasksWidget.php
 ├── resources/
-│   ├── views/                      # Package views
-│   └── assets/                     # Static assets
-├── lang/                          # Translation files
+│   ├── views/                   # Blade views
+│   └── assets/                  # Static assets (images, icons)
+├── lang/                        # Translation files
+│   ├── en/
+│   └── fr/
 ├── database/
-│   ├── migrations/                 # Database migrations
-│   └── seeders/                    # Database seeders
-├── routes/                        # Package routes
-│   ├── admin.php
-│   ├── auth.php
-│   └── web.php
-└── CoreCmsServiceProvider.php      # Main service provider
+│   ├── migrations/              # Database migrations
+│   ├── seeders/                 # Database seeders
+│   └── factories/               # Model factories
+├── routes/                      # Package routes
+│   ├── admin.php               # Admin routes
+│   ├── api.php                 # API routes
+│   ├── auth.php                # Authentication routes
+│   └── web.php                 # Public routes
+└── CoreCmsServiceProvider.php  # Main service provider
 ```
 
 ## API Routes
@@ -420,7 +721,15 @@ src/
 ```
 GET  /api/captcha/generate          # Generate new challenge
 GET  /captcha/{key}                 # Get challenge image
-POST /captcha/check                 # Verify response
+POST /api/captcha/check             # Verify response
+```
+
+### Utility Endpoints
+
+```
+GET  /api/csrf                      # Get CSRF token
+GET  /api/flash-messages            # Get flash messages
+GET  /api/{type}/search             # Search taxonomies (auth required)
 ```
 
 ### Asset Endpoints
@@ -451,10 +760,17 @@ Access the admin interface at `/admin` (configurable prefix).
 
 The package dispatches several events you can listen to:
 
-- `LangLoaded` - When language files are loaded
-- `OptionUpdated` - When system options are updated
-- `ContentSaved` - When content is saved
 - `CacheCleared` - When cache is cleared
+- `ContentSaved` - When content is saved
+- `OptionUpdated` - When system options are updated
+
+## Middleware
+
+### Available Middleware
+
+- `BackupSessionForEsi` - Backup flash messages for ESI compatibility
+- `SmartCacheControlMiddleware` - Intelligent cache control based on page content
+- `ThemeMiddlewareInterface` - Theme resolution middleware (can be implemented)
 
 ## Development
 
@@ -490,12 +806,19 @@ For support or questions:
 
 ### v1.0.0
 - Initial release
-- Complete authentication system
-- Asset management
-- Backup functionality
-- Admin interface
-- Shortcode system
-- CAPTCHA integration
+- Complete authentication system with social login
+- Asset management with Vite integration
+- Backup functionality with Spatie Backup
+- Admin interface with dashboard and widgets
+- Shortcode system with built-in shortcodes
+- CAPTCHA integration with puzzle challenge
+- Content management (pages, templates, articles)
+- Taxonomy system (categories, tags)
+- Permission system with Spatie Permission
+- Form registry for dynamic form fields
+- LiteSpeed cache support
+- SEO features (sitemap, robots.txt)
+- Multi-language support (EN, FR)
 
 ## Authors
 
