@@ -3,6 +3,7 @@
 namespace Netauratech\CoreCms\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 use Netauratech\CoreCms\Contracts\BackupProviderInterface;
 
 class BackupCmsCommand extends Command
@@ -38,18 +39,25 @@ class BackupCmsCommand extends Command
         $optionsCleanup = [];
         $prefix = "full_";
 
-        if($this->option('only-db')) {
+        if ($this->option('only-db')) {
             $optionsBackup['--only-db'] = true;
             $prefix = "db_";
         }
 
-        if($this->option('disable-notifications')) {
+        if ($this->option('disable-notifications')) {
             $optionsBackup['--disable-notifications'] = true;
             $optionsCleanup['--disable-notifications'] = true;
         }
 
         config(['backup.backup.destination.filename_prefix' => $prefix]);
 
-        $this->backupProvider->run($optionsBackup, $optionsCleanup);
+        try {
+            $this->backupProvider->run($optionsBackup, $optionsCleanup);
+        } finally {
+            $tempPath = config('backup.backup.temporary_directory');
+            if (is_dir($tempPath)) {
+                File::deleteDirectory($tempPath);
+            }
+        }
     }
 }
