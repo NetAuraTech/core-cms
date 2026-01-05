@@ -261,7 +261,13 @@ export class Editor {
             this.layouts.Dropdown([
                 this.fields.Media(name, {
                     label: translate('core-cms.admin.editor.sidebar.tabs.media.value'),
-                    canAnimate: true
+                    canAnimate: true,
+                    default: {
+                        id: "",
+                        alt: "",
+                        height: "",
+                        opacity: "1"
+                    },
                 } as MediaFieldArgs),
             ] as Array<FieldDefinition>, {
                 collapsed: translate('core-cms.admin.editor.sidebar.tabs.media.value')
