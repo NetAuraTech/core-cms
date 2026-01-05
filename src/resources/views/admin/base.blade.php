@@ -33,15 +33,23 @@
                         @if(isset($item['children']))
                             <h4 class="heading-4 padding-inline-4 padding-block-2">{{ $item['label'] }}</h4>
                             @foreach($item['children'] as $child)
+                                @php
+                                    $childIconName = is_array($child['icon']) ? ($child['icon']['icon'] ?? '') : $child['icon'];
+                                    $childIconPath = is_array($child['icon']) ? ($child['icon']['path'] ?? null) : null;
+                                @endphp
                                 <li>
-                                    <a href="{{ route($child['route'], $child['params'] ?? []) }}" {{ menu_active(route($child['route'], $child['params'] ?? [])) }}>{!! icon($child['icon'], 'small') !!}
+                                    <a href="{{ route($child['route'], $child['params'] ?? []) }}" {{ menu_active(route($child['route'], $child['params'] ?? [])) }}>{!! icon($childIconName, 'small', $childIconPath) !!}
                                         {{ $child['label'] }}
                                     </a>
                                 </li>
                             @endforeach
                         @else
+                            @php
+                                $itemIconName = is_array($item['icon']) ? ($item['icon']['icon'] ?? '') : $item['icon'];
+                                $itemIconPath = is_array($item['icon']) ? ($item['icon']['path'] ?? null) : null;
+                            @endphp
                             <li>
-                                <a href="{{ route($item['route'], $item['params'] ?? []) }}" {{ menu_active(route($item['route'], $item['params'] ?? [])) }}>{!! icon($item['icon'], 'small') !!}
+                                <a href="{{ route($item['route'], $item['params'] ?? []) }}" {{ menu_active(route($item['route'], $item['params'] ?? [])) }}>{!! icon($itemIconName, 'small', $itemIconPath) !!}
                                     {{ $item['label'] }}
                                 </a>
                             </li>

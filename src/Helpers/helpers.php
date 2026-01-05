@@ -9,13 +9,18 @@ if (!function_exists('icon')) {
      *
      * @param string $name The name of the icon.
      * @param string|null $size The size of the icon.
+     * @param string|null $path The size of the icon.
      * @return string
      */
-    function icon(string $name, ?string $size = null): string
+    function icon(string $name, ?string $size = null, ?string $path = null): string
     {
         $safeName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
 
-        $iconPath = '/vendor/core-cms/sprite.svg' . "#{$safeName}";
+        if(!$path) {
+            $path = '/vendor/core-cms/sprite.svg';
+        }
+
+        $iconPath = $path . "#{$safeName}";
 
         $sizeClass = $size ? htmlspecialchars($size, ENT_QUOTES, 'UTF-8') : '';
 
