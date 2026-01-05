@@ -3,6 +3,7 @@
 return [
     'actions' => 'Actions',
     'add' => 'Ajouter',
+    'back' => 'Retour',
     'cache' => [
         'clear' => 'Vider le cache',
         'cleared' => 'Le cache a bien été vidé.',
@@ -395,6 +396,7 @@ return [
     'send' => 'Envoyer',
     'statut' => 'Statut',
     'value' => 'Valeur',
+    'view' => 'Voir',
     'permission' => 'Permissions',
     'role' => [
         'name' => 'Nom',

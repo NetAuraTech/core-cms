@@ -3,12 +3,12 @@
 return [
     'actions' => 'Actions',
     'add' => 'Add',
+    'back' => 'Back',
     'cache' => [
         'clear' => 'Clear the cache',
         'cleared' => 'The cache has been cleared.',
     ],
     'create' => 'Create',
-
     'content' => [
         'edit' => 'Edit content',
         'created' => 'The content has been created.',
@@ -396,6 +396,7 @@ return [
     'send' => 'Send',
     'statut' => 'Status',
     'value' => 'Value',
+    'view' => 'View',
     'permission' => 'Permissions',
     'role' => [
         'name' => 'Name',
