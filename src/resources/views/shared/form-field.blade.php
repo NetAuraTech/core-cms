@@ -11,6 +11,8 @@
     $errorLocation ??= 'default';
     $disabled ??= false;
     $help ??= null;
+    $defaultOption ??= __('core-cms::core.select.option.choose');
+    $placeholder ??= '';
 
 
     $selectOptions ??= [];
@@ -60,6 +62,7 @@
                 id="{{ $id }}"
                 name="{{ $name }}"
                 class="form-control @if($displayError && $hasError($name, $errorLocation)) is-invalid @endif"
+                placeholder="{{ $placeholder }}"
                 @if($disabled)
                     disabled="disabled"
                 @endif
@@ -81,7 +84,7 @@
         <select id="{{ $id }}"
                 name="{{ $name }}"
                 class="form-control @if($displayError && $hasError($name, $errorLocation)) is-invalid @endif">
-            <option value="">{{ __('core-cms::core.select.option.choose') }}</option>
+            <option value="">{{ $defaultOption }}</option>
             @foreach($selectOptions as $option)
                 <option @selected($getOldValue() === $option->key) value="{{ $option->key }}">{{ $option->label }}</option>
             @endforeach
@@ -105,6 +108,7 @@
                 name="{{ $name }}"
                 value="{{ $getOldValue() }}"
                 class="form-control @if($displayError && $hasError($name, $errorLocation)) is-invalid @endif"
+                placeholder="{{ $placeholder }}"
                 @if($disabled)
                     disabled="disabled"
                 @endif
