@@ -20,5 +20,5 @@
     class="{{ join(" ", $contentClasses) }}"
     @if(count($contentStyles) > 0)style="{{ implode(";", $contentStyles) }}"@endif
 >
-    @shortcode($block['content'], ['content' => $content ?? '', 'options' => $options ?? []])
+    @shortcode($block[$blockKey], ['content' => $content ?? '', 'options' => $options ?? []])
 </div>
