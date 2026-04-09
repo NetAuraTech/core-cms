@@ -327,8 +327,8 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
 
         View::composer('*', function ($view) use ($ret, $mediaProvider) {
             $view->with('options', $ret['options']);
-            $view->with('favicon', $ret['options']['favicon'] ?? '' ? image_url($ret['options']['favicon'], 128) : "");
-            $view->with('openGraphLogo', $ret['options']['logo'] ?? '' ? $mediaProvider->get($ret['options']['logo']) : "");
+            $view->with('favicon', $ret['options']['favicon'] ?? null ? image_url($ret['options']['favicon'], 128) : null);
+            $view->with('openGraphLogo', $ret['options']['logo'] ?? null ? $mediaProvider->get($ret['options']['logo']) : null);
             $view->with('cacheBuster', isset($ret['theme']->updated_at) ? substr(md5(json_encode($ret['theme']->updated_at)), 0, 8) : 'dev');
         });
     }
