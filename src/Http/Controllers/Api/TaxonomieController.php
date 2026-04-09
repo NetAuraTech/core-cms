@@ -33,19 +33,28 @@ class TaxonomieController extends AdminController
     public function search(Request $request, string $type): JsonResponse
     {
         $search = $request->query->get('q');
+
         if (null === $search) {
             return response()->json([]);
         }
 
-        $values = match ($type) {
-            'tag' => Tag::whereRaw('LOWER(tags.name) like "' . strtolower((string)$search) . '%"')->orderByRaw('LENGTH(tags.name) asc')->get()->toArray(),
-            'category' => Category::whereRaw('LOWER(categories.name) like "' . strtolower((string)$search) . '%"')->orderByRaw('LENGTH(categories.name) asc')->get()->toArray(),
-            default => [],
+        $searchTerm = strtolower((string)$search) . '%';
+
+        $query = match ($type) {
+            'tag' => Tag::whereRaw('LOWER(name) LIKE ?', [$searchTerm]),
+            'category' => Category::whereRaw('LOWER(name) LIKE ?', [$searchTerm]),
+            default => null,
         };
 
-        return response()->json(array_map(fn ($t) => [
-            'name' => $t['name'],
-            'slug' => $t['slug'],
-        ], $values));
+        if (!$query) {
+            return response()->json([]);
+        }
+
+        $values = $query->orderByRaw('LENGTH(name) ASC')->get();
+
+        return response()->json($values->map(fn ($t) => [
+            'name' => $t->name,
+            'slug' => $t->slug,
+        ]));
     }
 }
