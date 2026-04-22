@@ -21,7 +21,8 @@ class ContentProvider implements ContentProviderInterface
      */
     public function getContents(string $type, ?int $perPage = null): LengthAwarePaginator
     {
-        return Content::where('type', $type)
+        return Content::with(['categories', 'media'])
+            ->where('type', $type)
             ->where('status', 'published')
             ->orderBy('published_at', 'desc')
             ->with('media')
@@ -88,7 +89,8 @@ class ContentProvider implements ContentProviderInterface
      */
     public function getContentBySlug(string $slug): ?object
     {
-        return Content::where('slug', $slug)
+        return Content::with(['categories', 'media'])
+            ->where('slug', $slug)
             ->where('status', 'published')
             ->first();
     }
