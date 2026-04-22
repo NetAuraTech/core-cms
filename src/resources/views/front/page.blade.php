@@ -1,7 +1,7 @@
 @php
     $options = $options ?? [];
     $site_name = $options['site_name'] ?? config('app.name');
-    $openGraphLogo = $openGraphLogo ?? '';
+    $openGraphLogo = $openGraphLogo ?? (object)['id' => '', 'width' => '', 'height' => '', 'alt' => ''];
     $logo = url('/') . str_replace('&amp;', '&', image_url($openGraphLogo->id ?? ''));
 
     $description = ($isHomepage ?? false) ? ($options['description'] ?? '') : ($content->description ?? '');

@@ -300,36 +300,47 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
      */
     protected function shareOptionsWithViews(): void
     {
-        $cache = Cache::store('database');
-        $ret = $cache->remember('options', 60 * 60, function () {
+        $cache = Cache::getFacadeRoot();
+
+        $ret = $cache->remember('options_optimized', 3600, function () {
             $opts = Option::all();
             $data = [];
-
             $contentProvider = $this->app->make(ContentProviderInterface::class);
+            $mediaProvider = $this->app->make(MediaProviderInterface::class);
             $theme = null;
 
             foreach ($opts as $option) {
                 $valueToStore = $option->value ?? '';
 
                 if (($option->type === 'content' || $option->type === 'template') && $option->value !== "") {
-                    $contentItem = $contentProvider->getContentById($option->value);
-                    $valueToStore = $contentItem;
+                    $valueToStore = $contentProvider->getContentById($option->value);
                 }
+
                 if ($option->type === 'theme') {
                     $theme = $option;
                 }
+
                 $data[$option->key] = $valueToStore;
             }
-            return ["options" => $data, "theme" => $theme];
+
+            $favicon = (isset($data['favicon']) && $data['favicon']) ? image_url($data['favicon'], 128) : null;
+            $ogLogo = (isset($data['logo']) && $data['logo']) ? $mediaProvider->get($data['logo']) : null;
+            $cacheBuster = isset($theme->updated_at) ? substr(md5(json_encode($theme->updated_at)), 0, 8) : 'dev';
+
+            return [
+                "options"        => $data,
+                "theme"          => $theme,
+                "favicon"        => $favicon,
+                "openGraphLogo"  => $ogLogo,
+                "cacheBuster"    => $cacheBuster
+            ];
         });
 
-        $mediaProvider = $this->app->make(MediaProviderInterface::class);
-
-        View::composer('*', function ($view) use ($ret, $mediaProvider) {
+        View::composer(['core-cms::base', 'core-cms::front/page', 'core-cms::admin.base', 'theme::*'], function ($view) use ($ret) {
             $view->with('options', $ret['options']);
-            $view->with('favicon', $ret['options']['favicon'] ?? null ? image_url($ret['options']['favicon'], 128) : null);
-            $view->with('openGraphLogo', $ret['options']['logo'] ?? null ? $mediaProvider->get($ret['options']['logo']) : null);
-            $view->with('cacheBuster', isset($ret['theme']->updated_at) ? substr(md5(json_encode($ret['theme']->updated_at)), 0, 8) : 'dev');
+            $view->with('favicon', $ret['favicon']);
+            $view->with('openGraphLogo', $ret['openGraphLogo']);
+            $view->with('cacheBuster', $ret['cacheBuster']);
         });
     }
 }
