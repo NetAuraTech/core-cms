@@ -342,7 +342,7 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
             ];
         });
 
-        View::composer(['core-cms::base', 'core-cms::front/page', 'core-cms::admin.base', 'theme::*'], function ($view) use ($ret) {
+        View::composer(['core-cms::base', 'core-cms::front/page', 'core-cms::auth/*', 'core-cms::profile/*', 'core-cms::admin.base', 'theme::*'], function ($view) use ($ret) {
             $view->with('options', $ret['options']);
             $view->with('favicon', $ret['favicon']);
             $view->with('openGraphLogo', $ret['openGraphLogo']);
