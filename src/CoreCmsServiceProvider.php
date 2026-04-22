@@ -186,16 +186,14 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
         ], 'core-cms-views');
 
         // Share options avec les vues UNIQUEMENT si la table existe
-        if ($this->app->runningInConsole()){
-            return;
-        }
+        if (!$this->app->runningInConsole()){
+            $hasOptionsTable = Cache::rememberForever('schema_has_options', function () {
+                return Schema::hasTable('options');
+            });
 
-        $hasOptionsTable = Cache::rememberForever('schema_has_options', function () {
-            return Schema::hasTable('options');
-        });
-
-        if ($hasOptionsTable) {
-            $this->shareOptionsWithViews();
+            if ($hasOptionsTable) {
+                $this->shareOptionsWithViews();
+            }
         }
 
         // Blade directives
