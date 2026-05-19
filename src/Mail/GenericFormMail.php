@@ -53,20 +53,29 @@ class GenericFormMail extends Mailable
         $subject = '';
         $replyTo = [];
 
+        $systemNoReply = Option::where('key', 'noreply-email')->first()?->value ?: config('mail.from.address');
+
         switch ($this->type) {
             case self::TYPE_CONTACT:
-                $fromAddress = $this->data['email'] ?? '';
+                $fromAddress = $systemNoReply;
                 $fromName = trim(($this->data['lastname'] ?? '') . ' ' . ($this->data['firstname'] ?? ''));
                 $subject = __('core-cms::mail.contact.request.value') . ': ' . ($this->data['subject'] ?? __('mail.no_subject')) . ' - ' . $this->site_name;
-                $replyTo = [new Address($fromAddress, $fromName)];
+                
+                $clientAddress = $this->data['email'] ?? '';
+                if (!empty($clientAddress)) {
+                    $replyTo = [new Address($clientAddress, $fromName)];
+                }
                 break;
 
             case self::TYPE_GENERAL_FORM:
-                $fromAddress = Option::where('key', 'noreply-email')->first()?->value;
+                $fromAddress = $systemNoReply;
                 $fromName = $this->site_name;
                 $subject = __('core-cms::mail.form.request.value') . ' - ' . $this->site_name;
                 break;
         }
+
+        $fromAddress = $fromAddress ?: config('mail.from.address');
+        $fromName = $fromName ?: $this->site_name;
 
         return new Envelope(
             from: new Address($fromAddress, $fromName),
