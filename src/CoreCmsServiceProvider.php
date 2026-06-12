@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Netauratech\CoreCms\Console\BackupCmsCommand;
 use Netauratech\CoreCms\Console\BackupCommand;
@@ -158,6 +159,10 @@ class CoreCmsServiceProvider extends AbstractCmsServiceProvider
     public function boot(MenuManager $menuManager, ShortcodeRegistry $shortcodeRegistry, DashboardManager $dashboardManager): void
     {
         $this->bootstrapPackage();
+
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
 
         // Publish configs
         $this->publishes([
